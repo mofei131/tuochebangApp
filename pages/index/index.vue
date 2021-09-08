@@ -80,12 +80,14 @@
 		font-family: PingFangSC-Regular, PingFang SC;
 		font-weight: 400;
 		color: #30AEFF;
+		text-align: center;
 	}
 	.yju{
 		font-size: 22rpx;
 		font-family: PingFangSC-Medium, PingFang SC;
 		font-weight: 500;
 		color: #30AEFF;
+		text-align: center;
 	}
 	.ceng2{
 		display: flex;
