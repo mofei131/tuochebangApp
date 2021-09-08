@@ -24,7 +24,26 @@
 					"titleNView": false
 				}
 			}
-		},{
+		},
+		{
+			"path": "pages/my/aboutus",
+			"style": {
+				"navigationBarTitleText": "关于我们"
+			}
+		},
+		{
+			"path": "pages/my/bill",
+			"style": {
+				"navigationBarTitleText": "余额明细"
+			}
+		},
+		{
+			"path": "pages/my/guide",
+			"style": {
+				"navigationBarTitleText": "赚钱攻略"
+			}
+		},
+		{
 			"path": "pages/login/login",
 			"style": {
 				"navigationBarTitleText": ""
