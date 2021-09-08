@@ -1,4 +1,4 @@
-const baseUrl = 'https://layer.boyaokj.cn/api/';
+const baseUrl = 'https://trailer.boyaokj.cn/api/';
 const imgUrl = 'http://store.boyaokj.cn/';
 const domeUrl = 'https://fc.boyaokj.cn/attachment/';
 /* 封装ajax函数

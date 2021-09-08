@@ -14,4 +14,10 @@
 
 <style>
 	/*每个页面公共css */
+	page{
+		background: #F9FAFC;
+	}
+	/* .uni-tabbar-border {
+			background-color: #fff!important;
+	} */
 </style>

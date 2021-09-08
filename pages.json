@@ -24,18 +24,34 @@
 					"titleNView": false
 				}
 			}
+		},{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},{
+			"path": "pages/login/register",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},{
+			"path": "pages/login/forget",
+			"style": {
+				"navigationBarTitleText": ""
+			}
 		}
 	],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarTextStyle": "white",
+		"backgroundColor": "#F4F7F7",
+		"navigationBarBackgroundColor": "#40A9FF"
 	},
 	"tabBar": {
 		"color": "#BFBFBF",
 		"selectedColor": "#30AEFF",
 		"font-size": "24rpx",
+		"border":"0rpx",
+		"box-shadow": "0px 0px 0px 0px",
 		"list": [{
 			"pagePath": "pages/index/index",
 			"iconPath": "static/images/icon1.png",

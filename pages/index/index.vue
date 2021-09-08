@@ -10,7 +10,12 @@
 			}
 		},
 		onLoad() {
-
+			
+		},
+		onShow() {
+			uni.reLaunch({
+				url:'../login/login'
+			})
 		},
 		methods: {
 
