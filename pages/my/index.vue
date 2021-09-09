@@ -6,36 +6,28 @@
 				<image  src='../../static/icon/zuanshi.png'></image>
 			</view>
 			<view class="username">
-				<view class="name">我是谁一会会水
-					<view class="level">白金</view>
-					<view class="ask">
-						<image  src='../../static/icon/zuanshi.png'></image>
-					</view>
+				<view class="name">我是潍坊大哥
+					<view class="level" style="display: flex;align-items: center;">白金<view class="ask">
+						<image src='../../static/icon/zuanshi.png'></image>
+					</view></view>
+					
 				</view>
-				<view class="renzheng">已认证</view>
+				<view class="renzheng" style="font-size: 17rpx;color: #FFFFFF;">已认证</view>
 			</view>
 		</view>
-		<!-- <view class="userifom" v-else>
-			<view class="headimg">
-				<image  src='../../static/icon/loginicon.png'></image>
-			</view>
-			<view class="username">
-				<view class="name" style="font-size: 40rpx;font-weight: 700;">请授权</view>
-			</view>
-		</view> -->
 		<view class="withdraw">
 			<view class="balance">
 				<view>36.68</view>
 				<view>余额</view>
 			</view>
-			<view class="darwbtn" @click="takeOut(user.balance)">立即提现</view>
+			<view class="darwbtn" @tap="withdrawal()">立即提现</view>
 			<view class="with" @tap="bill()">
 				<view>余额明细</view>
 				<image src="../../static/images/back.png"></image>
 			</view>
 		</view>
 	</view>
-	<view class="tuigaung" v-if="user.lawyer == ''">
+	<view class="tuigaung">
 		<!-- <view class="tuigaung"> -->
 		<view class="tgtext">我的推广</view>
 		<view class="zixun">
@@ -43,11 +35,11 @@
 				<image src="../../static/icon/yqhy.png" class="zixunitemimage"></image>
 				<view class="zixunitemview" style="margin-top: 22rpx;">邀请好友</view>
 			</button>
-			<button class="yqbtn" @tap="erm()">
+			<button class="yqbtn" @tap="mydistribution()">
 				<image src="../../static/icon/wdfx.png" class="zixunitemimage"></image>
 				<view class="zixunitemview" style="margin-top: 22rpx;">我的分销</view>
 			</button>
-			<button class="yqbtn" @tap="erm()">
+			<button class="yqbtn" @tap="mycommission()">
 				<image src="../../static/icon/wdtc.png" class="zixunitemimage"></image>
 				<view class="zixunitemview" style="margin-top: 22rpx;">我的提成</view>
 			</button>
@@ -58,8 +50,8 @@
 		</view>
 	</view>
 	<view class="functionlist">
-		<view class="functionitem" @tap="toUrl1()">
-			<view class="itemleft">
+		<view class="functionitem">
+			<view class="itemleft" @tap="myorder()">
 				<image src="../../static/icon/myicon1.png"> </image>
 				<view>我的订单</view>
 				<image class="icon" src="../../static/icon/rightzd.png"></image>
@@ -68,25 +60,19 @@
 				<image src="../../static/icon/myrighticon.png" mode=""></image>
 			</view> -->
 		</view>
-		<view class="functionitem"@tap="toUrl3()">
+		<view class="functionitem" @tap="drivercertification">
 			<view class="itemleft">
 				<image src="../../static/icon/myicon2.png"></image>
 				<view>司机认证</view>
 				<image class="icon" src="../../static/icon/rightzd.png"></image>
 			</view>
-			<!-- <view class="itemright">
-				<image src="../../static/icon/myrighticon.png" mode=""></image>
-			</view> -->
 		</view>
-		<view class="functionitem"@tap="toUrl3()">
+		<view class="functionitem" @tap="driverlevel()">
 			<view class="itemleft">
 				<image src="../../static/icon/myicon3.png"></image>
 				<view>司机等级</view>
 				<image class="icon" src="../../static/icon/rightzd.png"></image>
 			</view>
-			<!-- <view class="itemright">
-				<image src="../../static/icon/myrighticon.png" mode=""></image>
-			</view> -->
 		</view>
 		<view class="functionitem"@tap="toUrl3()">
 			<view class="itemleft">
@@ -94,18 +80,15 @@
 				<view>车辆管理</view>
 				<image class="icon" src="../../static/icon/rightzd.png"></image>
 			</view>
-			<!-- <view class="itemright">
-				<image src="../../static/icon/myrighticon.png" mode=""></image>
-			</view> -->
 		</view>
-		<view class="functionitem"@tap="toUrl4()">
+		<view class="functionitem">
 			<view class="itemleft">
 				<image src="../../static/icon/myicon5.png"></image>
 				<view>联系客服</view>
 			</view>
 			<view class="itemright">
 				<view class="kefu">400-6666-8888</view>
-				<image src="../../static/icon/myrighticon.png" mode=""></image>
+				<image class="icon" style="width: 36rpx;height: 36rpx;" src="../../static/icon/rightzd.png"></image>
 			</view>
 		</view>
 		<view class="functionitem" @tap="about()">
@@ -123,12 +106,6 @@
 			</view>
 		</view>
 	</view>
-	<view class="jds" @tap="ancl()" v-if="ewm">
-		<view class="baidi">
-		<image :src="ewmimage"></image>
-		<button class="bendi" @tap="saveImgToLocal()">保存到相册</button>
-		</view>
-	</view>
 	</view>
 </template>
 <script>
@@ -139,224 +116,71 @@
 		},
 		data() {
 			return {
-				user:{
-					uid:1,
-					lawyer:'',
-					name:'',
-					headimg:'',
-					balance:0,//余额
-					record:0,//是否认证
-					package:'',
-					vipname:'套餐二',//已开通vip名称
-					kefu:'',
-					layer_status:0,
-					busy:'',
-				},
-				ewm:false,
-				ewmimage:'',
-				openSettingBtnHidden: true,
-				xian:false
+				
 			};
 		},
-		onShareAppMessage(res) {
-		      return {
-		        title: '123律师小程序',
-		        path: '/pages/index/index?scene='+uni.getStorageSync('userInfo').user_id
-		      }
-		    },
 		onLoad(){
-			// if(uni.getStorageSync('userInfo').mobile == null){
-			// 	this.xian = !this.xian
-			// }
+			
 		},
 		onShow() {
-			let that = this
-			let user = uni.getStorageSync('userInfo');
-			uni.request({
-				url:'https://layer.boyaokj.cn/api/wechat/getUserinfo',
-				method:'GET',
-				data:{
-					user_id:user.user_id
-				},
-				success(res) {
-					uni.setStorageSync('userInfo',res.data.data);
-					that.user.name = res.data.data.nickname
-					that.user.headimg = res.data.data.avater
-					that.user.balance = res.data.data.wallet
-					that.user.layer_status = res.data.data.layer_status
-					that.user.busy = res.data.data.layer.busy
-					if(!res.data.data.layer){
-					}else{
-						that.user.lawyer = res.data.data.layer
-					}
-					that.user.package = res.data.data.package
-				}
-			})
-			uni.request({
-				url:'https://layer.boyaokj.cn/api/index/setting',
-				method:'GEt',
-				data:{
-					key:'kefu'
-				},
-				success(res) {
-					that.user.kefu = res.data.data.data
-				}
-			})
-			uni.request({
-				url:'https://layer.boyaokj.cn/api/wechat/shareCode',
-				method:'GET',
-				data:{
-					user_id:uni.getStorageSync('userInfo').user_id
-				},
-				success(res) {
-					// console.log("二维码")
-					// console.log(res.data.data.url)
-					that.ewmimage = res.data.data.url
-				}
-			})
+			
 		},
 		methods: {
-			fuxy(){
+			//提现
+			withdrawal(){
 				uni.navigateTo({
-					url:'xieyi'
+					url:'./withdrawal'
 				})
 			},
-			guide(){
+			//我的提成
+			mycommission(){
 				uni.navigateTo({
-					url:'./guide'
+					url:'./commission'
 				})
 			},
-			//微信小程序保存到相册
-			        handleSetting(e){
-								let that = this
-			            if (!e.detail.authSetting['scope.writePhotosAlbum']) {
-			                  that.openSettingBtnHidden = false;
-			            } else {
-			                 that.openSettingBtnHidden = true;
-			            }
-			        },
-			        saveEwm:function(e){
-								let that = this
-			            //获取相册授权
-			               uni.getSetting({
-			                 success(res) {
-			                   if (!res.authSetting['scope.writePhotosAlbum']) {
-			                     uni.authorize({
-			                       scope: 'scope.writePhotosAlbum',
-			                       success() {
-			                         //这里是用户同意授权后的回调
-			                         that.saveImgToLocal();
-			                       },
-			                       fail() {//这里是用户拒绝授权后的回调
-			                           that.openSettingBtnHidden=false
-			                       }
-			                     })
-			                   } else {//用户已经授权过了
-			                     that.saveImgToLocal();
-			                   }
-			                 }
-			               })
-			        },
-			        saveImgToLocal:function(e){
-			            let that = this
-			            uni.showModal({
-							
-			                title: '提示',
-			                content: '确定保存到相册吗',
-			                success: function (res) {
-			                    if (res.confirm) {
-			                        uni.downloadFile({
-			                                url: that.ewmimage,//图片地址
-			                                success: (res) =>{
-			                                    if (res.statusCode === 200){
-			                                        uni.saveImageToPhotosAlbum({
-			                                            filePath: res.tempFilePath,
-			                                            success: function() {
-			                                                uni.showToast({
-			                                                    title: "保存成功",
-			                                                    icon: "none"
-			                                                });
-			                                            },
-			                                            fail: function() {
-			                                                uni.showToast({
-			                                                    title: "保存失败",
-			                                                    icon: "none"
-			                                                });
-			                                            }
-			                                        });
-			                                    } 
-			                                }
-			                            })
-			                        
-			                        
-			                    } else if (res.cancel) {
-			                        
-			                    }
-			                }
-			            });
-			            
-			        },
-			erm(){
-				this.ewm = !this.ewm
-			},
-			ancl(){
-				this.ewm = !this.ewm
-			},
-			takeOut(e){
+			//我的分销
+			mydistribution(){
 				uni.navigateTo({
-					url:'./takeOut?balance='+e
+					url:'./distribution'
 				})
 			},
+			//我的订单
+			myorder(){
+				uni.switchTab({
+					url:'../order/index'
+				})
+			},
+			//余额明细
 			bill(){
 				uni.navigateTo({
 					url:'./bill'
 				})
 			},
-			open(){
+			//赚钱攻略
+			guide(){
 				uni.navigateTo({
-					url:'../single_service/otherService'
+					url:'./guide'
 				})
 			},
+			//司机认证
+			drivercertification(){
+				uni.navigateTo({
+					url:'./drivercertification'
+				})
+			},
+			//司机等级
+			driverlevel(){
+				uni.navigateTo({
+					url:'./driverlevel'
+				})
+			},
+			//关于我们
 			about(){
 				uni.navigateTo({
 					url:'./aboutus'
 				})
-			},
-			set(){
-				uni.navigateTo({
-					url:'./set'
-				})
-			},
-			toPage(url){
-				uni.navigateTo({
-					url:url
-				})
-			},
-			getPhoneNumber(e) {
-							 let that = this 
-								uni.login({
-									provider: 'weixin',
-									success(res) {
-										uni.request({
-											url:'https://layer.boyaokj.cn/api/wechat/setMobile',
-											method:'GET',
-											data:{
-												user_id:uni.getStorageSync('userInfo').user_id,
-												code:res.code,
-												iv:e.detail.iv,
-												encrypteddata:e.detail.encryptedData
-											},
-											success(res) {
-												that.xian = !that.xian
-												uni.setStorageSync('move',1)
-												uni.switchTab({
-												    url: '../index/index'
-												});
-											}
-										})
-									}
-								})
-			           },
+			}
+			
 		}
 	};
 </script>
@@ -514,7 +338,7 @@
 	}
 	.level{
 		font-size: 16rpx;
-		width: 50rpx;
+		width: 65rpx;
 		height: 26rpx;
 		line-height: 26rpx;
 		text-align: center;
@@ -722,6 +546,8 @@
 		font-size: 26rpx;
 		font-family: PingFangSC-Regular, PingFang SC;
 		font-weight: 400;
+		display: flex;
+		align-items: center;
 		color: #949494;
 	}
 	.itemleft image{
