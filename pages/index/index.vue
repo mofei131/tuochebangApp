@@ -7,7 +7,7 @@
 				<image src="../../static/images/shaixuan.png"></image>
 			</view>
 		</view>
-		<view class="dingbox">
+		<view class="dingbox" @click="todet">
 			<view class="neibox">
 				<view class="ceng1">
 					<view class="code">订单号:12408652396</view>
@@ -72,7 +72,11 @@
 			// })
 		},
 		methods: {
-
+			todet(){
+				uni.navigateTo({
+					url:'orderDet'
+				})
+			},
 		}
 	}
 </script>

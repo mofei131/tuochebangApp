@@ -1,11 +1,6 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/order/yanche",
-			"style": {
-				"navigationBarTitleText": "验车"
-			}
-		},{
 			"path": "pages/index/index",
 			"style": {
 				"navigationStyle": "custom",
@@ -64,19 +59,34 @@
 				"navigationBarTitleText": ""
 			}
 		},{
-			"path": "pages/order/orderDet",
+			"path": "pages/index/orderDet",
 			"style": {
-				"navigationBarTitleText": "列表"
+				"navigationBarTitleText": "订单详情"
 			}
 		},{
 			"path": "pages/order/yancheshuoming",
 			"style": {
-				"navigationBarTitleText": "验车说明"
+				"navigationBarTitleText": "验车说明",
+				"app-plus":{
+					"titleNView":{
+					"autoBackButton":"false"
+				 }
+				}
 			}
 		},{
 			"path": "pages/order/zhuyishixiang",
 			"style": {
-				"navigationBarTitleText": "注意事项"
+				"navigationBarTitleText": "注意事项",
+				"app-plus":{
+					"titleNView":{
+					"autoBackButton":"false"
+				 }
+				}
+			}
+		},{
+			"path": "pages/order/yanche",
+			"style": {
+				"navigationBarTitleText": "验车"
 			}
 		}
 	],

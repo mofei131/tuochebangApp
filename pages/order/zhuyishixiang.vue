@@ -3,6 +3,7 @@
 	<view class="about">
 		<!-- <view v-html="content"></view> -->
 		<rich-text  v-html = 'content'></rich-text>
+		<view class="btn" @click="back">同意协议</view>
 	</view>
 	</view>
 </template>
@@ -30,6 +31,12 @@
 			})
 		},
 		methods:{
+			back(){
+				uni.setStorageSync('zy',1)
+				uni.reLaunch({
+					url:'yanche'
+				})
+			},
 			formatRichText(html) {
 					let newContent = html.replace(/<img[^>]*>/gi, function(match, capture) {
 						match = match.replace(/style="[^"]+"/gi, '').replace(/style='[^']+'/gi, '');
@@ -51,6 +58,21 @@
 </script>
 
 <style>
+	.btn{
+		width: 680rpx;
+		height: 76rpx;
+		background: #40A9FF;
+		border-radius: 39rpx;
+		font-size: 28rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #FFFFFF;
+		margin: 0 auto;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 40rpx;
+	}
 	page{
 		background: #F4F7F7;
 	}

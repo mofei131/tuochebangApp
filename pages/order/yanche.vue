@@ -24,15 +24,15 @@
 			<view class="blue"></view>
 			<view class="itt">司机签字</view>
 		</view>
-		<!-- <view class="yuedu" >
-			<view>请点击阅读<text @click="toshuo">验车说明</text>和<text @click="tozhu">注意事项</text>,</view>
+		<view class="yuedu" v-if="!ty || !zy">
+			<view>请点击阅读<text @click="toshuo" :style="{'color':(ty?'#52C41A':'')}">验车说明</text>和<text @click="tozhu" :style="{'color':(zy?'#52C41A':'')}">注意事项</text>,</view>
 			<view>阅读完成后方可手动签名</view>
-		</view> -->
-		<view class="yuedu2" @tap="createCanvas">
+		</view>
+		<view class="yuedu2" @tap="createCanvas" v-else>
 			<view v-if="!imgurl">请司机点击空白位置签字，确认验车</view>
 			<image v-else :src="imgurl" mode="aspectFit"></image>
 		</view>
-		<view class="btn">确认上传</view>
+		<view class="btn" @click="updata">确认上传</view>
 		<view class="signature" v-show="showCanvas">
 			<canvas class="mycanvas" canvas-id="mycanvas" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend"></canvas>
 			<view class="footer">
@@ -54,17 +54,34 @@
 					ctx:'',         //绘图图像
 					points:[],       //路径点集合 
 					signature:'',
-					imgurl:''
+					imgurl:'',
+					ty:'',
+					zy:''
+				}
+			},
+			onLoad() {
+				
+			},
+			onShow() {
+				if(uni.getStorageSync('yc')){
+					this.ty = uni.getStorageSync('yc')
+				}
+				if(uni.getStorageSync('zy')){
+					this.zy = uni.getStorageSync('zy')
 				}
 			},
 			methods: {
+				updata(){
+					uni.removeStorageSync('yc')
+					uni.removeStorageSync('zy')
+				},
 				toshuo(){
-					uni.navigateTo({
+					uni.reLaunch({
 						url:'yancheshuoming'
 					}) 
 				},
 				tozhu(){
-					uni.navigateTo({
+					uni.reLaunch({
 						url:'zhuyishixiang'
 					})
 				},
