@@ -26,22 +26,25 @@
 					<view class="qidao">潍坊市</view>
 				</view>
 				<view class="ceng3">
-					<view>3吨板车</view>
-					<view>￥1398.00</view>
+					<view class="che">3吨板车</view>
+					<view class="jia">￥1398.00</view>
 				</view>
 				<view class="ceng4">
-					<text>装车时间:</text>
-					<text>今天12:00~15:00</text>
+					<view>装车时间</view>
+					<view>:</view>
+					<view>今天12:00~15:00</view>
 				</view>
 				<view class="ceng4">
-					<text>车辆型号:</text>
-					<text>比亚迪f3</text>
+					<view>车辆型号</view>
+					<view>:</view>
+					<view>比亚迪f3</view>
 				</view>
 				<view class="ceng4">
-					<text>备注:</text>
-					<text>轻拿轻放，尽快送达，会给好评</text>
+					<view>备注</view>
+					<view>:</view>
+					<view>轻拿轻放，尽快送达，会给好评</view>
 				</view>
-				<view class="neidi">
+				<view class="ceng5">
 					<view>立即接单</view>
 				</view>
 			</view>
@@ -75,6 +78,69 @@
 </script>
 
 <style>
+	.ceng5 view{
+		width: 188rpx;
+		height: 62rpx;
+		background: #30AEFF;
+		border-radius: 35rpx;
+		font-size: 24rpx;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		color: #FFFFFF;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-top: 11rpx;
+		float: right;
+	}
+	.ceng5{
+		height: 73rpx;
+		border-top: 1rpx solid #DBDBDB;
+		margin-top: 15rpx;
+	}
+	.ceng4{
+		display: flex;
+		justify-content: start;
+		align-items: center;
+		margin-top: 6rpx;
+	}
+	.ceng4 view:nth-child(3){
+		font-size: 24rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #333333;
+		margin-left: 15rpx;
+	}
+	.ceng4 view:nth-child(2){
+		color: #666666;
+		font-size: 24rpx;
+	}
+	.ceng4 view:nth-child(1){
+		width: 120rpx;
+		font-size: 24rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #666666;
+		text-align-last: justify;
+	}
+	.che{
+		font-size: 26rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #333333;
+	}
+	.jia{
+		font-size: 32rpx;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		color: #30AEFF;
+	}
+	.ceng3{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 12rpx;
+	}
 	.jju{
 		font-size: 16rpx;
 		font-family: PingFangSC-Regular, PingFang SC;
@@ -93,6 +159,7 @@
 		display: flex;
 		justify-content: start;
 		align-items: center;
+		margin-top: 7rpx;
 	}
 	.tou{
 		display: inline-block;
@@ -143,7 +210,7 @@
 	}
 	.dingbox{
 		width: 710rpx;
-		height: 408rpx;
+		/* height: 408rpx; */
 		background: #FFFFFF;
 		box-shadow: 0px 0px 19rpx 0px rgba(0, 0, 0, 0.11);
 		border-radius: 14rpx;
