@@ -74,7 +74,7 @@
 				<image class="icon" src="../../static/icon/rightzd.png"></image>
 			</view>
 		</view>
-		<view class="functionitem"@tap="toUrl3()">
+		<view class="functionitem"@tap="carmanage()">
 			<view class="itemleft">
 				<image src="../../static/icon/myicon4.png"></image>
 				<view>车辆管理</view>
@@ -174,10 +174,22 @@
 					url:'./driverlevel'
 				})
 			},
+			//车辆管理
+			carmanage(){
+				uni.navigateTo({
+					url:'./carmanage'
+				})
+			},
 			//关于我们
 			about(){
 				uni.navigateTo({
 					url:'./aboutus'
+				})
+			},
+			//更多设置
+			set(){
+				uni.navigateTo({
+					url:'./set'
 				})
 			}
 			

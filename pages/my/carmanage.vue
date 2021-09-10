@@ -3,27 +3,27 @@
 	  <view class="mode">
 	    <view class="personal">
 	      <view class="fenge"></view>
-	      <text lines="1" class="txt2">第一步：个人资料</text>
+	      <text lines="1" class="txt2">第一步：车辆资料</text>
 	    </view>
 	    <view class="info">
 	      <view class="infomation">
 	        <view class="name">
-	          <text lines="1" decode="true" class="nameword">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</text>
-			  <input lines="1" class="nameinput" type="number" placeholder="请输入姓名"
+	          <text lines="1" decode="true" class="nameword">车辆类型：</text>
+			  <input lines="1" class="nameinput" type="number" placeholder="请选择车辆类型"
 			  	placeholder-style="color:#C1C2C3;" />
 	        </view>
 	        <view class="xiantiao">
 	          <view class="outer1"></view>
 	        </view>
 	        <view class="group4">
-	          <text lines="1" class="phone">联系电话：</text>
-	          <input lines="1" class="phoneinput" type="number" maxlength="11" placeholder="请输入电话"
+	          <text lines="1" class="phone">车牌号：</text>
+	          <input lines="1" class="phoneinput" type="number" maxlength="11" placeholder="请输入车牌号"
 	          	placeholder-style="color:#C1C2C3;" />
 	        </view>
-	        <view class="xiantiao">
+	         <view class="xiantiao">
 	          <view class="outer1"></view>
 	        </view>
-	        <view class="group7">
+	        <!--<view class="group7">
 	          <text lines="1" class="txt3">身份证号：</text>
 	          <input lines="1" class="txt4" type="number" maxlength="11" placeholder="请输入身份证号码"
 	          	placeholder-style="color:#C1C2C3;" />
@@ -38,34 +38,34 @@
 	        </view>
 	        <view class="xiantiao">
 	          <view class="outer1"></view>
-	        </view>
+	        </view> -->
 	      </view>
 	    </view>
 		<view class="picture">
 			<view class="image">
-				<view class="word8">请上传公司营业执照</view>
+				<view class="word8">请上传车辆45度角照片</view>
 				<image src="../../static/images/renzhengpic.png"></image>
 			</view>
 			<view class="image">
-				<view class="word8">请上传身份证人像面</view>
-				<image src="../../static/images/idCardfront.png"></image>
-			</view>
-			<view class="image">
-				<view class="word8">请上传身份证国徽面</view>
-				<image src="../../static/images/idCard.png"></image>
-			</view>
-			<view class="image">
-				<view class="word8">请上传驾驶证照片主页</view>
+				<view class="word8">请上传行驶证正页</view>
 				<image src="../../static/images/renzhengpic.png"></image>
 			</view>
 			<view class="image">
-				<view class="word8">请上传驾驶证照片副业</view>
+				<view class="word8">请上传行驶证副页</view>
+				<image src="../../static/images/renzhengpic.png"></image>
+			</view>
+			<view class="image">
+				<view class="word8">请上传商业险照片</view>
+				<image src="../../static/images/renzhengpic.png"></image>
+			</view>
+			<view class="image">
+				<view class="word8">请上传货物险照片</view>
 				<image src="../../static/images/renzhengpic.png"></image>
 			</view>
 		</view>
 	    <view class="box12">
 	      <view class="layer8">
-	        <text lines="1" class="word15">下一步</text>
+	        <text lines="1" class="word15">支付押金</text>
 	      </view>
 	    </view>
 	  </view>

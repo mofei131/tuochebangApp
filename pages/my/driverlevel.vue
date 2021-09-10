@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="">
 		<view class="myhead">
 			<view class="userifom">
 				<view class="headimg">
@@ -67,6 +67,7 @@
 
 <style>
 	page{
+		width: 100%;
 		background: #F8F8F8;
 	}
 	.myhead{
@@ -81,9 +82,15 @@
 		display: flex;
 		margin-left: 54rpx;
 	}
+	.userifom image{
+		margin-top: 50rpx;
+		display: flex;
+	}
 	.username{
-		/* width: 180rpx; */
+		color: #FFFFFF;
 		margin-left: 31rpx;
+		margin-top: 50rpx;
+		display: inline-block;
 	}
 	.name{
 		color: #FFFFFF;

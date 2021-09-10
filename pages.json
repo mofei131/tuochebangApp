@@ -74,6 +74,18 @@
 			}
 		},
 		{
+			"path": "pages/my/carmanage",
+			"style": {
+				"navigationBarTitleText": "车辆管理"
+			}
+		},
+		{
+			"path": "pages/my/set",
+			"style": {
+				"navigationBarTitleText": "设置"
+			}
+		},
+		{
 			"path": "pages/login/login",
 			"style": {
 				"navigationBarTitleText": ""

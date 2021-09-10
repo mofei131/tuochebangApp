@@ -1,14 +1,70 @@
 <template>
-	<view class="myhead">
-		<view class="userifom">
-			<view class="username">
-				<view class="name">我是潍坊大哥</view>
-			</view>
-			<view>
-				<view>我是潍坊大哥</view>
+	<view class="page">
+		<view class="myhead">
+			<view class="userifom">
+				<view class="username">
+					<view class="name">我是潍坊大哥</view>
+				</view>
+				<view class="allowwithdrawal">
+					<view>可提现</view>
+				</view>
+				<view class="allowdrawalnum">
+					<view>￥<span>5682.00</span></view>
+				</view>
+				<view class="walletnum">
+					<view class="jine">3356.00</view>
+					<view class="desc">钱包余额</view>
+				</view>
+				<view class="baozhengjin">
+					<view class="jine">300.00</view>
+					<view class="desc">保证金</view>
+				</view>
 			</view>
 		</view>
+		<view class="inputbox">
+			<view class="input">
+				<view class="entry">
+					<view>提现金额</view>
+				</view>
+				<input class="moneyinput" type="text" placeholder="请输入提现金额" placeholder-style="font-size: 36rpx;color: #999999;"/>
+			</view>
+			<view class="input">
+				<view class="entrys">
+					<image src="../../static/icon/myicon2.png"></image>
+					<view class="bank">建设银行</view>
+					<view class="idnum">6223190730823041</view>
+					<view>
+						<!-- <label class="radio"><radio value="r1" checked="true" />选中</label> -->
+						<label class="radio" style="fl"><radio value="r2" /></label>
+					</view>
+				</view>
+			</view>
+			<view class="input">
+				<view class="entrys">
+					<image src="../../static/icon/myicon2.png" style="float: left;"></image>
+					<view class="bank">中国银行</view>
+					<view class="idnum">6217922230567890</view>
+					<view>
+						<!-- <label class="radio"><radio value="r1" checked="true" />选中</label> -->
+						<label class="radio" style="fl"><radio value="r2" /></label>
+					</view>
+				</view>
+			</view>
+			<view class="input">
+				<view class="entrys">
+					<image src="../../static/icon/myicon2.png" style="float: left;"></image>
+					<view class="bank">农业银行</view>
+					<view class="idnum">6225678908762567</view>
+					<view>
+						<!-- <label class="radio"><radio value="r1" checked="true" />选中</label> -->
+						<label class="radio" style="fl"><radio value="r2" /></label>
+					</view>
+				</view>
+			</view>
+		</view>
+		<view class="btn" @tap="pay()">立即提现</view>
 	</view>
+	
 </template>
 
 <script>
@@ -24,7 +80,6 @@
 		box-sizing: border-box;
 		background-size: 100%;
 		height: 355rpx;
-		margin: auto;
 	}
 	.userifom{
 		margin-left: 54rpx;
@@ -32,5 +87,89 @@
 	.username{
 		color: #FFFFFF;
 		margin-left: 31rpx;
+		margin-top: 50rpx;
+		display: inline-block;
+	}
+	.allowwithdrawal{
+		font-size: 26rpx;
+		color: #FFFFFF;
+		margin-left: 31rpx;
+		margin-top: 20rpx;
+	}
+	.allowdrawalnum{
+		font-size: 27rpx;
+		color: #FFFFFF;
+		margin-left: 31rpx;
+	}
+	.allowdrawalnum span{
+		font-size: 60rpx;
+		color: #FFFFFF;
+	}
+	.walletnum{
+		color: #FFFFFF;
+		float: left;
+		width: 350rpx;
+		margin-left: 31rpx;
+		margin-top: 20rpx;
+	}
+	.baozhengjin{
+		color: #FFFFFF;
+		margin-left: 31rpx;
+		margin-top: 20rpx;
+	}
+	.jine{
+		font-size: 36rpx;
+	}
+	.desc{
+		font-size: 20rpx;
+	}
+	.input{
+		background-color: #FFFFFF;
+		height: 99rpx;
+		margin-top: 20rpx;
+		line-height: 99rpx;
+	}
+	.input image{
+		background-color: #FFFFFF;
+		width: 38rpx;
+		height: 40rpx;
+		float: left;
+		margin-top: 35rpx;
+	}
+	.entry{
+		float: left;
+		margin-left: 40rpx;
+		width: 200rpx;
+	}
+	.entrys{
+		margin-left: 40rpx;
+	}
+	.moneyinput{
+		height: 99rpx;
+		line-height: 99rpx;
+	}
+	.bank{
+		float: left;
+	}
+	.idnum{
+		float: left;
+		margin-left: 40px;
+		width: 350rpx;
+	}
+	.btn{
+		width: 686rpx;
+		height: 76rpx;
+		background: #049EFF;
+		border-radius: 35rpx;
+		margin: auto;
+		font-size: 28rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #FFFFFF;
+		text-align: center;
+		/* line-height: 50rpx; */
+		padding-top: 15rpx;
+		box-sizing: border-box;
+		margin-top: 145rpx;
 	}
 </style>
