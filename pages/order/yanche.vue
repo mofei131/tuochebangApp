@@ -10,13 +10,13 @@
 					<view class="title">
 						请拍摄车辆引擎盖的位置
 					</view>
-					<image src="../../static/images/zhaobj.png"></image>
+					<image :src="photo1 == ''?'../../static/images/zhaobj.png':photo1" @click="chooseImage(1)"></image>
 				</view>
 				<view class="item">
 					<view class="title">
 						请拍摄车辆翼子板的位置
 					</view>
-					<image src="../../static/images/zhaobj.png"></image>
+					<image :src="photo1 == ''?'../../static/images/zhaobj.png':photo2" @click="chooseImage(2)"></image>
 				</view>
 			</view>
 		</view>
@@ -56,7 +56,12 @@
 					signature:'',
 					imgurl:'',
 					ty:'',
-					zy:''
+					zy:'',
+					photo1:'',
+					photo2:'',
+					photo3:'',
+					photo4:'',
+					photo5:''
 				}
 			},
 			onLoad() {
@@ -71,6 +76,46 @@
 				}
 			},
 			methods: {
+				chooseImage(e) {
+					let that = this
+								uni.chooseImage({
+									count: 1, //默认9
+									sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+									sourceType: ['camera'], //从相册选择、摄像头
+									success: function(res) {
+										console.log(res.tempFilePaths[0])
+										that.photo1 = res.tempFilePaths[0]
+										// if(e == 1){
+										// 	uni.uploadFile({
+										// 		url:'https://layer.boyaokj.cn/api/file/upload',
+										// 		filePath: res.tempFilePaths[0],
+										// 		name: 'file',
+										// 		success(res) {
+										// 			that.zhiname = JSON.parse(res.data).data.url
+										// 		}
+										// 	})
+										// }else if(e == 2){
+										// 	uni.uploadFile({
+										// 		url:'https://layer.boyaokj.cn/api/file/upload',
+										// 		filePath: res.tempFilePaths[0],
+										// 		name: 'file',
+										// 		success(res) {
+										// 			that.zhiyear = JSON.parse(res.data).data.url
+										// 		}
+										// 	})
+										// }else if(e == 3){
+										// 	uni.uploadFile({
+										// 		url:'https://layer.boyaokj.cn/api/file/upload',
+										// 		filePath: res.tempFilePaths[0],
+										// 		name: 'file',
+										// 		success(res) {
+										// 			that.cfcong = JSON.parse(res.data).data.url
+										// 		}
+										// 	})
+										// }
+									},
+								});
+							},
 				updata(){
 					uni.removeStorageSync('yc')
 					uni.removeStorageSync('zy')

@@ -50,9 +50,12 @@
 				card:[
 					{title:'全部',show:true},
 					{title:'进心中',show:false},
-					{title:'已完成',show:false}
+					{title:'已完成',show:false},
 				]
 			}
+		},
+		onLoad() {
+			
 		},
 		methods:{
 			yan(){
