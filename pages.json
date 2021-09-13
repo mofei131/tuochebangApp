@@ -80,6 +80,30 @@
 			}
 		},
 		{
+			"path": "pages/my/paihangbang",
+			"style": {
+				"navigationBarTitleText": "排行榜"
+			}
+		},
+		{
+			"path": "pages/my/bankcardlist",
+			"style": {
+				"navigationBarTitleText": "银行卡"
+			}
+		},
+		{
+			"path": "pages/my/bindbankcard",
+			"style": {
+				"navigationBarTitleText": "银行卡"
+			}
+		},
+		{
+			"path": "pages/my/updatepwd",
+			"style": {
+				"navigationBarTitleText": "修改密码"
+			}
+		},
+		{
 			"path": "pages/my/set",
 			"style": {
 				"navigationBarTitleText": "设置"

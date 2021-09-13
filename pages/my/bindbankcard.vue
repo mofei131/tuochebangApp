@@ -3,12 +3,12 @@
 	  <view class="mode">
 	    <view class="personal">
 	      <view class="fenge"></view>
-	      <text lines="1" class="txt2">第一步：个人资料</text>
+	      <text lines="1" class="txt2">添加银行卡</text>
 	    </view>
 	    <view class="info">
 	      <view class="infomation">
 	        <view class="name">
-	          <text lines="1" decode="true" class="nameword">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</text>
+	          <text lines="1" decode="true" class="nameword">持卡人：</text>
 			  <input lines="1" class="nameinput" type="number" placeholder="请输入姓名"
 			  	placeholder-style="color:#C1C2C3;" />
 	        </view>
@@ -16,56 +16,37 @@
 	          <view class="outer1"></view>
 	        </view>
 	        <view class="group4">
-	          <text lines="1" class="phone">联系电话：</text>
-	          <input lines="1" class="phoneinput" type="number" maxlength="11" placeholder="请输入电话"
+	          <text lines="1" class="phone">卡号：</text>
+	          <input lines="1" class="phoneinput" type="number" maxlength="11" placeholder="请输入卡号"
 	          	placeholder-style="color:#C1C2C3;" />
 	        </view>
-	        <view class="xiantiao">
+	         <view class="xiantiao">
 	          <view class="outer1"></view>
 	        </view>
-	        <view class="group7">
-	          <text lines="1" class="txt3">身份证号：</text>
-	          <input lines="1" class="txt4" type="number" maxlength="11" placeholder="请输入身份证号码"
-	          	placeholder-style="color:#C1C2C3;" />
-	        </view>
-	        <view class="xiantiao">
-	          <view class="outer1"></view>
-	        </view>
-	        <view class="group10">
-	          <text lines="1" class="word8">归属公司：</text>
-	          <input lines="1" class="info1" type="number" maxlength="11" placeholder="请输入归属公司"
-	          	placeholder-style="color:#C1C2C3;" />
-	        </view>
-	        <view class="xiantiao">
-	          <view class="outer1"></view>
-	        </view>
+			<view class="group4">
+			  <text lines="1" class="phone">预留电话：</text>
+			  <input lines="1" class="phoneinput" type="number"  maxlength="11" placeholder="请输入卡号"
+			  	placeholder-style="color:#C1C2C3;"/>
+			</view>
+			<button bindtap="getcode" class="main2">
+			    <text lines="1" class="info5">获取验证码</text>
+			</button>
+			 <view class="xiantiao">
+			  <view class="outer1"></view>
+			</view>
+			<view class="group4">
+			  <text lines="1" class="phone">验证码：</text>
+			  <input lines="1" class="phoneinput" type="number" maxlength="11" placeholder="请输入卡号"
+			  	placeholder-style="color:#C1C2C3;" />
+			</view>
+			 <view class="xiantiao">
+			  <view class="outer1"></view>
+			</view>
 	      </view>
 	    </view>
-		<view class="picture">
-			<view class="image">
-				<view class="word8">请上传公司营业执照</view>
-				<image src="../../static/images/renzhengpic.png"></image>
-			</view>
-			<view class="image">
-				<view class="word8">请上传身份证人像面</view>
-				<image src="../../static/images/idCardfront.png"></image>
-			</view>
-			<view class="image">
-				<view class="word8">请上传身份证国徽面</view>
-				<image src="../../static/images/idCard.png"></image>
-			</view>
-			<view class="image">
-				<view class="word8">请上传驾驶证照片主页</view>
-				<image src="../../static/images/renzhengpic.png"></image>
-			</view>
-			<view class="image">
-				<view class="word8">请上传驾驶证照片副页</view>
-				<image src="../../static/images/renzhengpic.png"></image>
-			</view>
-		</view>
 	    <view class="box12">
 	      <view class="layer8">
-	        <text lines="1" class="word15">下一步</text>
+	        <text lines="1" class="word15">确定绑卡</text>
 	      </view>
 	    </view>
 	  </view>
@@ -354,5 +335,28 @@
 		margin: auto;
 		margin-top: 10rpx;
 		background-color: rgba(255,255,255,1);
+	}
+	.main2 {
+	  height: 56rpx;
+	  border-radius: 28rpx;
+	  background-color: rgba(64,169,255,1);
+	  margin-left: 160rpx;
+	  width: 178rpx;
+	  justify-content: center;
+	  align-items: center;
+	  display: flex;
+	  flex-direction: column;
+	}
+	.info5 {
+	  z-index: 73;
+	  width: 140rpx;
+	  display: block;
+	  overflow-wrap: break-word;
+	  color: rgba(255,255,255,1);
+	  font-size: 28rpx;
+	  font-family: PingFangSC-Regular;
+	  white-space: nowrap;
+	  line-height: 40rpx;
+	  text-align: left;
 	}
 </style>

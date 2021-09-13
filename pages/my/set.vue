@@ -13,27 +13,21 @@
 				<image src="../../static/icon/rightzd.png"></image>
 			</view>
 		</view>
-		<view class="guidelist" @tap="pandaun(index)">
+		<view class="guidelist" @tap="updatepwd()">
 			<view class="guideitem">
-				<view>清理缓存</view>
+				<view>修改支付密码</view>
 				<image src="../../static/icon/rightzd.png"></image>
 			</view>
 		</view>
 		<view class="guidelist" @tap="pandaun(index)">
 			<view class="guideitem">
-				<view>隐私协议</view>
-				<image src="../../static/icon/rightzd.png"></image>
+				<view>订单消息提示</view>
+				<switch checked @change="switch1Change"  style="transform: scale(0.7,0.7);"/>
 			</view>
 		</view>
 		<view class="guidelist" @tap="pandaun(index)">
 			<view class="guideitem">
-				<view>用户协议</view>
-				<image src="../../static/icon/rightzd.png"></image>
-			</view>
-		</view>
-		<view class="guidelist" @tap="pandaun(index)">
-			<view class="guideitem">
-				<view>使用说明</view>
+				<view>退出登录</view>
 				<image src="../../static/icon/rightzd.png"></image>
 			</view>
 		</view>
@@ -62,6 +56,12 @@
 			personaldata(){
 				uni.navigateTo({
 					url:'./personaldata'
+				})
+			},
+			//修改密码
+			updatepwd(){
+				uni.navigateTo({
+					url:'./updatepwd'
 				})
 			}
 		}

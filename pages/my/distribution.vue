@@ -19,7 +19,7 @@
 			<view class="newuser">已邀请用户
 				<span class="usernum">386</span>人
 			</view> 
- 			<view class="paihang">
+ 			<view class="paihang" @tap="paihangbang()">
 	 			<image src='../../static/images/paihang.png'></image>
 				<view class="phb">
 					排行榜
@@ -72,7 +72,12 @@
 			
 		},
 		methods:{
-			
+			//跳转排行榜
+			paihangbang(){
+				uni.navigateTo({
+					url:'./paihangbang'
+				})
+			}
 		}
 	}
 </script>
@@ -153,6 +158,8 @@
 		color: #FFFFFF;
 		font-size: 24rpx;
 		line-height: 45rpx;
+		top: -200rpx;
+		text-align: center;
 	}
 	.paihang image{
 		width: 154rpx;

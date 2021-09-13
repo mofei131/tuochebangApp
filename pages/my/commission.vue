@@ -70,7 +70,6 @@
 					user_id:uni.getStorageSync('userInfo').user_id
 				},
 				success(res) {
-					console.log(res.data.data)
 					that.bill = res.data.data
 				}
 			})
