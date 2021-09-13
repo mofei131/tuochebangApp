@@ -25,9 +25,9 @@
 		</view>
 		<view class="agreement">
 			<text>登录即代表同意</text>
-			<navigator url="agreement" open-type="navigate">用户协议</navigator>
+			<navigator url="yonghuxieyi" open-type="navigate">用户协议</navigator>
 			<text>和</text>
-			<navigator url="privacyPolicy" open-type="navigate">隐私政策</navigator>
+			<navigator url="yinsizhengce" open-type="navigate">隐私政策</navigator>
 		</view>
 		<view class="button-login"  ref="login" @tap="bindLogin()" v-if="dis">
 			<text>确认登录</text>
@@ -98,7 +98,7 @@
 					return;
 				}
 				this.http.ajax({
-					url: 'user/login',
+					url: 'app/login',
 					method: 'GET',
 					data: {
 						mobile: this.phone,
@@ -107,9 +107,15 @@
 					success: function(res) {
 						if (res.code == 200) {
 							uni.setStorageSync('userInfo', res.data)
-							uni.switchTab({
-								url: '/pages/index/index'
+							uni.showToast({
+								title: '登录成功',
+								duration:1000
 							})
+							setTimeout(() => {
+								uni.switchTab({
+									url: '/pages/index/index'
+								})
+							},1000)
 						} else {
 							uni.showToast({
 								title: res.message,

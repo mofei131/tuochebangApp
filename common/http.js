@@ -1,6 +1,5 @@
 const baseUrl = 'https://trailer.boyaokj.cn/api/';
 const imgUrl = 'http://store.boyaokj.cn/';
-const domeUrl = 'https://fc.boyaokj.cn/attachment/';
 /* 封装ajax函数
  * @param {string}opt.type http连接的方式，包括POST和GET两种方式
  * @param {string}opt.url 发送请求的url
@@ -19,42 +18,30 @@ function getHeader() { //header头部
 }
 
 const ajax = function(opt) {
-	
-	return new Promise((resolve,reject)=>{
-		opt = opt || {};
-		opt.method = (opt.method && opt.method.toUpperCase()) || 'POST';
-		opt.url = baseUrl + opt.url || '';
-		opt.async = opt.async || true;
-		opt.data = opt.data || null;
-		// opt.success = opt.success || function() {};
-		// opt.fail = opt.fail || function() {};
-		// opt.complete = opt.complete || function() {};
-		uni.request({
-			method: opt.method,
-			dataType: 'json',
-			url: opt.url,
-			data: opt.data,
-			header: getHeader(),
-			success: (res) => {
-				resolve(res.data);
-				// opt.success(res);
-			},
-			fail: (res) => {
-				uni.showToast({
-					title:"服务器异常，请求有误！",
-					icon:'none'
-				})
-				reject(res.data);
-				// opt.fail(res);
-			},
-			complete: (res) => {
-				// opt.complete(res);
-			},
-		})
-		
-	});
-	
-	
+	opt = opt || {};
+	opt.method = (opt.method && opt.method.toUpperCase()) || 'POST';
+	opt.url = baseUrl + opt.url || '';
+	opt.async = opt.async || true;
+	opt.data = opt.data || null;
+	opt.success = opt.success || function() {};
+	opt.fail = opt.fail || function() {};
+	opt.complete = opt.complete || function() {};
+	uni.request({
+		method: opt.method,
+		dataType: 'json',
+		url: opt.url,
+		data: opt.data,
+		header: getHeader(),
+		success: (res) => {
+			opt.success(res.data);
+		},
+		fail: (res) => {
+			opt.fail(res);
+		},
+		complete: (res) => {
+			opt.complete(res);
+		},
+	})
 	// var xmlHttp = null;
 	// if (XMLHttpRequest) {
 	// 	xmlHttp = new XMLHttpRequest();
@@ -131,7 +118,6 @@ const checkLogin = function() {
 export default {
 	baseUrl,
 	imgUrl,
-	domeUrl,
 	ajax,
 	checkLogin
 }

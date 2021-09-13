@@ -130,6 +130,16 @@
 			"style": {
 				"navigationBarTitleText": "验车"
 			}
+		},{
+			"path": "pages/login/yinsizhengce",
+			"style": {
+				"navigationBarTitleText": "隐私政策"
+			}
+		},{
+			"path": "pages/login/yonghuxieyi",
+			"style": {
+				"navigationBarTitleText": "用户协议"
+			}
 		}
 	],
 	"globalStyle": {
@@ -141,8 +151,6 @@
 		"color": "#BFBFBF",
 		"selectedColor": "#30AEFF",
 		"font-size": "24rpx",
-		"border":"0rpx",
-		"box-shadow": "0px 0px 0px 0px",
 		"list": [{
 			"pagePath": "pages/index/index",
 			"iconPath": "static/images/icon1.png",

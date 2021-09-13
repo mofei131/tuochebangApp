@@ -16,7 +16,7 @@
 					<view class="title">
 						请拍摄车辆翼子板的位置
 					</view>
-					<image :src="photo1 == ''?'../../static/images/zhaobj.png':photo2" @click="chooseImage(2)"></image>
+					<image :src="photo2 == ''?'../../static/images/zhaobj.png':photo2" @click="chooseImage(2)"></image>
 				</view>
 			</view>
 		</view>
@@ -31,6 +31,13 @@
 		<view class="yuedu2" @tap="createCanvas" v-else>
 			<view v-if="!imgurl">请司机点击空白位置签字，确认验车</view>
 			<image v-else :src="imgurl" mode="aspectFit"></image>
+		</view>
+		<view class="itemt">
+			<view class="blue"></view>
+			<view class="itt">驳回理由</view>
+		</view>
+		<view class="yuedu2">
+			<view class="liyou">车辆车牌号不对，不是要运送的车辆。</view>
 		</view>
 		<view class="btn" @click="updata">确认上传</view>
 		<view class="signature" v-show="showCanvas">
@@ -119,6 +126,9 @@
 				updata(){
 					uni.removeStorageSync('yc')
 					uni.removeStorageSync('zy')
+					uni.reLaunch({
+						url:'index'
+					})
 				},
 				toshuo(){
 					uni.reLaunch({
@@ -164,7 +174,7 @@
 					this.points.push(movePoint);       //存点
 					let len = this.points.length;
 					if(len>=2){
-						this.draw();                   //绘制路径
+						this.draw();                  //绘制路径
 					}
 					
 				},
@@ -241,6 +251,14 @@
 <style>
 	.yuedu2 image{
 		margin: auto;
+	}
+	.liyou{
+		font-size: 24rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #333!important;
+		margin: 0rpx 0 0 20rpx;
+		padding: 26rpx 0 120rpx 0;
 	}
 	.yuedu2 view{
 		font-size: 24rpx;

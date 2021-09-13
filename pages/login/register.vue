@@ -24,8 +24,8 @@
 		</view>
 		<view class="agreement">
 			<text v-if="password == ''">密码为6-20位，可由数字、字母、符号组成。</text>
-			<text v-if="password != ''">登录即代表同意<navigator url="agreement" open-type="navigate" class="xiahuaxian">用户协议</navigator>及<navigator
-					class="xiahuaxian" url="privacyPolicy" open-type="navigate">隐私政策</navigator></text>
+			<text v-if="password != ''">登录即代表同意<navigator url="yonghuxieyi" open-type="navigate" class="xiahuaxian">用户协议</navigator>及<navigator
+					class="xiahuaxian" url="yinsizhengce" open-type="navigate">隐私政策</navigator></text>
 		</view>
 		<view class="button-login" hover-class="button-hover" @tap="bindLogin" v-if="dis">
 			<text>立即注册</text>
@@ -67,7 +67,7 @@
 				if (this.second == 0) {
 					return '| 获取验证码';
 				} else {
-					return this.second+'s';
+					return this.second+'s重新获取';
 					// if (this.second < 10) {
 					// 	return '重新获取0' + this.second;
 					// } else {
@@ -110,21 +110,25 @@
 					return;
 				}
 				this.second = 60;
-				// this.http.ajax({
-				// 	url: 'user/getVerifyCode',
-				// 	method: 'GET',
-				// 	data: {
-				// 		mobile: this.phone,
-				// 	},
-				// 	success: function(res) {
-						js = setInterval(function() {
-							_this.second--;
-							if (_this.second == 0) {
-								_this.clear()
-							}
-						}, 1000)
-				// 	}
-				// });
+				this.http.ajax({
+					url: 'app/getVerifyCode',
+					method: 'GET',
+					data: {
+						mobile: this.phone,
+					},
+					success(res) {
+						if(res.code == 200){
+							console.log(res)
+							console.log("倒计时")
+							js = setInterval(function() {
+								_this.second--;
+								if (_this.second == 0) {
+									_this.clear()
+								}
+							},1000)
+						}
+					}
+				});
 			},
 			bindLogin() {
 				// if (this.agreement == false) {
@@ -156,24 +160,25 @@
 				// 	return;
 				// }
 				this.http.ajax({
-					url: 'user/register',
+					url: 'app/register',
 					method: 'GET',
 					data: {
 						mobile: this.phone,
 						password: this.password,
-						// code: this.code
+						code:this.code
 					},
 					success: function(res) {
-						wx.showToast({
-							title: res.message,
-							icon: 'none'
-						})
 						if (res.code == 200) {
-							setTimeout(() => {
-								wx.redirectTo({
-									url: 'login'
-								}, 1000)
+							uni.showToast({
+								title: '注册成功',
+								icon: 'none',
+								duration:1000
 							})
+							setTimeout(() => {
+								uni.redirectTo({
+									url: 'login'
+								})
+							},1000)
 						}
 					}
 				});
