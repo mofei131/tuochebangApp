@@ -20,6 +20,12 @@
 					<view class="desc">保证金</view>
 				</view>
 			</view>
+			<view class="bankcard" @tap="bankcard()">
+				<image src='../../static/images/paihang.png'></image>
+				<view class="phb">
+					银行卡列表
+				</view>
+			</view>
 		</view>
 		<view class="inputbox">
 			<view class="input">
@@ -63,11 +69,35 @@
 			</view>
 		</view>
 		<view class="btn" @tap="pay()">立即提现</view>
+		<view>
+			<text lines="1" class="paragraph">提现小于2万元（不含2万元），每笔2元；
+				<br/>提现大于2万元小于5万元（不含5万元），每笔5元；
+				<br/>提现大于5万元，每笔10元。
+			</text>
+    
+		</view>
 	</view>
 	
 </template>
 
 <script>
+	export default{
+		data(){
+			return{
+				
+			}
+		},
+		onLoad() {
+			
+		},
+		methods:{
+			bankcard(){
+				uni.navigateTo({
+					url:'./bankcardlist'
+				})
+			}
+		}
+	}
 	
 </script>
 <style>
@@ -117,6 +147,25 @@
 		margin-left: 31rpx;
 		margin-top: 20rpx;
 	}
+	.bankcard{
+		position: relative;
+		color: #FFFFFF;
+		font-size: 24rpx;
+		line-height: 45rpx;
+		top: -200rpx;
+		text-align: center;
+	}
+	.bankcard image{
+		width: 154rpx;
+		height: 50rpx;
+		float: right;
+	}
+	.phb{
+		position: absolute;
+		top: 0;
+		right: 20rpx;
+		
+	}
 	.jine{
 		font-size: 36rpx;
 	}
@@ -155,6 +204,21 @@
 		float: left;
 		margin-left: 40px;
 		width: 350rpx;
+	}
+	.paragraph {
+	  width: 562rpx;
+	  height: 99rpx;
+	  display: block;
+	  overflow-wrap: break-word;
+	  color: rgba(148,148,148,1);
+	  font-size: 24rpx;
+	  font-family: PingFangSC-Regular;
+	  line-height: 33rpx;
+	  text-align: left;
+	  align-self: flex-start;
+	  overflow: hidden;
+	  text-overflow: ellipsis;
+	  margin: 25rpx 0 0 35rpx;
 	}
 	.btn{
 		width: 686rpx;
