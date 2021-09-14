@@ -1,0 +1,6 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "iconlist": "/pages/components/iconlist/iconlist"
+  }
+}

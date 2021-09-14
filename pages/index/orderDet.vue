@@ -2,6 +2,10 @@
 	<view>
 		<!-- <view class="map"> -->
 			<map style="width: 100%;" :style="{height:(shou?'25vh':'68vh')}" :latitude="latitude" :longitude="longitude" scale="16" show-location="true" :markers="markers" :polyline="polylines">
+				<!-- <cover-view> -->
+							 <cover-image class="war" :style="homestyle"></cover-image>
+							 <cover-view class="juli">提示:装车距离距离您150km</cover-view>
+				<!-- </cover-view> -->
 			</map>
 		<!-- </view> -->
 		 <!-- @touchend="chukai" -->
@@ -38,7 +42,7 @@
 					</view>
 					</view>
 				</view>
-				<view class="ceng3" v-if="shou" id="ceng3">
+				<view class="ceng3 animation" v-if="shou" id="ceng3" :animation="animationData">
 					<view class="yugu">
 						<view class="ylef">
 							<view>预估里程</view>
@@ -136,7 +140,11 @@
 				title: 'map',
 				latitude:'',
 				longitude:'',
-				polylines:''
+				polylines:'',
+				homestyle:{
+					backgroundImage:'url(http://hlstore.yimetal.cn/2021/war.png)'
+				},
+				animationData:{}
 			}
 		},
 		onLoad() {
@@ -195,13 +203,16 @@
 			        console.log(info)
 			      }
 			    })
+				this.animation = uni.createAnimation()
+		},
+		onUnload() {
+			this.animationData = {}
 		},
 		methods:{
 			/**  
 			* 触摸开始  
 			**/  
 			touchStart(e) {  
-					console.log("触摸开始")  
 					this.touchStartX = e.touches[0].clientX;  
 					this.touchStartY = e.touches[0].clientY;  
 			},  
@@ -209,8 +220,7 @@
 			/**  
 			* 触摸结束  
 			**/  
-			touchEnd(e) {  
-					console.log("触摸结束")  
+			touchEnd(e) {
 					let deltaX = e.changedTouches[0].clientX - this.touchStartX;  
 					let deltaY = e.changedTouches[0].clientY - this.touchStartY;  
 					if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY)) {  
@@ -240,10 +250,12 @@
 			// },
 			togao(){
 				uni.openLocation({
-					latitude: 26.64030264268305,
-					longitude: 114.15421791961671,
-					name: "井冈山",
-					address: "吉安市井冈山市茨坪镇"
+					// latitude: 26.64030264268305,
+					latitude:this.latitude,
+					longitude:this.longitude,
+					// longitude: 114.15421791961671,
+					// name: "井冈山",
+					// address: "吉安市井冈山市茨坪镇"
 				});
 			}
 		}
@@ -251,6 +263,34 @@
 </script>
 
 <style>
+	.juli{
+		display:inline-flex;
+		width: 750rpx;
+		/* padding-left: 70rpx; */
+		position: relative;
+		height: 40rpx;
+		background: rgba(0, 0, 0, 0.5);
+		font-size: 24rpx;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		color: #FFFFFF;
+		text-align: center;
+		letter-spacing: 10rpx;
+	}
+	.war{
+		width: 28rpx;
+		height: 28rpx;
+		display:inline-flex;
+		position: absolute;
+		top: 11rpx;
+		left: 40rpx;
+		/* background-image: url('http://hlstore.yimetal.cn/2021/war.png'); */
+		/* background-image: url('~@/static/images/war.png'); */
+		/* background-image: url(../../static/images/war.png);
+		background-size: 100% 100%;
+		background-position: 50% 50%;
+		background-repeat: no-repeat; */
+	}
 	.gotuwen view{
 		font-size: 20rpx;
 		font-family: PingFangSC-Regular, PingFang SC;
@@ -556,6 +596,7 @@
 	.ceng3{
 		padding-left: 50rpx;
 		box-sizing: border-box;
+		background-color: #fff;
 	}
 	.btn{
 		width: 550rpx;

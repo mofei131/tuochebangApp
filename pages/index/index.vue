@@ -7,8 +7,9 @@
 				<image src="../../static/images/shaixuan.png" @click="hsai"></image>
 			</view>
 		</view>
-		<view class="dingbox" @click="todet">
+		<view class="dingbox">
 			<view class="neibox">
+				<view  @click="todet">
 				<view class="ceng1">
 					<view class="code">订单号:12408652396</view>
 					<view class="fu">到付</view>
@@ -44,8 +45,9 @@
 					<view>:</view>
 					<view>轻拿轻放，尽快送达，会给好评</view>
 				</view>
+				</view>
 				<view class="ceng5">
-					<view>立即接单</view>
+					<view @click="lie()">立即接单</view>
 				</view>
 			</view>
 		</view>
@@ -97,7 +99,7 @@
 				<view class="shaiitem">
 					<view class="shaibai">行车距离</view>
 					<view>:</view>
-					<input class="xaunze" type="digit" v-model="juli" placeholder="请输入行车距离" placeholder-style="color: #999999;"/>
+					<input class="xaunze" type="digit" v-model="juli" placeholder="请输入行车距离(km)" placeholder-style="color: #999999;"/>
 				</view>
 				<view class="shaiitem2">
 					<view class="qjnam">
@@ -115,16 +117,27 @@
 					<view class="shaibai">特殊要求</view>
 					<view class="shaimao">:</view>
 					</view>
-					<view class="qujian">
-						<input type="digit" v-model="min" placeholder="自定义最低价" placeholder-style="color: #999999;"/>
-						<view class="huiheng"></view>
-						<input type="digit" v-model="max" placeholder="自定义最高价" placeholder-style="color: #999999;"/>
+					<view class="labellist">
+						<view class="labelitem" v-for="(item,index) in teshu" :key="index" :class="{ clever: cardlist.indexOf(item.id) != -1 }" @tap="select(item.id)">
+							{{item.title}}
+						</view>
 					</view>
 				</view>
 				<view class="btns">
 					<view class="tbtn">重置</view>
 					<view class="tbtn2">查看</view>
 				</view>
+			</view>
+		</view>
+		</view>
+		<view class="huibax" v-if="jie">
+		<view class="tanbox">
+			<image src="../../static/images/close.png" @click="guan()"></image>
+			<view class="tishi">提示</view>
+			<view class="jiele">您确定要接取这个订单吗?</view>
+			<view class="quque">
+				<view @click="guan()">取消</view>
+				<view>确定</view>
 			</view>
 		</view>
 		</view>
@@ -143,6 +156,7 @@
 		},
 		data() {
 			return {
+				jie:false,
 				amapPlugin:'',
 				address:'',
 				lat:'',
@@ -165,7 +179,15 @@
 				juli:'',
 				min:'',
 				max:'',
-				shai:false
+				shai:false,
+				teshu:[
+					{id:0,title:'备用车衣'},
+					{id:1,title:'备用车衣2'},
+					{id:2,title:'备用车衣33'},
+					{id:3,title:'备用车衣444'},
+					{id:4,title:'备用车衣5555'},
+				],
+				cardlist:[]
 			}
 		},
 		onLoad() {
@@ -183,7 +205,7 @@
 			            key: 'bd45905078a821a4b50ad67dbc470875',
 			        });
 			this.amapPlugin.getRegeo({
-					success: (data) => {  
+					success: (data) => {
 							this.defaultRegionCode = [data[0].regeocodeData.addressComponent.province,data[0].regeocodeData.addressComponent.city,data[0].regeocodeData.addressComponent.district]
 							// this.address = data[0].name;
 							// this.lat = data[0].latitude
@@ -195,8 +217,21 @@
 			}); 
 		},
 		methods: {
+			select(index) {
+			let that = this;
+			if (that.cardlist.indexOf(index) == -1) {
+				that.cardlist.push(index); //选中添加到数组里
+			} else {
+				that.cardlist.splice(that.cardlist.indexOf(index), 1); //取消
+					}
+				},
+			guan(){
+				this.jie = false
+			},
+			lie(){
+				this.jie = true
+			},
 			hsai(){
-				console.log("断")
 				if(this.shai){
 					this.shai = false
 				}else{
@@ -238,6 +273,106 @@
 </script>
 
 <style>
+	.labelitem{
+		background: #E9E9E9;
+		border-radius: 50rpx;
+		padding: 10rpx 20rpx 10rpx 20rpx;
+		font-size: 24rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #51565D;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-right: 20rpx;
+		margin-top: 20rpx;
+	}
+	.labellist{
+		width: 560rpx;
+		margin: auto;
+		display: flex;
+		align-items: center;
+		justify-content:start;
+		flex-wrap: wrap;
+	}
+	.clever{
+		color: #fff;
+		background: #30AEFF;
+	}
+	.quque view:nth-child(1){
+		width: 334rpx;
+		height: 76rpx;
+		border-radius: 39rpx;
+		border: 1px solid #30AEFF;
+		font-size: 28rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #30AEFF;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.quque view:nth-child(2){
+		width: 334rpx;
+		height: 76rpx;
+		background: #30AEFF;
+		border-radius: 39rpx;
+		font-size: 28rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #fff;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.quque{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 680rpx;
+		padding-top: 78rpx;
+		margin: auto;
+	}
+	.jiele{
+		font-size: 28rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		text-align: center;
+		margin-top: 44rpx;
+	}
+	.tishi{
+		font-size: 30rpx;
+		font-family: PingFangSC-Semibold, PingFang SC;
+		font-weight: 600;
+		color: #51565D;
+		padding-top: 68rpx;
+		text-align: center;
+	}
+	.tanbox image{
+		width: 66rpx;
+		height: 66rpx;
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+	.huibax{
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 5;
+		background-color: rgb(0,0,0,.3);
+	}
+	.tanbox{
+		width: 720rpx;
+		height: 368rpx;
+		background: #FFFFFF;
+		border-radius: 14rpx;
+		position: relative;
+		margin: auto;
+		margin-top: 60%;
+	}
 	.tbtn2{
 		width: 334rpx;
 		height: 76rpx;
