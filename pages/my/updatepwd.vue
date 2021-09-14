@@ -61,14 +61,9 @@
     computed: {
       yanzhengma() {
         if (this.second == 0) {
-          return '| 获取验证码';
+			return '| 获取验证码';
         } else {
-					return this.second+'s';
-          // if (this.second < 10) {
-          //   return '重新获取0' + this.second;
-          // } else {
-          //   return '重新获取' + this.second;
-          // }
+			return this.second+'s';
         }
       }
     },
