@@ -16,7 +16,7 @@
 	page{
 		background: #F9FAFC;
 	}
-	/* .uni-tabbar-border {
-			background-color: #fff!important;
-	} */
+	.uni-tabbar-border{
+		height: 0rpx!important;
+	}
 </style>

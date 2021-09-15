@@ -172,6 +172,12 @@
 			
 		},
 		onShow() {
+			console.log(uni.getStorageSync('userInfo'))
+			if(!uni.getStorageSync('userInfo')){
+				uni.reLaunch({
+					url:'../login/login'
+				})
+			}
 			let that = this
 			this.amapPlugin = new amap.AMapWX({  
 			            key: 'bd45905078a821a4b50ad67dbc470875',

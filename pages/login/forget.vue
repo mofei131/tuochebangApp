@@ -47,7 +47,7 @@
         if (this.second == 0) {
           return '| 获取验证码';
         } else {
-					return this.second+'s';
+					return this.second+'s重新获取';
           // if (this.second < 10) {
           //   return '重新获取0' + this.second;
           // } else {
@@ -80,21 +80,23 @@
           return;
         }
         _this.second = 60;
-        // this.http.ajax({
-        // 	url: 'user/getVerifyCode',
-        // 	method: 'GET',
-        // 	data: {
-        // 		mobile: this.phone,
-        // 	},
-        // 	success: function(res) {
-        		js = setInterval(function() {
-        		  _this.second--;
-        		  if (_this.second == 0) {
-        		    _this.clear()
-        		  }
-        		}, 1000)
-        // 	}
-        // });
+				this.http.ajax({
+					url: 'app/getVerifyCode',
+					method: 'GET',
+					data: {
+						mobile: this.phone,
+					},
+					success(res) {
+						if(res.code == 200){
+							js = setInterval(function() {
+								_this.second--;
+								if (_this.second == 0) {
+									_this.clear()
+								}
+							},1000)
+						}
+					}
+				});
       },
       bindLogin() {
         if (this.phone.length != 11) {
@@ -126,7 +128,7 @@
 				  return;
 				}
         this.http.ajax({
-        	url: 'user/forget',
+        	url: 'app/forget',
         	method: 'GET',
         	data: {
         		mobile: this.phone,
@@ -134,16 +136,17 @@
         		code: this.code
         	},
         	success: function(res) {
-        		wx.showToast({
-        			title: res.message,
-        			icon: 'none'
-        		})
         		if (res.code == 200) {
-        			setTimeout(() => {
-        				wx.redirectTo({
-        					url: 'login'
-        				}, 1000)
+        			uni.showToast({
+        				title: '修改成功',
+        				icon: 'none',
+        				duration:1000
         			})
+        			setTimeout(() => {
+        				uni.redirectTo({
+        					url: 'login'
+        				})
+        			},1000)
         		}
         	}
         });

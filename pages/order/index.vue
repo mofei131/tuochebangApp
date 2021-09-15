@@ -4,7 +4,7 @@
 			<view class="feld">
 				<image src="../../static/images/xiaoxi.png"></image>
 				<view class="toptitle">订单</view>
-				<image src="../../static/images/kefu.png"></image>
+				<image src="../../static/images/kefu.png" @click="call()"></image>
 			</view>
 		</view>
 		<view class="card">
@@ -51,13 +51,19 @@
 					{title:'全部',show:true},
 					{title:'进心中',show:false},
 					{title:'已完成',show:false},
-				]
+				],
+				cell:'1335678520'
 			}
 		},
 		onLoad() {
 			
 		},
 		methods:{
+			call(){
+				uni.makePhoneCall({
+					 phoneNumber: this.cell, 
+				})
+			},
 			yan(){
 				uni.navigateTo({
 					url:'yanche'

@@ -47,25 +47,26 @@
                 ]
             },
             /* ios打包配置 */
-                        "ios" : {},
-                        /* SDK配置 */
-                        "sdkConfigs" : {
-                            "geolocation" : {
-                                "amap" : {
-                                    "__platform__" : [ "ios", "android" ],
-                                    "appkey_ios" : "",
-                                    "appkey_android" : ""
-                                }
-                            },
-                            "maps" : {
-                                "amap" : {
-                                    "appkey_ios" : "f439e676d6d7ead585c6fc31a7ee077b",
-                                    "appkey_android" : "fd77fb7a7ac9c6dc048a6ef101da9cd7"
-                                }
-                            }
-                        }
+            "ios" : {},
+            /* SDK配置 */
+            "sdkConfigs" : {
+                "geolocation" : {
+                    "amap" : {
+                        "__platform__" : [ "ios", "android" ],
+                        "appkey_ios" : "",
+                        "appkey_android" : ""
                     }
                 },
+                "maps" : {
+                    "amap" : {
+                        "appkey_ios" : "f439e676d6d7ead585c6fc31a7ee077b",
+                        "appkey_android" : "fd77fb7a7ac9c6dc048a6ef101da9cd7"
+                    }
+                },
+                "ad" : {}
+            }
+        }
+    },
     /* 快应用特有相关 */
     "quickapp" : {},
     /* 小程序特有相关 */
