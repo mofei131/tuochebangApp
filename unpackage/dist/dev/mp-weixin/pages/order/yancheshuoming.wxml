@@ -1,0 +1,1 @@
+<view style="overflow:hidden;"><view class="about"><rich-text><rich-text nodes="{{content}}"></rich-text></rich-text><view data-event-opts="{{[['tap',[['back',['$event']]]]]}}" class="btn" bindtap="__e">同意协议</view></view></view>

@@ -77,7 +77,7 @@
 			return{
 				xian:false,
 				page:1,
-				limit:100,
+				limit:10,
 				my:'',
 				rank:[],
 			}
@@ -88,10 +88,28 @@
 		},
 		onShareAppMessage() {},
 		onShow() {
-		
+			this.searchChange();
 		},
 		methods:{
-			
+			searchChange() {
+				let that = this
+				that.page++
+				uni.request({
+					url:'http://trailer.boyaokj.cn/api/wechat/rank',
+					method:'GET',
+					data:{
+						page:that.page,
+						limit:that.limit,
+						user_id:uni.getStorageSync('userInfo').user_id
+					},
+					success(res) {
+						console.log(res);
+						for(let i in res.data.data){
+							that.boll.push(res.data.data[i])
+						}
+					}
+				})
+			}
 		}
 	}
 </script>

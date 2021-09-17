@@ -1,5 +1,11 @@
 <template>
 	<view>
+		<view class="tanchuang" style="float: left;">
+				<view class="juli">提示：有新的订单</view>
+				<div class="qd" style="float: left;line-height: 80rpx;">
+					<button class="qiangdan">去抢单(10s)</button>
+				</div>
+		</view>
 		<!-- <view class="guidelist" v-for="(item,index) in article" :key="index" @tap="pandaun(index)"> -->
 		<view class="guidelist" @tap="personaldata()">
 			<view class="guideitem">
@@ -7,13 +13,19 @@
 				<image src="../../static/icon/rightzd.png"></image>
 			</view>
 		</view>
-		<view class="guidelist" @tap="pandaun(index)">
+		<view class="guidelist" @tap="updatemobile()">
 			<view class="guideitem">
 				<view>修改手机号</view>
 				<image src="../../static/icon/rightzd.png"></image>
 			</view>
 		</view>
 		<view class="guidelist" @tap="updatepwd()">
+			<view class="guideitem">
+				<view>修改登录密码</view>
+				<image src="../../static/icon/rightzd.png"></image>
+			</view>
+		</view>
+		<view class="guidelist" @tap="updatepaypwd()">
 			<view class="guideitem">
 				<view>修改支付密码</view>
 				<image src="../../static/icon/rightzd.png"></image>
@@ -53,6 +65,13 @@
 			})
 		},
 		methods:{
+			//修改手机号
+			updatemobile(){
+				uni.navigateTo({
+					url:'./updatemobile'
+				})
+			},
+			//个人资料
 			personaldata(){
 				uni.navigateTo({
 					url:'./personaldata'
@@ -60,6 +79,12 @@
 			},
 			//修改密码
 			updatepwd(){
+				uni.navigateTo({
+					url:'./updatepwd'
+				})
+			},
+			//修改支付密码
+			updatepaypwd(){
 				uni.navigateTo({
 					url:'./updatepwd'
 				})
@@ -72,6 +97,31 @@
 <style>
 	page{
 		background: #F8F8F8;
+	}
+	.tanchuang{
+		width: 100%;
+		height:80rpx;
+		line-height: 85rpx;
+		background-color: rgba(0,0,0,0.5);
+		color: #FFFFFF;
+	}
+	.juli{
+		margin-left: 30rpx;
+		font-size: 24rpx;
+		width: 500rpx;
+		float: left;
+	}
+	.qd{
+		width: 180rpx;
+		font-size: 24rpx;
+	}
+	.qiangdan{
+		background-color: rgba(48,174,255,1);
+		font-size: 24rpx;
+		height: 60rpx;
+		margin: 10rpx;
+		border-radius: 23rpx;
+		color: #FFFFFF;
 	}
 	.guideitem{
 		display: flex;
