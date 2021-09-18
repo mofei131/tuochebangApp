@@ -18,7 +18,7 @@
 		onLoad() {
 			let that = this
 			uni.request({
-				url:'https://layer.boyaokj.cn/api/index/setting',
+				url:'https://trailer.boyaokj.cn/api/index/setting',
 				method:'GET',
 				data:{
 					key:'guanyu'

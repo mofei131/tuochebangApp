@@ -98,6 +98,12 @@
 			}
 		},
 		{
+			"path": "pages/my/personaldata",
+			"style": {
+				"navigationBarTitleText": "个人资料"
+			}
+		},
+		{
 			"path": "pages/my/updatemobile",
 			"style": {
 				"navigationBarTitleText": "修改手机号"

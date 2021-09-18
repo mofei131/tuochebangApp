@@ -32,7 +32,7 @@
 				</view>
 			</view>
 			<view class="btn" @tap="bindbankcard()">绑定银行卡</view>
-			<view class="btn" @tap="bindbankcard()">解除绑定</view>
+			<view class="btn" @tap="unbindbankcard()">解除绑定</view>
 		</view>
 	</view>
 </template>
@@ -50,7 +50,7 @@
 			this.lei = p.page
 			let that = this
 			uni.request({
-				url:'https://layer.boyaokj.cn/api/wechat/moneyLog',
+				url:'https://trailer.boyaokj.cn/api/wechat/moneyLog',
 				method:'GET',
 				data:{
 					page:that.page,
@@ -72,7 +72,7 @@
 				let that = this
 				that.page++
 				uni.request({
-					url:'https://layer.boyaokj.cn/api/wechat/moneyLog',
+					url:'https://trailer.boyaokj.cn/api/wechat/moneyLog',
 					method:'GET',
 					data:{
 						page:that.page,
@@ -90,6 +90,9 @@
 				uni.navigateTo({
 					url:'./bindbankcard'
 				})
+			},
+			unbindbankcard(){
+				
 			}
 		}
 	}

@@ -4339,7 +4339,7 @@ var render = function() {
               _c(
                 "span",
                 { staticClass: _vm._$g(11, "sc"), attrs: { _i: 11 } },
-                [_vm._v("386")]
+                [_vm._v(_vm._$g(11, "t0-0"))]
               ),
               _vm._v("人")
             ],
@@ -8084,7 +8084,12 @@ var render = function() {
               _c(
                 "v-uni-button",
                 { staticClass: _vm._$g(4, "sc"), attrs: { _i: 4 } },
-                [_vm._v("去抢单(10s)")]
+                [
+                  _vm._v("去抢单("),
+                  _c("span", { attrs: { _i: 5 } }, [_vm._v("10")]),
+                  _vm._v("s)")
+                ],
+                1
               )
             ],
             1
@@ -8095,8 +8100,8 @@ var render = function() {
       _c(
         "v-uni-view",
         {
-          staticClass: _vm._$g(5, "sc"),
-          attrs: { _i: 5 },
+          staticClass: _vm._$g(6, "sc"),
+          attrs: { _i: 6 },
           on: {
             click: function($event) {
               return _vm.$handleViewEvent($event)
@@ -8106,10 +8111,10 @@ var render = function() {
         [
           _c(
             "v-uni-view",
-            { staticClass: _vm._$g(6, "sc"), attrs: { _i: 6 } },
+            { staticClass: _vm._$g(7, "sc"), attrs: { _i: 7 } },
             [
-              _c("v-uni-view", { attrs: { _i: 7 } }, [_vm._v("个人资料")]),
-              _c("v-uni-image", { attrs: { src: _vm._$g(8, "a-src"), _i: 8 } })
+              _c("v-uni-view", { attrs: { _i: 8 } }, [_vm._v("个人资料")]),
+              _c("v-uni-image", { attrs: { src: _vm._$g(9, "a-src"), _i: 9 } })
             ],
             1
           )
@@ -8119,8 +8124,8 @@ var render = function() {
       _c(
         "v-uni-view",
         {
-          staticClass: _vm._$g(9, "sc"),
-          attrs: { _i: 9 },
+          staticClass: _vm._$g(10, "sc"),
+          attrs: { _i: 10 },
           on: {
             click: function($event) {
               return _vm.$handleViewEvent($event)
@@ -8130,11 +8135,11 @@ var render = function() {
         [
           _c(
             "v-uni-view",
-            { staticClass: _vm._$g(10, "sc"), attrs: { _i: 10 } },
+            { staticClass: _vm._$g(11, "sc"), attrs: { _i: 11 } },
             [
-              _c("v-uni-view", { attrs: { _i: 11 } }, [_vm._v("修改手机号")]),
+              _c("v-uni-view", { attrs: { _i: 12 } }, [_vm._v("修改手机号")]),
               _c("v-uni-image", {
-                attrs: { src: _vm._$g(12, "a-src"), _i: 12 }
+                attrs: { src: _vm._$g(13, "a-src"), _i: 13 }
               })
             ],
             1
@@ -8145,8 +8150,8 @@ var render = function() {
       _c(
         "v-uni-view",
         {
-          staticClass: _vm._$g(13, "sc"),
-          attrs: { _i: 13 },
+          staticClass: _vm._$g(14, "sc"),
+          attrs: { _i: 14 },
           on: {
             click: function($event) {
               return _vm.$handleViewEvent($event)
@@ -8156,11 +8161,11 @@ var render = function() {
         [
           _c(
             "v-uni-view",
-            { staticClass: _vm._$g(14, "sc"), attrs: { _i: 14 } },
+            { staticClass: _vm._$g(15, "sc"), attrs: { _i: 15 } },
             [
-              _c("v-uni-view", { attrs: { _i: 15 } }, [_vm._v("修改登录密码")]),
+              _c("v-uni-view", { attrs: { _i: 16 } }, [_vm._v("修改登录密码")]),
               _c("v-uni-image", {
-                attrs: { src: _vm._$g(16, "a-src"), _i: 16 }
+                attrs: { src: _vm._$g(17, "a-src"), _i: 17 }
               })
             ],
             1
@@ -8171,8 +8176,8 @@ var render = function() {
       _c(
         "v-uni-view",
         {
-          staticClass: _vm._$g(17, "sc"),
-          attrs: { _i: 17 },
+          staticClass: _vm._$g(18, "sc"),
+          attrs: { _i: 18 },
           on: {
             click: function($event) {
               return _vm.$handleViewEvent($event)
@@ -8182,11 +8187,11 @@ var render = function() {
         [
           _c(
             "v-uni-view",
-            { staticClass: _vm._$g(18, "sc"), attrs: { _i: 18 } },
+            { staticClass: _vm._$g(19, "sc"), attrs: { _i: 19 } },
             [
-              _c("v-uni-view", { attrs: { _i: 19 } }, [_vm._v("修改支付密码")]),
+              _c("v-uni-view", { attrs: { _i: 20 } }, [_vm._v("修改支付密码")]),
               _c("v-uni-image", {
-                attrs: { src: _vm._$g(20, "a-src"), _i: 20 }
+                attrs: { src: _vm._$g(21, "a-src"), _i: 21 }
               })
             ],
             1
@@ -8197,8 +8202,8 @@ var render = function() {
       _c(
         "v-uni-view",
         {
-          staticClass: _vm._$g(21, "sc"),
-          attrs: { _i: 21 },
+          staticClass: _vm._$g(22, "sc"),
+          attrs: { _i: 22 },
           on: {
             click: function($event) {
               return _vm.$handleViewEvent($event)
@@ -8208,12 +8213,12 @@ var render = function() {
         [
           _c(
             "v-uni-view",
-            { staticClass: _vm._$g(22, "sc"), attrs: { _i: 22 } },
+            { staticClass: _vm._$g(23, "sc"), attrs: { _i: 23 } },
             [
-              _c("v-uni-view", { attrs: { _i: 23 } }, [_vm._v("订单消息提示")]),
+              _c("v-uni-view", { attrs: { _i: 24 } }, [_vm._v("订单消息提示")]),
               _c("v-uni-switch", {
                 staticStyle: { transform: "scale(0.7,0.7)" },
-                attrs: { checked: true, _i: 24 },
+                attrs: { checked: true, _i: 25 },
                 on: {
                   change: function($event) {
                     return _vm.$handleViewEvent($event)
@@ -8229,8 +8234,8 @@ var render = function() {
       _c(
         "v-uni-view",
         {
-          staticClass: _vm._$g(25, "sc"),
-          attrs: { _i: 25 },
+          staticClass: _vm._$g(26, "sc"),
+          attrs: { _i: 26 },
           on: {
             click: function($event) {
               return _vm.$handleViewEvent($event)
@@ -8240,11 +8245,11 @@ var render = function() {
         [
           _c(
             "v-uni-view",
-            { staticClass: _vm._$g(26, "sc"), attrs: { _i: 26 } },
+            { staticClass: _vm._$g(27, "sc"), attrs: { _i: 27 } },
             [
-              _c("v-uni-view", { attrs: { _i: 27 } }, [_vm._v("退出登录")]),
+              _c("v-uni-view", { attrs: { _i: 28 } }, [_vm._v("退出登录")]),
               _c("v-uni-image", {
-                attrs: { src: _vm._$g(28, "a-src"), _i: 28 }
+                attrs: { src: _vm._$g(29, "a-src"), _i: 29 }
               })
             ],
             1
@@ -8344,7 +8349,7 @@ if(false) {}
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../../HBuilderX/plugins/uniapp-cli/node_modules/css-loader/dist/runtime/api.js */ 22);
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "\nbody{\n\tbackground: #F8F8F8;\n}\n.tanchuang{\n\twidth: 100%;\n\theight:80rpx;\n\tline-height: 85rpx;\n\tbackground-color: rgba(0,0,0,0.5);\n\tcolor: #FFFFFF;\n}\n.juli{\n\tmargin-left: 30rpx;\n\tfont-size: 24rpx;\n\twidth: 500rpx;\n\tfloat: left;\n}\n.qd{\n\twidth: 180rpx;\n\tfont-size: 24rpx;\n}\n.qiangdan{\n\tbackground-color: rgba(48,174,255,1);\n\tfont-size: 24rpx;\n\theight: 60rpx;\n\tmargin: 10rpx;\n\tborder-radius: 23rpx;\n\tcolor: #FFFFFF;\n}\n.guideitem{\n\tdisplay: -webkit-box;\n\tdisplay: -webkit-flex;\n\tdisplay: flex;\n\t-webkit-box-pack: justify;\n\t-webkit-justify-content: space-between;\n\t        justify-content: space-between;\n\twidth: 710rpx;\n\theight: 96rpx;\n\tbackground: #FFFFFF;\n\tbox-shadow: 0px 0px 19px 0px rgba(0, 0, 0, 0.11);\n\tborder-radius: 14rpx;\n\tmargin: auto;\n\tmargin-top: 20rpx;\n}\n.guidecot{\n\tpadding-bottom: 20rpx;\n}\n.guideitem uni-image{\n\twidth: 36rpx;\n\theight: 36rpx;\n\tmargin: 26rpx 36rpx 0 0;\n}\n.guideitem uni-view{\n\tfont-size: 28rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\t/* color: #40A9FF; */\n\tmargin: 30rpx 0 0 38rpx;\n}\n.guidecot{\n\twidth: 640rpx;\n\tmargin: auto;\n\tfont-size: 26rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #666666;\n}\n.box{\n\twidth: 710rpx;\n\tmargin: auto;\n\tborder-radius: 14rpx;\n\tpadding-top: 100rpx;\n\tmargin-top: -80rpx;\n\tbackground: #fff;\n}\n", ""]);
+exports.push([module.i, "\nbody{\n\tbackground: #F8F8F8;\n}\n.tanchuang{\n\twidth: 100%;\n\theight:80rpx;\n\tline-height: 85rpx;\n\tbackground-color: rgba(0,0,0,0.5);\n\tcolor: #FFFFFF;\n}\n.juli{\n\tmargin-left: 30rpx;\n\tfont-size: 24rpx;\n\twidth: 500rpx;\n\tfloat: left;\n}\n.qd{\n\twidth: 200rpx;\n\tfont-size: 24rpx;\n}\n.qiangdan{\n\tbackground-color: rgba(48,174,255,1);\n\tfont-size: 24rpx;\n\theight: 60rpx;\n\tmargin: 10rpx;\n\tborder-radius: 23rpx;\n\tcolor: #FFFFFF;\n}\n.guideitem{\n\tdisplay: -webkit-box;\n\tdisplay: -webkit-flex;\n\tdisplay: flex;\n\t-webkit-box-pack: justify;\n\t-webkit-justify-content: space-between;\n\t        justify-content: space-between;\n\twidth: 710rpx;\n\theight: 96rpx;\n\tbackground: #FFFFFF;\n\tbox-shadow: 0px 0px 19px 0px rgba(0, 0, 0, 0.11);\n\tborder-radius: 14rpx;\n\tmargin: auto;\n\tmargin-top: 20rpx;\n}\n.guidecot{\n\tpadding-bottom: 20rpx;\n}\n.guideitem uni-image{\n\twidth: 36rpx;\n\theight: 36rpx;\n\tmargin: 26rpx 36rpx 0 0;\n}\n.guideitem uni-view{\n\tfont-size: 28rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\t/* color: #40A9FF; */\n\tmargin: 30rpx 0 0 38rpx;\n}\n.guidecot{\n\twidth: 640rpx;\n\tmargin: auto;\n\tfont-size: 26rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #666666;\n}\n.box{\n\twidth: 710rpx;\n\tmargin: auto;\n\tborder-radius: 14rpx;\n\tpadding-top: 100rpx;\n\tmargin-top: -80rpx;\n\tbackground: #fff;\n}\n", ""]);
 // Exports
 module.exports = exports;
 

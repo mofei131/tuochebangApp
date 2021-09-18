@@ -9,7 +9,7 @@
  		</view>
  		<view class="list-call">
  			<input class="sl-input" type="text" maxlength="6" placeholder="请输入验证码" />
-			<view class="yzm" :class="{ yzms: second>0 }" @tap="getcode">{{yanzhengma}}</view>
+			<view class="yzm" :class="{ yzms: second > 0 }" @tap="getcode">{{yanzhengma}}</view>
  		</view>
      </view>
      <view class="button-login" hover-class="button-hover" @tap="save()">
@@ -24,8 +24,8 @@
    export default {
      data() {
        return {
-         phone: '',
-         second: 0,
+        phone: '',
+        second: 0,
          code: "",
          showPassword: false,
          password: '',

@@ -82,11 +82,6 @@
 				rank:[],
 			}
 		},
-		onLoad() {
-			let that = this
-			
-		},
-		onShareAppMessage() {},
 		onShow() {
 			this.searchChange();
 		},
@@ -100,10 +95,10 @@
 					data:{
 						page:that.page,
 						limit:that.limit,
-						user_id:uni.getStorageSync('userInfo').user_id
+						user_id:uni.getStorageSync('userInfo').id
 					},
 					success(res) {
-						console.log(res);
+						//console.log(JSON.stringify(res));
 						for(let i in res.data.data){
 							that.boll.push(res.data.data[i])
 						}

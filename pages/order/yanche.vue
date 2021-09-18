@@ -94,7 +94,7 @@
 										that.photo1 = res.tempFilePaths[0]
 										// if(e == 1){
 										// 	uni.uploadFile({
-										// 		url:'https://layer.boyaokj.cn/api/file/upload',
+										// 		url:'https://trailer.boyaokj.cn/api/file/upload',
 										// 		filePath: res.tempFilePaths[0],
 										// 		name: 'file',
 										// 		success(res) {
@@ -103,7 +103,7 @@
 										// 	})
 										// }else if(e == 2){
 										// 	uni.uploadFile({
-										// 		url:'https://layer.boyaokj.cn/api/file/upload',
+										// 		url:'https://trailer.boyaokj.cn/api/file/upload',
 										// 		filePath: res.tempFilePaths[0],
 										// 		name: 'file',
 										// 		success(res) {
@@ -112,7 +112,7 @@
 										// 	})
 										// }else if(e == 3){
 										// 	uni.uploadFile({
-										// 		url:'https://layer.boyaokj.cn/api/file/upload',
+										// 		url:'https://trailer.boyaokj.cn/api/file/upload',
 										// 		filePath: res.tempFilePaths[0],
 										// 		name: 'file',
 										// 		success(res) {

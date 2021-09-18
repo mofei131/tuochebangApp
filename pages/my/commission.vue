@@ -62,7 +62,7 @@
 			this.lei = p.page
 			let that = this
 			uni.request({
-				url:'https://layer.boyaokj.cn/api/wechat/moneyLog',
+				url:'https://trailer.boyaokj.cn/api/wechat/moneyLog',
 				method:'GET',
 				data:{
 					page:that.page,
@@ -83,12 +83,12 @@
 						let that = this
 						that.page++
 						uni.request({
-							url:'https://layer.boyaokj.cn/api/wechat/moneyLog',
+							url:'https://trailer.boyaokj.cn/api/wechat/moneyLog',
 							method:'GET',
 							data:{
 								page:that.page,
 								limit:that.limit,
-								user_id:uni.getStorageSync('userInfo').user_id
+								user_id:uni.getStorageSync('userInfo').id
 							},
 							success(res) {
 								for(let i in res.data.data){

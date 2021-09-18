@@ -3,7 +3,7 @@
 		<view class="tanchuang" style="float: left;">
 				<view class="juli">提示：有新的订单</view>
 				<div class="qd" style="float: left;line-height: 80rpx;">
-					<button class="qiangdan">去抢单(10s)</button>
+					<button class="qiangdan">去抢单(<span>10</span>s)</button>
 				</div>
 		</view>
 		<!-- <view class="guidelist" v-for="(item,index) in article" :key="index" @tap="pandaun(index)"> -->
@@ -37,7 +37,7 @@
 				<switch checked @change="switch1Change"  style="transform: scale(0.7,0.7);"/>
 			</view>
 		</view>
-		<view class="guidelist" @tap="pandaun(index)">
+		<view class="guidelist" @tap="signout(index)">
 			<view class="guideitem">
 				<view>退出登录</view>
 				<image src="../../static/icon/rightzd.png"></image>
@@ -57,7 +57,7 @@
 		onLoad() {
 			let that = this
 			uni.request({
-				url:'https://layer.boyaokj.cn/api/commission/notice',
+				url:'https://trailer.boyaokj.cn/api/commission/notice',
 				method:'POST',
 				success(res) {
 					that.article = res.data.data
@@ -88,6 +88,13 @@
 				uni.navigateTo({
 					url:'./updatepwd'
 				})
+			},
+			//退出
+			signout(){
+				uni.removeStorageSync('userInfo');
+				uni.redirectTo({
+					url:'../login/login'
+				})
 			}
 		}
 	}
@@ -112,8 +119,11 @@
 		float: left;
 	}
 	.qd{
-		width: 180rpx;
+		width: 200rpx;
 		font-size: 24rpx;
+	}
+	.qd{
+		
 	}
 	.qiangdan{
 		background-color: rgba(48,174,255,1);
