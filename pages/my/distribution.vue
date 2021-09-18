@@ -89,7 +89,7 @@
 						user_id:uni.getStorageSync('userInfo').id
 					},
 					success(res) {
-						console.log(JSON.stringify(res));return;
+						console.log(JSON.stringify(res));
 						for(let i in res.data.data){
 							that.boll.push(res.data.data[i])
 						}
