@@ -21,6 +21,17 @@
 					排行榜
 				</view>
 			</view> -->
+			
+			<view class="progress">
+			<progress
+			:percent="pgList"
+			stroke-width='6'
+			border-radius='7'
+			activeColor="#6765FF"
+			active="true"/>
+			<view class="shuntr">{{fen1}}/{{fen2}}</view>
+			</view>
+			
 		</view>
 		<view class="guidelist" v-for="(item,index) in article" :key="index" @tap="pandaun(index)">
 		<!-- <view class="guidelist" @tap="pandaun(index)"> -->
@@ -42,7 +53,11 @@
 			return{
 				decide:false,
 				ji:'',
-				article:[]
+				article:[],
+				title: 'progress',
+				pgList: 20,
+				fen1:1200,
+				fen2:6000
 			}
 		},
 		onLoad() {
@@ -66,6 +81,22 @@
 
 
 <style>
+	.shuntr{
+		font-size: 20rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #FFFFFF;
+		text-align: end;
+		margin-top: 5rpx;
+	}
+	.progress progress{
+		border-radius: 12rpx;
+	}
+	.progress{
+		width: 622rpx;
+		margin: auto;
+		margin-top: 20rpx;
+	}
 	page{
 		width: 100%;
 		background: #F8F8F8;
