@@ -2,7 +2,7 @@
 	<view>
 		<view class="top">
 			<view class="feld">
-				<image src="../../static/images/xiaoxi.png"></image>
+				<image src="../../static/images/xiaoxi.png" @click="tonews"></image>
 				<view class="toptitle">订单</view>
 				<image src="../../static/images/kefu.png" @click="call()"></image>
 			</view>
@@ -12,31 +12,34 @@
 				<view>{{item.title}}</view>
 			</view>
 		</view>
-		<view class="listbox">
+		<view class="listbox" v-for="(item,index) in orderlist" :key="index">
 			<view class="neibox">
+				<view @click="todet(item)">
 				<view class="ceng1">
-					<view class="code">订单号:12408652396</view>
-					<view class="fu">进行中</view>
+					<view class="code">订单号:{{item.orderno}}</view>
+					<view class="fu" v-if="item.status == 2">进行中</view>
+					<view class="fu" v-if="item.status == 4">已完成</view>
 				</view>
 				<view class="ceng2">
-					<view>3吨板车</view>
+					<view>{{item.trailer_type}}</view>
 				</view>
 				<view class="ceng3">
 					<view>装</view>
-					<view>大连海港码头</view>
+					<view>{{item.start_addr}}</view>
 				</view>
 				<view class="ceng4">
 					<view class="left">
 						<view>卸</view>
-						<view>潍坊房奎文区丹桂里</view>
+						<view>{{item.end_addr}}</view>
 					</view>
-					<view class="jia">￥1398.00</view>
+					<view class="jia">￥{{item.money}}</view>
+				</view>
 				</view>
 				<view class="ceng5" v-if="true">
-					<view class="yan" v-if="true" @click="yan()">发起验车</view>
+					<view class="yan" v-if="true" @click="yan(item)">发起验车</view>
 					<view class="bo" v-if="false">验车被驳回</view>
 					<view class="tong" v-if="false">已通过验车</view>
-					<view class="yan" v-if="true">联系客户</view>
+					<view class="yan" v-if="true" @click="lianxi(item)">联系客户</view>
 				</view>
 			</view>
 		</view>
@@ -52,21 +55,57 @@
 					{title:'进心中',show:false},
 					{title:'已完成',show:false},
 				],
-				cell:'1335678520'
+				cell:'1335678520',
+				page:1,
+				limit:10,
+				status:0,
+				orderlist:[]
 			}
 		},
 		onLoad() {
 			
 		},
+		onShow() {
+			let that = this
+			this.http.ajax({
+				url: 'DriverOrder/myOrder',
+				method: 'GET',
+				data: {
+					user_id:uni.getStorageSync('userInfo').id,
+					page:this.page,
+					limit:this.limit,
+					status:0
+				},
+				success: function(res) {
+					console.log(res)
+					that.orderlist = res.data
+				}
+			});
+		},
 		methods:{
+			tonews(){
+				uni.navigateTo({
+					url:'../index/news'
+				})
+			},
+			todet(item){
+				uni.navigateTo({
+					url:'../index/orderDet?id='+item.id
+				})
+			},
+			lianxi(item){
+				uni.navigateTo({
+					url:'lianxi?id='+item.id
+				})
+			},
 			call(){
 				uni.makePhoneCall({
 					 phoneNumber: this.cell, 
 				})
 			},
-			yan(){
+			yan(item){
 				uni.navigateTo({
-					url:'yanche'
+					url:'yanche?id='+item.id
 				})
 			},
 			cad(index){
@@ -74,14 +113,59 @@
 					this.card[index].show = true
 					this.card[1].show = false
 					this.card[2].show = false
+					this.status = 0
+					let that = this
+					this.http.ajax({
+						url: 'DriverOrder/myOrder',
+						method: 'GET',
+						data: {
+							user_id:uni.getStorageSync('userInfo').id,
+							page:this.page,
+							limit:this.limit,
+							status:0
+						},
+						success: function(res) {
+							that.orderlist = res.data
+						}
+					});
 				}else if(index == 1){
 					this.card[1].show = true
 					this.card[0].show = false
 					this.card[2].show = false
+					this.status = 2
+					let that = this
+					this.http.ajax({
+						url: 'DriverOrder/myOrder',
+						method: 'GET',
+						data: {
+							user_id:uni.getStorageSync('userInfo').id,
+							page:this.page,
+							limit:this.limit,
+							status:2
+						},
+						success: function(res) {
+							that.orderlist = res.data
+						}
+					});
 				}else{
 					this.card[2].show = true
 					this.card[0].show = false
 					this.card[1].show = false
+					this.status = 4
+					let that = this
+					this.http.ajax({
+						url: 'DriverOrder/myOrder',
+						method: 'GET',
+						data: {
+							user_id:uni.getStorageSync('userInfo').id,
+							page:this.page,
+							limit:this.limit,
+							status:4
+						},
+						success: function(res) {
+							that.orderlist = res.data
+						}
+					});
 				}
 			}
 		}

@@ -25,7 +25,7 @@
 				<switch checked @change="switch1Change"  style="transform: scale(0.7,0.7);"/>
 			</view>
 		</view>
-		<view class="guidelist" @tap="pandaun(index)">
+		<view class="guidelist" @tap="out()">
 			<view class="guideitem">
 				<view>退出登录</view>
 				<image src="../../static/icon/rightzd.png"></image>
@@ -53,6 +53,12 @@
 			})
 		},
 		methods:{
+			out(){
+				uni.removeStorageSync('userInfo')
+				uni.switchTab({
+					url:'../index/index'
+				})
+			},
 			personaldata(){
 				uni.navigateTo({
 					url:'./personaldata'

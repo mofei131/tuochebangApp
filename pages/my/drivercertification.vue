@@ -9,7 +9,7 @@
 	      <view class="infomation">
 	        <view class="name">
 	          <text lines="1" decode="true" class="nameword">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</text>
-			  <input lines="1" class="nameinput" type="number" placeholder="请输入姓名"
+			  <input lines="1" class="nameinput" v-model="name" type="text" placeholder="请输入姓名"
 			  	placeholder-style="color:#C1C2C3;" />
 	        </view>
 	        <view class="xiantiao">
@@ -17,7 +17,7 @@
 	        </view>
 	        <view class="group4">
 	          <text lines="1" class="phone">联系电话：</text>
-	          <input lines="1" class="phoneinput" type="number" maxlength="11" placeholder="请输入电话"
+	          <input lines="1" class="phoneinput" v-model="phone" type="number" maxlength="11" placeholder="请输入电话"
 	          	placeholder-style="color:#C1C2C3;" />
 	        </view>
 	        <view class="xiantiao">
@@ -25,57 +25,310 @@
 	        </view>
 	        <view class="group7">
 	          <text lines="1" class="txt3">身份证号：</text>
-	          <input lines="1" class="txt4" type="number" maxlength="11" placeholder="请输入身份证号码"
+	          <input lines="1" class="txt4" v-model="card" type="text" maxlength="18" placeholder="请输入身份证号码"
 	          	placeholder-style="color:#C1C2C3;" />
 	        </view>
 	        <view class="xiantiao">
 	          <view class="outer1"></view>
 	        </view>
+						<view class="intitem">
+							<view class="word8">认证分类：</view>
+							<view class="danxuan">
+								<view class="danxuanleft" @tap="dian1()">
+									<view>公司司机认证</view>
+									<image :src="dian == 1?'../../static/images/zhong.png':'../../static/images/buzhong.png'" ></image>
+								</view>
+								<view class="danxuanleft" @tap="dian2()">
+									<view>个人车主认证</view>
+									<image :src="dian == 2?'../../static/images/zhong.png':'../../static/images/buzhong.png'" ></image>
+								</view>
+							</view>
+						</view>
+						<view v-if="dian == 1">
+						<view class="xiantiao">
+						  <view class="outer1"></view>
+						</view>
 	        <view class="group10">
 	          <text lines="1" class="word8">归属公司：</text>
-	          <input lines="1" class="info1" type="number" maxlength="11" placeholder="请输入归属公司"
+	          <input lines="1" class="info1" v-model="unit" type="text" maxlength="11" placeholder="请输入归属公司"
 	          	placeholder-style="color:#C1C2C3;" />
 	        </view>
-	        <view class="xiantiao">
-	          <view class="outer1"></view>
-	        </view>
+					</view>
+					<view class="xiantiao">
+					  <view class="outer1"></view>
+					</view>
 	      </view>
 	    </view>
 		<view class="picture">
-			<view class="image">
+			<view class="image" v-if="dian == 1">
 				<view class="word8">请上传公司营业执照</view>
-				<image src="../../static/images/renzhengpic.png"></image>
+				<image :src="photo1 == ''?'../../static/images/renzhengpic.png':photo1" @click="chooseImage(1)"></image>
 			</view>
 			<view class="image">
 				<view class="word8">请上传身份证人像面</view>
-				<image src="../../static/images/idCardfront.png"></image>
+				<image :src="photo2 == ''?'../../static/images/idCardfront.png':photo2" @click="chooseImage(2)"></image>
 			</view>
 			<view class="image">
 				<view class="word8">请上传身份证国徽面</view>
-				<image src="../../static/images/idCard.png"></image>
+				<image :src="photo3 == ''?'../../static/images/idCard.png':photo3" @click="chooseImage(3)"></image>
 			</view>
 			<view class="image">
 				<view class="word8">请上传驾驶证照片主页</view>
-				<image src="../../static/images/renzhengpic.png"></image>
+				<image :src="photo4 == ''?'../../static/images/renzhengpic.png':photo4" @click="chooseImage(4)"></image>
 			</view>
 			<view class="image">
 				<view class="word8">请上传驾驶证照片副页</view>
-				<image src="../../static/images/renzhengpic.png"></image>
+				<image :src="photo5 == ''?'../../static/images/renzhengpic.png':photo5" @click="chooseImage(5)"></image>
+			</view>
+			<view class="bohui">
+				<view class="phone">驳回理由:</view>
+				<view class="bo">{{reason}}</view>
 			</view>
 		</view>
 	    <view class="box12">
-	      <view class="layer8">
-	        <text lines="1" class="word15">下一步</text>
+	      <view class="layer8" v-if="status == 0">
+					<text lines="1" class="word15"  @click="next()">下一步</text>
 	      </view>
+				<view class="layer8" v-if="status == 2">
+				  <text lines="1" class="word15" @click="updata()">更新司机信息</text>
+				</view>
 	    </view>
 	  </view>
 	</view>
 </template>
 
 <script>
+	export default{
+		data(){
+			return{
+				name:'',
+				phone:'',
+				card:'',
+				unit:'',
+				photo1:'',
+				photo2:'',
+				photo3:'',
+				photo4:'',
+				photo5:'',
+				dian:1,
+				reason:'',
+				status:0,
+			}
+		},
+		onShow() {
+			let that = this
+			this.http.ajax({
+				url: 'driverAuth/driverInfo',
+				method: 'GET',
+				data: {
+					user_id:uni.getStorageSync('userInfo').id
+				},
+				success(res) {
+					console.log(res.data)
+					that.name = res.data.name
+					that.phone = res.data.mobile
+					that.card = res.data.idcard
+					that.dian = res.data.auth_type
+					that.unit = res.data.company
+					that.photo1 = res.data.business_lince
+					that.photo2 = res.data.front_id_card
+					that.photo3 = res.data.back_id_card
+					that.photo4 = res.data.driver_card_frontpage
+					that.photo5 = res.data.driver_card_homepage
+					that.reason = res.data.reason
+					that.status = res.data.status
+ 				}
+			});
+		},
+		methods:{
+			dian1(){
+				this.dian = 1
+			},
+			dian2(){
+				this.dian = 2
+			},
+			chooseImage(e) {
+				let that = this
+							uni.chooseImage({
+								count: 1, //默认9
+								sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+								sourceType: ['camera','album'], //从相册选择、摄像头
+								success: function(res) {
+									if(e == 1){
+										uni.uploadFile({
+											url:'https://trailer.boyaokj.cn/api/file/upload',
+											filePath: res.tempFilePaths[0],
+											name: 'file',
+											success(res) {
+												that.photo1 = JSON.parse(res.data).data.url
+											}
+										})
+									}else if(e == 2){
+										uni.uploadFile({
+											url:'https://trailer.boyaokj.cn/api/file/upload',
+											filePath: res.tempFilePaths[0],
+											name: 'file',
+											success(res) {
+												that.photo2 = JSON.parse(res.data).data.url
+											}
+										})
+									}else if(e == 3){
+										uni.uploadFile({
+											url:'https://trailer.boyaokj.cn/api/file/upload',
+											filePath: res.tempFilePaths[0],
+											name: 'file',
+											success(res) {
+												that.photo3 = JSON.parse(res.data).data.url
+											}
+										})
+									}else if(e == 4){
+										uni.uploadFile({
+											url:'https://trailer.boyaokj.cn/api/file/upload',
+											filePath: res.tempFilePaths[0],
+											name: 'file',
+											success(res) {
+												that.photo4 = JSON.parse(res.data).data.url
+											}
+										})
+									}else if(e == 5){
+										uni.uploadFile({
+											url:'https://trailer.boyaokj.cn/api/file/upload',
+											filePath: res.tempFilePaths[0],
+											name: 'file',
+											success(res) {
+												that.photo5 = JSON.parse(res.data).data.url
+											}
+										})
+									}
+								},
+							});
+				},
+				next(){
+					if (!this.name) {
+						uni.showToast({
+							title: '请输入您的姓名',
+							icon: 'none',
+						})
+						return
+					}
+					if (!this.phone) {
+						uni.showToast({
+							title: '请输入您的电话',
+							icon: 'none',
+						})
+						return
+					}
+					if (!this.card) {
+						uni.showToast({
+							title: '请输入您的身份证号码',
+							icon: 'none',
+						})
+						return
+					}
+					if (!this.unit && this.dian == 1) {
+						uni.showToast({
+							title: '请输入您的归属公司',
+							icon: 'none',
+						})
+						return
+					}
+					if (!this.photo1 && this.dian == 1) {
+						uni.showToast({
+							title: '请上传公司营业执照',
+							icon: 'none',
+						})
+						return
+					}
+					if (!this.photo2) {
+						uni.showToast({
+							title: '请上传身份证人相面',
+							icon: 'none',
+						})
+						return
+					}
+					if (!this.photo3) {
+						uni.showToast({
+							title: '请上传身份证国徽面',
+							icon: 'none',
+						})
+						return
+					}
+					if (!this.photo4) {
+						uni.showToast({
+							title: '请上传驾驶证照片主页',
+							icon: 'none',
+						})
+						return
+					}
+					if (!this.photo5) {
+						uni.showToast({
+							title: '请上传驾驶证照片副页',
+							icon: 'none',
+						})
+						return
+					}
+					uni.setStorage({
+						key:'zancun',
+						data:{
+							name:this.name,
+							phone:this.phone,
+							card:this.card,
+							unit:this.unit,
+							photo1:this.photo1,
+							photo2:this.photo2,
+							photo3:this.photo3,
+							photo4:this.photo4,
+							photo5:this.photo5,
+							auth_type:this.dian
+						}
+					})
+					uni.navigateTo({
+						url:'carmanage'
+					})
+				},
+			}
+	}
 </script>
 
 <style>
+	.bo{
+		width: 680rpx;
+		height: 200rpx;
+		padding: 20rpx;
+		box-sizing: border-box;
+		font-size: 24rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #5D6168;
+		background-color: rgba(244,247,247,1);
+		margin-bottom: 20rpx;
+	}
+	.intitem{
+		display: flex;
+		align-items: center;
+		margin-top: 35rpx;
+	}
+	.danxuan{
+		display: flex;
+		align-items: center;
+		width: 480rpx;
+		justify-content: space-between;
+		margin-left: 40rpx;
+	}
+	.danxuanleft view{
+		font-size: 24rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #5D6168;
+	}
+	.danxuanleft{
+		display: flex;
+		align-items: center;
+	}
+	.danxuanleft image{
+		width: 40rpx;
+		height: 40rpx;
+	}
 	.page {
 	  position: relative;
 	  width: 750rpx;
@@ -184,7 +437,7 @@
 	  width: 140rpx;
 	  display: block;
 	  overflow-wrap: break-word;
-	  color: rgba(193,194,195,1);
+	  color: rgba(93,97,104,1);
 	  font-size: 28rpx;
 	  font-family: PingFangSC-Regular;
 	  white-space: nowrap;
@@ -232,7 +485,7 @@
 	  width: 168rpx;
 	  display: block;
 	  overflow-wrap: break-word;
-	  color: rgba(193,194,195,1);
+	  color: rgba(93,97,104,1);
 	  font-size: 28rpx;
 	  font-family: PingFangSC-Regular;
 	  white-space: nowrap;
@@ -340,15 +593,14 @@
 	  flex-direction: column;
 	}
 	.word15 {
-	  width: 84rpx;
-	  display: block;
+	  width: 680rpx;
 	  overflow-wrap: break-word;
 	  color: rgba(255,255,255,1);
 	  font-size: 28rpx;
 	  font-family: Helvetica;
-	  white-space: nowrap;
-	  line-height: 40rpx;
-	  text-align: center;
+	  display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 	.image{
 		margin: auto;

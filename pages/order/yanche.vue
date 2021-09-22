@@ -18,12 +18,31 @@
 					</view>
 					<image :src="photo2 == ''?'../../static/images/zhaobj.png':photo2" @click="chooseImage(2)"></image>
 				</view>
+				<view class="item">
+					<view class="title">
+						请拍摄车辆图片3
+					</view>
+					<image :src="photo3 == ''?'../../static/images/zhaobj.png':photo3" @click="chooseImage(3)"></image>
+				</view>
+				<view class="item">
+					<view class="title">
+						请拍摄车辆图片4
+					</view>
+					<image :src="photo4 == ''?'../../static/images/zhaobj.png':photo4" @click="chooseImage(4)"></image>
+				</view>
+				<view class="item">
+					<view class="title">
+						请拍摄车辆图片5
+					</view>
+					<image :src="photo5 == ''?'../../static/images/zhaobj.png':photo5" @click="chooseImage(5)"></image>
+				</view>
 			</view>
 		</view>
 		<view class="itemt">
 			<view class="blue"></view>
 			<view class="itt">司机签字</view>
 		</view>
+		<view v-if="status == 0">
 		<view class="yuedu" v-if="!ty || !zy">
 			<view>请点击阅读<text @click="toshuo" :style="{'color':(ty?'#52C41A':'')}">验车说明</text>和<text @click="tozhu" :style="{'color':(zy?'#52C41A':'')}">注意事项</text>,</view>
 			<view>阅读完成后方可手动签名</view>
@@ -32,14 +51,24 @@
 			<view v-if="!imgurl">请司机点击空白位置签字，确认验车</view>
 			<image v-else :src="imgurl" mode="aspectFit"></image>
 		</view>
+		</view>
+		<view v-else>
+			<view class="yuedu2" @tap="createCanvas">
+				<image :src="sign" mode="aspectFit"></image>
+			</view>
+		</view>
+		<view v-if="status == -1">
 		<view class="itemt">
 			<view class="blue"></view>
 			<view class="itt">驳回理由</view>
 		</view>
 		<view class="yuedu2">
-			<view class="liyou">车辆车牌号不对，不是要运送的车辆。</view>
+			<view class="liyou">{{reason}}</view>
 		</view>
-		<view class="btn" @click="updata">确认上传</view>
+		</view>
+		<view class="btn" v-if="status == 1">审核中</view>
+		<view class="btn" v-if="status == -1" @click="updata()">被驳回,再次上传</view>
+		<view class="btn" v-if="status == 0" @click="updata()">确认上传</view>
 		<view class="signature" v-show="showCanvas">
 			<canvas class="mycanvas" canvas-id="mycanvas" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend"></canvas>
 			<view class="footer">
@@ -68,67 +97,222 @@
 					photo2:'',
 					photo3:'',
 					photo4:'',
-					photo5:''
+					photo5:'',
+					sign:'',
+					orderid:'',
+					status:0,
+					reason:''
 				}
 			},
-			onLoad() {
-				
+			onLoad(p) {
+				this.orderid = p.id
 			},
 			onShow() {
+				let that = this
 				if(uni.getStorageSync('yc')){
 					this.ty = uni.getStorageSync('yc')
 				}
 				if(uni.getStorageSync('zy')){
 					this.zy = uni.getStorageSync('zy')
 				}
+				if(uni.getStorageSync('yanche')){
+					this.photo1 = uni.getStorageSync('yanche').photo1
+					this.photo2 = uni.getStorageSync('yanche').photo2
+					this.photo3 = uni.getStorageSync('yanche').photo3
+					this.photo4 = uni.getStorageSync('yanche').photo4
+					this.photo5 = uni.getStorageSync('yanche').photo5
+				}
+				this.http.ajax({
+					url: 'driverOrder/verifyDetail',
+					method: 'GET',
+					data: {
+						order_id:this.orderid
+					},
+					success: function(res) {
+						if(res.code == 200){
+							that.photo1 = res.data.photo1
+							that.photo2 = res.data.photo2
+							that.photo3 = res.data.photo3
+							that.photo4 = res.data.photo4
+							that.photo5 = res.data.photo5
+							that.sign = res.data.sign
+							that.status = res.data.status
+							that.reason = res.data.reason
+						}else if(res.code == -1){
+							uni.showToast({
+								title:res.message,
+								icon:'none'
+							})
+						}
+					}
+				});
 			},
 			methods: {
 				chooseImage(e) {
+					if(e == 5){
+						if(!this.photo1 || !this.photo2 || !this.photo3 || !this.photo4){
+							uni.showToast({
+								title:'请拍摄前四个位置',
+								icon:'none'
+							})
+							return
+						}
+					}
 					let that = this
 								uni.chooseImage({
 									count: 1, //默认9
 									sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 									sourceType: ['camera'], //从相册选择、摄像头
 									success: function(res) {
-										console.log(res.tempFilePaths[0])
-										that.photo1 = res.tempFilePaths[0]
-										// if(e == 1){
-										// 	uni.uploadFile({
-										// 		url:'https://layer.boyaokj.cn/api/file/upload',
-										// 		filePath: res.tempFilePaths[0],
-										// 		name: 'file',
-										// 		success(res) {
-										// 			that.zhiname = JSON.parse(res.data).data.url
-										// 		}
-										// 	})
-										// }else if(e == 2){
-										// 	uni.uploadFile({
-										// 		url:'https://layer.boyaokj.cn/api/file/upload',
-										// 		filePath: res.tempFilePaths[0],
-										// 		name: 'file',
-										// 		success(res) {
-										// 			that.zhiyear = JSON.parse(res.data).data.url
-										// 		}
-										// 	})
-										// }else if(e == 3){
-										// 	uni.uploadFile({
-										// 		url:'https://layer.boyaokj.cn/api/file/upload',
-										// 		filePath: res.tempFilePaths[0],
-										// 		name: 'file',
-										// 		success(res) {
-										// 			that.cfcong = JSON.parse(res.data).data.url
-										// 		}
-										// 	})
-										// }
+										if(e == 1){
+											uni.uploadFile({
+												url:'https://trailer.boyaokj.cn/api/file/upload',
+												filePath: res.tempFilePaths[0],
+												name: 'file',
+												success(res) {
+													that.photo1 = JSON.parse(res.data).data.url
+												}
+											})
+										}else if(e == 2){
+											uni.uploadFile({
+												url:'https://trailer.boyaokj.cn/api/file/upload',
+												filePath: res.tempFilePaths[0],
+												name: 'file',
+												success(res) {
+													that.photo2 = JSON.parse(res.data).data.url
+												}
+											})
+										}else if(e == 3){
+											uni.uploadFile({
+												url:'https://trailer.boyaokj.cn/api/file/upload',
+												filePath: res.tempFilePaths[0],
+												name: 'file',
+												success(res) {
+													that.photo3 = JSON.parse(res.data).data.url
+												}
+											})
+										}else if(e == 4){
+											uni.uploadFile({
+												url:'https://trailer.boyaokj.cn/api/file/upload',
+												filePath: res.tempFilePaths[0],
+												name: 'file',
+												success(res) {
+													that.photo4 = JSON.parse(res.data).data.url
+												}
+											})
+										}else if(e == 5){
+											uni.uploadFile({
+												url:'https://trailer.boyaokj.cn/api/file/upload',
+												filePath: res.tempFilePaths[0],
+												name: 'file',
+												success(res) {
+													that.photo5 = JSON.parse(res.data).data.url
+													uni.setStorage({
+														key:'yanche',
+														data:{
+															photo1:that.photo1,
+															photo2:that.photo2,
+															photo3:that.photo3,
+															photo4:that.photo4,
+															photo5:that.photo5,
+														}
+													})
+												}
+											})
+										}
 									},
 								});
 							},
 				updata(){
+					// if (!this.unit) {
+					// 	uni.showToast({
+					// 		title: '请输入您的归属公司',
+					// 		icon: 'none',
+					// 	})
+					// 	return
+					// }
+					// if (!this.photo1) {
+					// 	uni.showToast({
+					// 		title: '请上传公司营业执照',
+					// 		icon: 'none',
+					// 	})
+					// 	return
+					// }
+					// if (!this.photo2) {
+					// 	uni.showToast({
+					// 		title: '请上传身份证人相面',
+					// 		icon: 'none',
+					// 	})
+					// 	return
+					// }
+					// if (!this.photo3) {
+					// 	uni.showToast({
+					// 		title: '请上传身份证国徽面',
+					// 		icon: 'none',
+					// 	})
+					// 	return
+					// }
+					// if (!this.photo4) {
+					// 	uni.showToast({
+					// 		title: '请上传驾驶证照片主页',
+					// 		icon: 'none',
+					// 	})
+					// 	return
+					// }
+					// if (!this.photo5) {
+					// 	uni.showToast({
+					// 		title: '请上传驾驶证照片副页',
+					// 		icon: 'none',
+					// 	})
+					// 	return
+					// }
+					if (!this.sign) {
+						uni.showToast({
+							title: '请签名',
+							icon: 'none',
+						})
+						return
+					}
 					uni.removeStorageSync('yc')
 					uni.removeStorageSync('zy')
-					uni.reLaunch({
-						url:'index'
-					})
+					this.http.ajax({
+						url: 'driverOrder/verifyOrder',
+						method: 'POST',
+						data: {
+							order_id:this.orderid,
+							photo1:this.photo1,
+							photo2:this.photo2,
+							photo3:this.photo3,
+							photo4:this.photo4,
+							photo5:this.photo5,
+							sign:this.sign
+						},
+						success: function(res) {
+							if(res.code == 200){
+								uni.removeStorageSync('yanche')
+								uni.showToast({
+										title:'上传成功',
+										icon:'none',
+										duration:1000
+									})
+									setTimeout(function() {
+									uni.reLaunch({
+										url:'index'
+									})
+									},1000)
+							}else if(res.code == -1){
+								uni.showToast({
+									title:res.message,
+									icon:'none'
+								})
+							}else{
+								uni.showToast({
+									title:'上传失败',
+									icon:'none'
+								})
+							}
+						}
+					});
 				},
 				toshuo(){
 					uni.reLaunch({
@@ -218,29 +402,18 @@
 					uni.canvasToTempFilePath({
 					  canvasId: 'mycanvas',
 					  success: function(res) {
-						  console.log(res)
+						  console.log(res.tempFilePath)
 							that.imgurl = res.tempFilePath;
 							that.clear();
 							that.showCanvas = false;
-						//上传到服务器
-						// that.api.uploadFile({
-						// 	url: 'user/upload/one',
-						// 	filePath: res.tempFilePath,
-						// 	name: 'file',
-						// 	success: (uploadFileRes) => {
-						// 		console.log(uploadFileRes)
-						// 		that.signature = uploadFileRes.data.url;
-						// 		that.clear();
-						// 		that.showCanvas = false;
-						// 	}
-						// })
-						//保存到本地
-						/* 
-						
-						let path = res.tempFilePath;
-						uni.saveImageToPhotosAlbum({
-							filePath:path,
-						}) */
+							uni.uploadFile({
+								url:'https://trailer.boyaokj.cn/api/file/upload',
+								filePath: res.tempFilePath,
+								name: 'file',
+								success(res) {
+									that.sign = JSON.parse(res.data).data.url
+								}
+							})
 					  } 
 					})
 				},

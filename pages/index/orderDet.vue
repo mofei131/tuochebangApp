@@ -1,9 +1,9 @@
 <template>
 	<view>
 		<!-- <view class="map"> -->
-			<map style="width: 100%;" :style="{height:(shou?'25vh':'68vh')}" :latitude="latitude" :longitude="longitude" scale="16" show-location="true" :markers="markers" :polyline="polylines">
+			<map style="width: 100%;display: flex;" :style="{height:(shou?'25vh':'68vh')}" :latitude="latitude" :longitude="longitude" scale="16" show-location="true" :markers="markers" :polyline="polylines">
 				<!-- <cover-view> -->
-							 <cover-image class="war" :style="homestyle"></cover-image>
+							 <cover-image class="war" src="../../static/images/war.png" ></cover-image>
 							 <cover-view class="juli">提示:装车距离距离您150km</cover-view>
 				<!-- </cover-view> -->
 			</map>
@@ -18,10 +18,10 @@
 					<view class="dizhi">
 					<view class="zhxi">
 						<view>起</view>
-						<view>丹桂里小区</view>
+						<view>{{orderdet.start_name}}</view>
 					</view>
-					<view class="gogaode" @click="togao()">
-					<view class="hutong">江西省新余市分宜县和平胡同302号</view>
+					<view class="gogaode" @click="togaoqi()">
+					<view class="hutong">{{orderdet.start_addr}}</view>
 					<view class="gotuwen">
 						<image src="../../static/images/daohang.png" mode=""></image>
 						<view>导航</view>
@@ -31,10 +31,10 @@
 					<view class="dizhi">
 					<view class="zhxi">
 						<view style="background: #EB4A32;">终</view>
-						<view>银丰家园</view>
+						<view>{{orderdet.end_name}}</view>
 					</view>
-					<view class="gogaode">
-					<view class="hutong">内蒙古自治区乌海市乌达区祖冲之胡同11号</view>
+					<view class="gogaode" @click="togaozhong()">
+					<view class="hutong">{{orderdet.end_addr}}</view>
 					<view class="gotuwen">
 						<image src="../../static/images/daohang.png" mode=""></image>
 						<view>导航</view>
@@ -42,65 +42,62 @@
 					</view>
 					</view>
 				</view>
-				<view class="ceng3 animation" v-if="shou" id="ceng3" :animation="animationData">
+				<view class="ceng3" v-if="shou" id="ceng3">
 					<view class="yugu">
 						<view class="ylef">
 							<view>预估里程</view>
 							<view>:</view>
-							<view>532.25km</view>
+							<view>{{orderdet.licheng}}km</view>
 						</view>
 						<view class="yrig">
 							<view>预估时间</view>
 							<view>:</view>
-							<view>5.5h</view>
+							<view>{{orderdet.hour}}h</view>
 						</view>
 					</view>
 					<view class="zhuangc">
 						<view>装车时间</view>
 						<view>:</view>
-						<view>今天</view>
-						<view>01:00-01:20</view>
+						<view>{{orderdet.zc_start_time}} ~ {{orderdet.zc_end_time}}</view>
 					</view>
 					<view class="leifu">
 						<view class="san">
 							<view>板车类型</view>
 							<view>:</view>
-							<view>斜板车</view>
+							<view>{{tname}}</view>
 						</view>
 						<view class="san">
 							<view>托运车型</view>
 							<view>:</view>
-							<view>比亚迪f3</view>
+							<view>{{orderdet.chexing}}</view>
 						</view>
 						<view class="san">
 							<view>支付类型</view>
 							<view>:</view>
-							<view>到付</view>
+							<view v-if="orderdet.pay_type == 1">全款</view>
+							<view v-if="orderdet.pay_type == 2">定金</view>
+							<view v-if="orderdet.pay_type == 3">到付</view>
 						</view>
 					</view>
 					<view class="lifei">
 						<view>里程费</view>
 						<view>:</view>
-						<view>￥454.64</view>
+						<view>￥{{orderdet.money}}</view>
 					</view>
 					<view class="baoxian">
 						<view class="lhan">保险</view>
 						<view class="yinmao">:</view>
 						<view class="yangzh">
-						<view class="bxrt">
-							<view>保险货损险</view>
-							<view>￥45</view>
-						</view>
-						<view class="bxrt">
-							<view>保险货损险</view>
-							<view>￥45</view>
+						<view class="bxrt" v-for="(item,index) in orderdet.baoxian" :key="index">
+							<view>{{item.name}}</view>
+							<view>￥{{item.price}}</view>
 						</view>
 						</view>
 					</view>
 					<view class="beizhu">
 						<view>备注</view>
 						<view>:</view>
-						<view>快点送过来，速度快点送过来，速度快点送过来，速度快点送过来，速度快点送过来，速度</view>
+						<view>{{orderdet.mark}}</view>
 					</view>
 					<view class="tixing">
 						<view>特别提醒:</view>
@@ -108,17 +105,19 @@
 					</view>
 				</view>
 				<view class="ceng4">
-					<view class="btn">联系客户</view>
+					<view class="btn" v-if="orderdet.status == 1" @click="tiaobox()">接取订单</view>
+					<view class="btn" v-if="orderdet.status == 2" @click="lianxi(orderdet.id)">联系客户</view>
+					<view class="btn" v-if="orderdet.status == 3">订单完成</view>
 				</view>
 			</view>
-			<view class="huibax" v-if="false">
+			<view class="huibax" v-if="tanbox">
 			<view class="tanbox">
-				<image src="../../static/images/close.png"></image>
+				<image src="../../static/images/close.png" @click="tiaobox2()"></image>
 				<view class="tishi">提示</view>
 				<view class="jiele">您确定要接取这个订单吗?</view>
 				<view class="quque">
-					<view>取消</view>
-					<view>确定</view>
+					<view @click="tiaobox2()">取消</view>
+					<view @click="jie(orderdet.id)">确定</view>
 				</view>
 			</view>
 			</view>
@@ -144,74 +143,154 @@
 				homestyle:{
 					backgroundImage:'url(http://hlstore.yimetal.cn/2021/war.png)'
 				},
-				animationData:{}
+				animation:'',
+				animationData: {},
+				orderdet:[],
+				tname:'',
+				tanbox:false
 			}
 		},
-		onLoad() {
+		onLoad(p) {
 			let that = this;
 			let amapFile = require('../../common/amap-wx.js');
 			let amapPlugin = new amapFile.AMapWX({
 			key:this.key
 			});
-			that.polylines = [{
-				points: [{
-						latitude: 36.710943,
-						longitude: 119.147928
-					},
-					{
-						latitude: 36.610943,
-						longitude: 119.247928
-					},
-					{
-						latitude: 36.510943,
-						longitude: 119.347928
-					},
-					{
-						latitude: 36.410943,
-						longitude:119.447928
-					},
-					{
-						latitude: 36.310943,
-						longitude: 119.547928
-					}
-				],
-				arrowLine: true,
-				dottedLine: true,
-				arrowIconPath: "../../static/images/close.png",
-				width: 8,
-				color: "FEAA34"
-			}];
 			amapPlugin.getRegeo({
 			      success: function(data){
 			        //成功回调
 							console.log(data)
-							that.markers = [
-								{
-										id:0,
-										latitude: data[0].latitude,
-										longitude:  data[0].longitude,
-										iconPath: '../../static/images/weizhi.png',
-										width: 10,
-										height: 10
-								}
-						]
 							that.latitude = data[0].latitude
 							that.longitude = data[0].longitude
+							that.http.ajax({
+								url: 'driverOrder/detail',
+								method: 'GET',
+								data: {
+									id:p.id
+								},
+								success(res) {
+									console.log(res)
+									that.orderdet = res.data
+									that.tname = res.data.trailer_type.name
+									that.result = res.data.result
+									that.polylines = [{
+										points: res.data.result,
+										arrowLine: true,
+										dottedLine: true,
+										arrowIconPath: "../../static/images/close.png",
+										width: 10,
+										color: "FEAA34"
+									}];
+									that.markers = [
+											{
+													id:0,
+													latitude: that.latitude,
+													longitude:  that.longitude,
+													iconPath: '../../static/images/weizhi.png',
+													width: 20,
+													height: 20
+											},{
+													id:1,
+													latitude: res.data.result[0].latitude,
+													longitude: res.data.result[0].longitude,
+													iconPath: '../../static/images/qi.png',
+													width: 20,
+													height: 20
+											},{
+													id:2,
+													latitude: res.data.result[res.data.result.length-1].latitude,
+													longitude: res.data.result[res.data.result.length-1].longitude,
+													iconPath: '../../static/images/dao.png',
+													width: 20,
+													height: 20
+											}
+									]
+								}
+							});
 			      },
 			      fail: function(info){
 			        //失败回调
-			        console.log(info)
+			        // console.log(info)
 			      }
 			    })
-				this.animation = uni.createAnimation()
 		},
-		onUnload() {
-			this.animationData = {}
-		},
+		// onShow() {
+		// 		// 初始化一个动画
+		// 		var animation = uni.createAnimation({
+		// 				transformOrigin: "50% 0 50%",  
+		// 				duration: 1000,  //动画持续1秒
+		// 				timingFunction: 'linear',  //linear 全程匀速运动
+		// 				// delay:200  //延迟两秒执行动画
+		// 		})
+		// 		this.animation = animation
+		// },
 		methods:{
-			/**  
-			* 触摸开始  
-			**/  
+			tiaobox(){
+				this.tanbox = true
+			},
+			tiaobox2(){
+				this.tanbox = false
+			},
+			jie(id){
+				let that = this
+				this.http.ajax({
+					url: 'driverOrder/receivingOrder',
+					method: 'GET',
+					data: {
+						order_id:id,
+						user_id:uni.getStorageSync('userInfo').id
+					},
+					success(res) {
+						if(res.code == 200){
+							uni.showToast({
+								title:'订单接取成功',
+								duration:1000
+							})
+							that.http.ajax({
+								url: 'driverOrder/detail',
+								method: 'GET',
+								data: {
+									id:p.id
+								},
+								success(res) {
+									console.log(res)
+									that.orderdet = res.data
+									that.result = res.data.result
+									console.log("result")
+									that.polylines = [{
+										points: res.data.result,
+										arrowLine: true,
+										dottedLine: true,
+										arrowIconPath: "../../static/images/close.png",
+										width: 10,
+										color: "FEAA34"
+									}];
+								}
+							});
+							setTimeout(function() {
+							uni.switchTab({
+								url:'./index'
+							})
+							},1000)
+						}else if(res.code == -1){
+							uni.showToast({
+								title:res.message,
+								icon:'none'
+							})
+						}else{
+							uni.showToast({
+								title:'接取失败，请联系客服',
+								icon:'none'
+							})
+						}
+					}
+				});
+			},
+			lianxi(id){
+				uni.navigateTo({
+					url:'../order/lianxi?id='+id
+				})
+			},
 			touchStart(e) {  
 					this.touchStartX = e.touches[0].clientX;  
 					this.touchStartY = e.touches[0].clientY;  
@@ -233,9 +312,14 @@
 							if (deltaY < 0) {  
 									console.log("上滑")  
 									this.shou = true
+									// this.animation.translateY(0).step() 
+									// this.animationData = this.animation.export()
 							} else {  
-									console.log("下滑")  
+									console.log("下滑")
 									this.shou = false
+									// this.animation.translateY(500).step() 
+									// // 导出动画数据传递给data层
+									// this.animationData = this.animation.export(); //每次执行导出动画时 会覆盖之前的动画
 							}  
 					} else {  
 							console.log("可能是误触！")  
@@ -248,14 +332,21 @@
 			// 		this.shou = true
 			// 	}
 			// },
-			togao(){
+			togaoqi(){
+				
 				uni.openLocation({
-					// latitude: 26.64030264268305,
-					latitude:this.latitude,
-					longitude:this.longitude,
-					// longitude: 114.15421791961671,
-					// name: "井冈山",
-					// address: "吉安市井冈山市茨坪镇"
+					latitude:JSON.parse(this.orderdet.start_lat),
+					longitude:JSON.parse(this.orderdet.start_lon),
+					name:this.orderdet.start_name,
+					address: this.orderdet.start_addr,
+				});
+			},
+			togaozhong(){
+				uni.openLocation({
+					latitude:JSON.parse(this.orderdet.end_lat),
+					longitude:JSON.parse(this.orderdet.end_lon),
+					name:this.orderdet.end_name,
+					address: this.orderdet.end_addr
 				});
 			}
 		}
@@ -276,14 +367,16 @@
 		color: #FFFFFF;
 		text-align: center;
 		letter-spacing: 10rpx;
+		/* padding-left: 50rpx; */
 	}
 	.war{
 		width: 28rpx;
 		height: 28rpx;
 		display:inline-flex;
 		position: absolute;
-		top: 11rpx;
-		left: 40rpx;
+		top: 8rpx;
+		left: 200rpx;
+		z-index: 5;
 		/* background-image: url('http://hlstore.yimetal.cn/2021/war.png'); */
 		/* background-image: url('~@/static/images/war.png'); */
 		/* background-image: url(../../static/images/war.png);
@@ -573,6 +666,7 @@
 	.beizhu{
 		display: flex;
 		margin-top: 2rpx;
+		/* height: 138rpx; */
 	}
 	.tixing view:nth-child(2){
 		font-size: 20rpx;
@@ -595,6 +689,7 @@
 	}
 	.ceng3{
 		padding-left: 50rpx;
+		height: 620rpx;
 		box-sizing: border-box;
 		background-color: #fff;
 	}

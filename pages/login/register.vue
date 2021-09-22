@@ -179,6 +179,11 @@
 									url: 'login'
 								})
 							},1000)
+						}else if(res.code == -1){
+							uni.showToast({
+								title: res.message,
+								icon: 'none',
+							})
 						}
 					}
 				});

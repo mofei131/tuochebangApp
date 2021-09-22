@@ -2,53 +2,66 @@
 	<view>
 		<view class="top">
 			<view class="feld">
-				<image src="../../static/images/xiaoxi.png"></image>
+				<image src="../../static/images/xiaoxi.png" @click="tonews"></image>
 				<view class="toptitle">司机端</view>
 				<image src="../../static/images/shaixuan.png" @click="hsai"></image>
 			</view>
 		</view>
-		<view class="dingbox">
+		<view class="dingbox" v-for="(item,index) in orderlist" :key="index">
 			<view class="neibox">
-				<view  @click="todet">
+				<view  @click="todet(item.id)">
 				<view class="ceng1">
-					<view class="code">订单号:12408652396</view>
-					<view class="fu">到付</view>
+					<view class="code">订单号:{{item.orderno}}</view>
+					<view class="fu" v-if="item.pay_type == 1">全款</view>
+					<view class="fu" v-if="item.pay_type == 2">定金</view>
+					<view class="fu" v-if="item.pay_type == 3">到付</view>
 				</view>
 				<view class="ceng2">
-					<view class="qidao">潍坊市</view>
+					<view class="qidao">{{item.start_city}}</view>
 					<view >
-						<view class="yju">15.7km</view>
+						<view class="yju">{{item.licheng}}km</view>
 						<view class="jian">
 							<text class="xian"></text>
 							<text class="tou"></text>
 						</view>
-						<view class="jju">距您120km</view>
+						<view class="jju">距您{{item.distance}}km</view>
 					</view>
-					<view class="qidao">潍坊市</view>
+					<view class="qidao">{{item.end_city}}</view>
 				</view>
 				<view class="ceng3">
-					<view class="che">3吨板车</view>
-					<view class="jia">￥1398.00</view>
+					<view class="che">{{item.trailer_name}}</view>
+					<view class="jia">￥{{item.money}}</view>
 				</view>
 				<view class="ceng4">
 					<view>装车时间</view>
 					<view>:</view>
-					<view>今天12:00~15:00</view>
+					<view>{{item.zc_start_time}} ~ {{item.zc_end_time}}</view>
 				</view>
 				<view class="ceng4">
 					<view>车辆型号</view>
 					<view>:</view>
-					<view>比亚迪f3</view>
+					<view>{{item.chexing}}</view>
 				</view>
 				<view class="ceng4">
 					<view>备注</view>
 					<view>:</view>
-					<view>轻拿轻放，尽快送达，会给好评</view>
+					<view>{{item.mark}}</view>
 				</view>
 				</view>
 				<view class="ceng5">
-					<view @click="lie()">立即接单</view>
+					<view @click="lie(item.id)">立即接单</view>
 				</view>
+			</view>
+			<view class="huibax" v-show="jie">
+			<view class="tanbox">
+				<image src="../../static/images/close.png" @click="guan()"></image>
+				<view class="tishi">提示</view>
+				<view class="jiele">您确定要接取这个订单吗?</view>
+				<view class="quque">
+					<view @click="guan()">取消</view>
+					<view @click="jiequ()">确定</view>
+				</view>
+			</view>
 			</view>
 		</view>
 		<view class="shaibaox" v-show="shai">
@@ -89,9 +102,9 @@
 				<view class="shaiitem">
 					<view class="shaibai">用车类型</view>
 					<view class="shaimao">:</view>
-					<picker class="xaunze" @change="anjianChange1" :value="index1" :range="array1" range-key="record">
+					<picker class="xaunze" @change="anjianChange1" :value="index1" :range="array1" range-key="name">
 						<view class="flex-row">
-							<text>{{array1[index1].record}}</text>
+							<text>{{array1[index1].name}}</text>
 							<fa-icon type="angle-down" color="gray" style="margin-left:16rpx;"></fa-icon>
 						</view>
 					</picker>
@@ -130,17 +143,6 @@
 			</view>
 		</view>
 		</view>
-		<view class="huibax" v-if="jie">
-		<view class="tanbox">
-			<image src="../../static/images/close.png" @click="guan()"></image>
-			<view class="tishi">提示</view>
-			<view class="jiele">您确定要接取这个订单吗?</view>
-			<view class="quque">
-				<view @click="guan()">取消</view>
-				<view>确定</view>
-			</view>
-		</view>
-		</view>
 	</view>
 </template>
 
@@ -168,7 +170,7 @@
 				city2:'',
 				area2:'',
 				defaultRegionCode:[],
-				array1: [{
+				array1:[{
 					record: '三吨板车',id:0
 				}, {
 					record: '五吨板车',id:1
@@ -187,14 +189,24 @@
 					{id:3,title:'备用车衣444'},
 					{id:4,title:'备用车衣5555'},
 				],
-				cardlist:[]
+				cardlist:[],
+				page:1,
+				limit:10,
+				orderlist:[],
+				dingid:0
 			}
 		},
 		onLoad() {
-			
+			let that = this
+			this.http.ajax({
+					url: 'index/getTrailerType',
+					method: 'GET',
+					success(res) {
+						that.array1 = res.data
+					}
+				});
 		},
 		onShow() {
-			console.log(uni.getStorageSync('userInfo'))
 			if(!uni.getStorageSync('userInfo')){
 				uni.reLaunch({
 					url:'../login/login'
@@ -206,10 +218,26 @@
 			        });
 			this.amapPlugin.getRegeo({
 					success: (data) => {
+						console.log(data[0].latitude,data[0].longitude)
 							this.defaultRegionCode = [data[0].regeocodeData.addressComponent.province,data[0].regeocodeData.addressComponent.city,data[0].regeocodeData.addressComponent.district]
 							// this.address = data[0].name;
-							// this.lat = data[0].latitude
-							// this.lng = data[0].longitude 
+							this.lat = data[0].latitude
+							this.lng = data[0].longitude 
+							let that = this
+							this.http.ajax({
+								url: 'driverOrder/list',
+								method: 'GET',
+								data: {
+									lng:data[0].longitude,
+									lat:data[0].latitude,
+									page:this.page,
+									limit:this.limit
+								},
+								success(res) {
+									console.log(res.data)
+									that.orderlist = res.data
+								}
+							});
 					},
 					fail:(err) =>{
 						console.log(err)
@@ -217,6 +245,53 @@
 			}); 
 		},
 		methods: {
+			jiequ(){
+				let that = this
+				this.http.ajax({
+					url: 'driverOrder/receivingOrder',
+					method: 'GET',
+					data: {
+						order_id:this.dingid,
+						user_id:uni.getStorageSync('userInfo').id
+					},
+					success(res) {
+						if(res.code == 200){
+							uni.showToast({
+								title:'订单接取成功'
+							})
+							that.http.ajax({
+								url: 'driverOrder/list',
+								method: 'GET',
+								data: {
+									lng:that.lng,
+									lat:that.lat,
+									page:that.page,
+									limit:that.limit
+								},
+								success(res) {
+									that.orderlist = res.data
+								}
+							});
+							that.jie = false
+						}else if(res.code == -1){
+							uni.showToast({
+								title:res.message,
+								icon:'none'
+							})
+						}else{
+							uni.showToast({
+								title:'接取失败，请联系客服',
+								icon:'none'
+							})
+						}
+					}
+				});
+			},
+			tonews(){
+				uni.navigateTo({
+					url:'news'
+				})
+			},
 			select(index) {
 			let that = this;
 			if (that.cardlist.indexOf(index) == -1) {
@@ -228,8 +303,9 @@
 			guan(){
 				this.jie = false
 			},
-			lie(){
+			lie(id){
 				this.jie = true
+				this.dingid = id
 			},
 			hsai(){
 				if(this.shai){
@@ -263,9 +339,9 @@
 			changeDatetimePicker2(date){
 				console.log(date)
 			},
-			todet(){
+			todet(id){
 				uni.navigateTo({
-					url:'orderDet'
+					url:'orderDet?id='+id
 				})
 			},
 		}

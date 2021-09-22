@@ -9,16 +9,22 @@
 	      <view class="infomation">
 	        <view class="name">
 	          <text lines="1" decode="true" class="nameword">车辆类型：</text>
-			  <input lines="1" class="nameinput" type="number" placeholder="请选择车辆类型"
-			  	placeholder-style="color:#C1C2C3;" />
+			  <!-- <input lines="1" class="nameinput" type="number" placeholder="请选择车辆类型"
+			  	placeholder-style="color:#C1C2C3;" /> -->
+					<picker class="xaunze" @change="anjianChange1" :value="index1" :range="array1" range-key="name">
+						<view class="flex-row">
+							<text>{{array1[index1].name}}</text>
+							<fa-icon type="angle-down" color="gray" style="margin-left:16rpx;"></fa-icon>
+						</view>
+					</picker>
 	        </view>
 	        <view class="xiantiao">
 	          <view class="outer1"></view>
 	        </view>
 	        <view class="group4">
 	          <text lines="1" class="phone">车牌号：</text>
-	          <input lines="1" class="phoneinput" type="number" maxlength="11" placeholder="请输入车牌号"
-	          	placeholder-style="color:#C1C2C3;" />
+	          <input lines="1" class="phoneinput" type="text" maxlength="11" placeholder="请输入车牌号"
+	          	placeholder-style="color:#C1C2C3;" v-model="carcode" />
 	        </view>
 	         <view class="xiantiao">
 	          <view class="outer1"></view>
@@ -44,28 +50,35 @@
 		<view class="picture">
 			<view class="image">
 				<view class="word8">请上传车辆45度角照片</view>
-				<image src="../../static/images/renzhengpic.png"></image>
+				<image :src="photo6 == ''?'../../static/images/renzhengpic.png':photo6" @click="chooseImage(6)"></image>
 			</view>
 			<view class="image">
 				<view class="word8">请上传行驶证正页</view>
-				<image src="../../static/images/renzhengpic.png"></image>
+				<image :src="photo7 == ''?'../../static/images/renzhengpic.png':photo7" @click="chooseImage(7)"></image>
 			</view>
 			<view class="image">
 				<view class="word8">请上传行驶证副页</view>
-				<image src="../../static/images/renzhengpic.png"></image>
+				<image :src="photo8 == ''?'../../static/images/renzhengpic.png':photo8" @click="chooseImage(8)"></image>
 			</view>
 			<view class="image">
 				<view class="word8">请上传商业险照片</view>
-				<image src="../../static/images/renzhengpic.png"></image>
+				<image :src="photo9 == ''?'../../static/images/renzhengpic.png':photo9" @click="chooseImage(9)"></image>
 			</view>
 			<view class="image">
 				<view class="word8">请上传货物险照片</view>
-				<image src="../../static/images/renzhengpic.png"></image>
+				<image :src="photo10 == ''?'../../static/images/renzhengpic.png':photo10" @click="chooseImage(10)"></image>
+			</view>
+			<view class="bohui">
+				<view class="nameword">驳回理由:</view>
+				<view class="bo">{{reason}}</view>
 			</view>
 		</view>
 	    <view class="box12">
 	      <view class="layer8">
-	        <text lines="1" class="word15">支付押金</text>
+	        <text lines="1" class="word15" v-if="status==1">审核中</text>
+					<text lines="1" class="word15" v-if="status==-1" @click="topay()">被驳回,重新提交</text>
+					<text lines="1" class="word15" v-if="status==0" @click="topay()">支付押金</text>
+					<text lines="1" class="word15" v-if="status==2" @click="updata()">更新车辆信息</text>
 	      </view>
 	    </view>
 	  </view>
@@ -73,9 +86,200 @@
 </template>
 
 <script>
+	export default{
+		data(){
+			return{
+				array1: [{
+					record: '三吨板车',id:0
+				}, {
+					record: '五吨板车',id:1
+				}, {
+					record: '重型板车',id:2
+				}],
+				index1: 0,
+				carcode:'',
+				photo6:'',
+				photo7:'',
+				photo8:'',
+				photo9:'',
+				photo10:'',
+				status:0,
+				reason:''
+			}
+		},
+		onShow() {
+			let that = this
+			this.http.ajax({
+				url: 'index/getTrailerType',
+				method: 'GET',
+				success(res) {
+					that.array1 = res.data
+					that.http.ajax({
+						url: 'driverAuth/carInfo',
+						method: 'GET',
+						data: {
+							user_id:uni.getStorageSync('userInfo').id
+						},
+						success(res) {
+							console.log(res.data)
+							that.index1 = that.array1.findIndex(item => item.id === JSON.parse(res.data.car_type))
+							that.carcode = res.data.car_number
+							that.photo6 = res.data.car_photo_45
+							that.photo7 = res.data.driving_license_front_page
+							that.photo8 = res.data.driving_license_second_page
+							that.photo9 = res.data.cargo_insurance_photo
+							that.photo10 = res.data.commercial_insurance_photo
+							that.status = res.data.status
+							that.reason = res.data.reason
+						}
+					});
+				}
+			});
+		},
+		methods:{
+			chooseImage(e) {
+				let that = this
+							uni.chooseImage({
+								count: 1, //默认9
+								sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+								sourceType: ['camera','album'], //从相册选择、摄像头
+								success: function(res) {
+									if(e == 6){
+										uni.uploadFile({
+											url:'https://trailer.boyaokj.cn/api/file/upload',
+											filePath: res.tempFilePaths[0],
+											name: 'file',
+											success(res) {
+												that.photo6 = JSON.parse(res.data).data.url
+											}
+										})
+									}else if(e == 7){
+										uni.uploadFile({
+											url:'https://trailer.boyaokj.cn/api/file/upload',
+											filePath: res.tempFilePaths[0],
+											name: 'file',
+											success(res) {
+												that.photo7 = JSON.parse(res.data).data.url
+											}
+										})
+									}else if(e == 8){
+										uni.uploadFile({
+											url:'https://trailer.boyaokj.cn/api/file/upload',
+											filePath: res.tempFilePaths[0],
+											name: 'file',
+											success(res) {
+												that.photo8 = JSON.parse(res.data).data.url
+											}
+										})
+									}else if(e == 9){
+										uni.uploadFile({
+											url:'https://trailer.boyaokj.cn/api/file/upload',
+											filePath: res.tempFilePaths[0],
+											name: 'file',
+											success(res) {
+												that.photo9 = JSON.parse(res.data).data.url
+											}
+										})
+									}else if(e == 10){
+										uni.uploadFile({
+											url:'https://trailer.boyaokj.cn/api/file/upload',
+											filePath: res.tempFilePaths[0],
+											name: 'file',
+											success(res) {
+												that.photo10 = JSON.parse(res.data).data.url
+											}               
+										})
+									}
+								},
+							});
+				},
+			anjianChange1(e) {
+				this.index1 = e.detail.value;
+			},
+			topay(){
+				if (!this.carcode) {
+					uni.showToast({
+						title: '请输入车牌号',
+						icon: 'none',
+					})
+					return
+				}
+				if (!this.photo6) {
+					uni.showToast({
+						title: '请上传车辆45度角照片',
+						icon: 'none',
+					})
+					return
+				}
+				if (!this.photo7) {
+					uni.showToast({
+						title: '请上传行驶证正页',
+						icon: 'none',
+					})
+					return
+				}
+				if (!this.photo8) {
+					uni.showToast({
+						title: '请上传行驶证副页',
+						icon: 'none',
+					})
+					return
+				}
+				if (!this.photo9) {
+					uni.showToast({
+						title: '请上传商业险照片',
+						icon: 'none',
+					})
+					return
+				}
+				if (!this.photo10) {
+					uni.showToast({
+						title: '请上传货物险照片',
+						icon: 'none',
+					})
+					return
+				}
+				uni.setStorage({
+					key:'zancun2',
+					data:{
+						type:this.array1[this.index1].id,
+						carcode:this.carcode,
+						photo6:this.photo6,
+						photo7:this.photo7,
+						photo8:this.photo8,
+						photo9:this.photo9,
+						photo10:this.photo10,
+					}
+				})
+				uni.navigateTo({
+					url:'./pay?id=yj'
+				})
+			}
+		}
+	}
 </script>
 
 <style>
+	.bo{
+		width: 680rpx;
+		height: 200rpx;
+		padding: 20rpx;
+		box-sizing: border-box;
+		font-size: 24rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #5D6168;
+		background-color: rgba(244,247,247,1);
+		margin-bottom: 20rpx;
+	}
+	.xaunze{
+		width: 530rpx;
+		margin-left: 40rpx;
+		font-size: 28rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #51565D;
+	}
 	.page {
 	  position: relative;
 	  width: 750rpx;
@@ -232,7 +436,7 @@
 	  width: 168rpx;
 	  display: block;
 	  overflow-wrap: break-word;
-	  color: rgba(193,194,195,1);
+	  color: rgba(81,86,93,1);
 	  font-size: 28rpx;
 	  font-family: PingFangSC-Regular;
 	  white-space: nowrap;
@@ -340,15 +544,14 @@
 	  flex-direction: column;
 	}
 	.word15 {
-	  width: 84rpx;
-	  display: block;
+	  width: 680rpx;
 	  overflow-wrap: break-word;
 	  color: rgba(255,255,255,1);
 	  font-size: 28rpx;
 	  font-family: Helvetica;
-	  white-space: nowrap;
-	  line-height: 40rpx;
-	  text-align: center;
+	  display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 	.image{
 		margin: auto;
