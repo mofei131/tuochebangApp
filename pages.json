@@ -99,9 +99,27 @@
 			}
 		},
 		{
+			"path": "pages/my/personaldata",
+			"style": {
+				"navigationBarTitleText": "个人资料"
+			}
+		},
+		{
+			"path": "pages/my/updatemobile",
+			"style": {
+				"navigationBarTitleText": "修改手机号"
+			}
+		},
+		{
 			"path": "pages/my/updatepwd",
 			"style": {
 				"navigationBarTitleText": "修改密码"
+			}
+		},
+		{
+			"path": "pages/my/updatepaypwd",
+			"style": {
+				"navigationBarTitleText": "修改支付密码"
 			}
 		},
 		{

@@ -46,17 +46,20 @@
 		},
 		onLoad(p) {
 			this.lei = p.page
+		},
+		onShow() {
 			let that = this
 			uni.request({
-				url:'https://layer.boyaokj.cn/api/wechat/moneyLog',
+				url:'http://trailer.boyaokj.cn/api/wechat/moneyLog',
 				method:'GET',
 				data:{
 					page:that.page,
 					limit:that.limit,
-					user_id:uni.getStorageSync('userInfo').user_id
+					user_id:uni.getStorageSync('userInfo').id,
+					type:1
 				},
 				success(res) {
-					console.log(res.data.data)
+					console.log(JSON.stringify(res))
 					that.bill = res.data.data
 				}
 			})
@@ -70,7 +73,7 @@
 						let that = this
 						that.page++
 						uni.request({
-							url:'https://layer.boyaokj.cn/api/wechat/moneyLog',
+							url:'https://trailer.boyaokj.cn/api/wechat/moneyLog',
 							method:'GET',
 							data:{
 								page:that.page,

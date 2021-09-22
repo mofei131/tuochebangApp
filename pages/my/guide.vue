@@ -26,7 +26,7 @@
 		onLoad() {
 			let that = this
 			uni.request({
-				url:'https://layer.boyaokj.cn/api/commission/notice',
+				url:'https://trailer.boyaokj.cn/api/commission/notice',
 				method:'POST',
 				success(res) {
 					that.article = res.data.data

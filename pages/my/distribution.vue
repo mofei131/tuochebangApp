@@ -17,7 +17,7 @@
 				
 			</view>
 			<view class="newuser">已邀请用户
-				<span class="usernum">386</span>人
+				<span class="usernum">{{total}}</span>人
 			</view> 
  			<view class="paihang" @tap="paihangbang()">
 	 			<image src='../../static/images/paihang.png'></image>
@@ -31,7 +31,6 @@
 				<view class="itemleft">
 					<view>张三</view>
 					<view>2020-02-21  13:12:22</view>
-					<!-- <view v-else>0000-00-00 00:00:00</view> -->
 				</view>
 				<view class="itemright">
 					<view>+100</view>
@@ -41,7 +40,6 @@
 				<view class="itemleft">
 					<view>王五</view>
 					<view>2021-05-09  18:12:19</view>
-					<!-- <view v-else>0000-00-00 00:00:00</view> -->
 				</view>
 				<view class="itemright">
 					<view>+55</view>
@@ -51,7 +49,6 @@
 				<view class="itemleft">
 					<view>李四</view>
 					<view>2021-08-21  23:32:12</view>
-					<!-- <view v-else>0000-00-00 00:00:00</view> -->
 				</view>
 				<view class="itemright">
 					<view>+63</view>
@@ -65,17 +62,61 @@
 	export default{
 		data(){
 			return{
-
+				page:1,
+				limit:6,
+				total:0
 			}
 		},
 		onLoad() {
 			
+		},
+		onShow() {
+			this.getUserInfo();
+			this.distributionList()
 		},
 		methods:{
 			//跳转排行榜
 			paihangbang(){
 				uni.navigateTo({
 					url:'./paihangbang'
+				})
+			},
+			getUserInfo(){
+				uni.request({
+					url:'http://trailer.boyaokj.cn/api/wechat/getUserinfo',
+					method:'GET',
+					data:{
+						user_id:uni.getStorageSync('userInfo').id
+					},
+					success(res) {
+						console.log(JSON.stringify(res));
+						for(let i in res.data.data){
+							that.boll.push(res.data.data[i])
+						}
+					}
+					
+				})
+			},
+			//列表
+			distributionList() {
+				let that = this
+				that.page++
+				uni.request({
+					url:'http://trailer.boyaokj.cn/api/wechat/moneyLog',
+					method:'GET',
+					data:{
+						page:that.page,
+						limit:that.limit,
+						user_id:uni.getStorageSync('userInfo').id,
+						type:2
+					},
+					success(res) {
+						this.total = res.data.data.total
+						console.log(JSON.stringify(res));return;
+						for(let i in res.data.data){
+							that.boll.push(res.data.data[i])
+						}
+					}
 				})
 			}
 		}

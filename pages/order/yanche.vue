@@ -220,6 +220,36 @@
 												}
 											})
 										}
+										console.log(res.tempFilePaths[0])
+										that.photo1 = res.tempFilePaths[0]
+										// if(e == 1){
+										// 	uni.uploadFile({
+										// 		url:'https://trailer.boyaokj.cn/api/file/upload',
+										// 		filePath: res.tempFilePaths[0],
+										// 		name: 'file',
+										// 		success(res) {
+										// 			that.zhiname = JSON.parse(res.data).data.url
+										// 		}
+										// 	})
+										// }else if(e == 2){
+										// 	uni.uploadFile({
+										// 		url:'https://trailer.boyaokj.cn/api/file/upload',
+										// 		filePath: res.tempFilePaths[0],
+										// 		name: 'file',
+										// 		success(res) {
+										// 			that.zhiyear = JSON.parse(res.data).data.url
+										// 		}
+										// 	})
+										// }else if(e == 3){
+										// 	uni.uploadFile({
+										// 		url:'https://trailer.boyaokj.cn/api/file/upload',
+										// 		filePath: res.tempFilePaths[0],
+										// 		name: 'file',
+										// 		success(res) {
+										// 			that.cfcong = JSON.parse(res.data).data.url
+										// 		}
+										// 	})
+										// }
 									},
 								});
 							},

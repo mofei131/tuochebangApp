@@ -17,14 +17,12 @@
 		onLoad() {
 			let that = this
 			uni.request({
-				url:'https://layer.boyaokj.cn/api/index/setting',
+				url:'https://trailer.boyaokj.cn/api/index/setting',
 				method:'GET',
 				data:{
 					key:'fuwu'
 				},
 				success(res) {
-					// console.log(res.data.data.data)
-					// that.content = res.data.data.data
 					that.content = that.formatRichText(res.data.data.data)
 				}
 			})
