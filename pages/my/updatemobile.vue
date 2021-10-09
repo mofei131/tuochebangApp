@@ -15,7 +15,7 @@
      <view class="button-login" hover-class="button-hover" @tap="save()">
        <text>保存</text>
      </view>
- 
+ <takinfo></takinfo>
    </view>
  </template>
  

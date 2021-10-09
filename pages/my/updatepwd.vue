@@ -1,296 +1,171 @@
 <template>
-  <view class="content">
-    <view class="list">
-     <!-- <view class="list-call">
-        <input class="sl-input" type="number" v-model="phone" maxlength="11" placeholder="请输入手机号" />
-		 <view class="yzm" :class="{ yzms: second>0 }" @tap="getcode">{{yanzhengma}}</view>
-      </view>
-      <view class="list-call">
-        <input class="sl-input" type="number" v-model="code" maxlength="4" placeholder="验证码" />
-      </view> -->
-		<view class="list-call">
-			<input class="sl-input" type="text" v-model="password" maxlength="32" placeholder="旧密码" :password="!showPassword" />
-			<view class="eay1">
-				<image @click="mqing" src="../../static/images/null.png"></image>
+	<view>
+		<view class="itemlist">
+			<view class="listitem">
+				<input :type="inputType" class="old" v-model="password1" :password="!showPassword" maxlength="32" placeholder="旧密码" placeholder-style="color: #5D5D61;"/>
+				<image src="http://hlstore.yimetal.cn/2021/tuochebang/null.png" class="close" @tap="close1()"></image>
+			</view>
+			<view class="listitem">
+				<input :type="inputType" class="password" v-model="password2" :password="!showPassword" maxlength="32" placeholder="新密码" placeholder-style="color: #5D5D61;"/>
+				<image src="http://hlstore.yimetal.cn/2021/tuochebang/null.png" class="close" @tap="close2()"></image>
+				<image class="img" :src="showPassword?'http://hlstore.yimetal.cn/2021/tuochebang/eaykai.png':'http://hlstore.yimetal.cn/2021/tuochebang/eaybi.png'" @tap="display"></image>
+			</view>
+			<view class="listitem">
+				<input :type="inputType" class="password" v-model="password3" :password="!showPassword" maxlength="32" placeholder="确认新密码" placeholder-style="color: #5D5D61;"/>
+				<image src="http://hlstore.yimetal.cn/2021/tuochebang/null.png" class="close" @tap="close3()"></image>
+				<image class="img" :src="showPassword?'http://hlstore.yimetal.cn/2021/tuochebang/eaykai.png':'http://hlstore.yimetal.cn/2021/tuochebang/eaybi.png'" @tap="display"></image>
+			</view>
+			<view class="ming">
+				<view>密码为6-20位，可由数字、字母、符号组成。</view>
 			</view>
 		</view>
-		<view class="list-call">
-			<input class="sl-input" type="text" v-model="password2" maxlength="32" placeholder="新密码" :password="!showPassword" />
-			<view class="eay2">
-				<image @click="mqing" src="../../static/images/null.png"></image>
-				<image @click="lst" :src="show==true?'../../static/images/eaybi.png':'../../static/images/eaykai.png'" mode=""></image>
-			</view>
+		<view class="modify">
+			<view @click="save()">保存</view>
 		</view>
-		<view class="list-call">
-			<input class="sl-input" type="text" v-model="password2" maxlength="32" placeholder="确认密码" :password="!showPassword" />
-			<view class="eay3">
-				<image @click="mqing" src="../../static/images/null.png"></image>
-				<image @click="lst" :src="show==true?'../../static/images/eaybi.png':'../../static/images/eaykai.png'" mode=""></image>
-			</view>
-		</view>
-    </view>
-	<view class="agreement">
-		<text>密码为6-20位，可由数字、字母、符号组成。</text>
+		<takinfo></takinfo>
 	</view>
-    <view class="button-login" hover-class="button-hover" @tap="bindLogin()">
-      <text>保存</text>
-    </view>
-
-  </view>
 </template>
 
 <script>
-  var _this, js;
-  export default {
-    data() {
-      return {
-        phone: '',
-        second: 0,
-        code: "",
-        showPassword: false,
-        password: '',
-		password2: '',
-		dis:false,
-		show:true,
-		btn:false
-      }
-    },
-    onLoad() {
-      _this = this;
-    },
-    computed: {
-      yanzhengma() {
-        if (this.second == 0) {
-			return '| 获取验证码';
-        } else {
-			return this.second+'s';
-        }
-      }
-    },
-    onUnload() {
-      this.clear()
-    },
-    methods: {
-		lst(){
-			if(this.show){
-				this.show = false
-			}else{
-				this.show = true
+	export default{
+		data(){
+			return{
+				password1:'',
+				password2:'',
+				password3:'',
+				showPassword: false,
+				inputType: "text",
 			}
 		},
-		pqing(){
-			this.phone = ''
-		},
-		mqing(){
-			this.password = ''
-		},
-      display() {
-        this.showPassword = !this.showPassword
-      },
-      clear(){
-        clearInterval(js)
-        js = null
-        this.second = 0
-      },
-      getcode() {
-        if (this.phone.length != 11) {
-          uni.showToast({
-            icon: 'none',
-            title: '手机号不正确'
-          });
-          return;
-        }
-        if (this.second > 0) {
-          return;
-        }
-        _this.second = 60;
-        // this.http.ajax({
-        // 	url: 'user/getVerifyCode',
-        // 	method: 'GET',
-        // 	data: {
-        // 		mobile: this.phone,
-        // 	},
-        // 	success: function(res) {
-        		js = setInterval(function() {
-        		  _this.second--;
-        		  if (_this.second == 0) {
-        		    _this.clear()
-        		  }
-        		}, 1000)
-        // 	}
-        // });
-      },
-      bindLogin() {
-        if (this.phone.length != 11) {
-          uni.showToast({
-            icon: 'none',
-            title: '手机号不正确'
-          });
-          return;
-        }
-        if (this.password.length < 6) {
-          uni.showToast({
-            icon: 'none',
-            title: '密码不正确'
-          });
-          return;
-        }
-        if (this.code.length != 4) {
-          uni.showToast({
-            icon: 'none',
-            title: '验证码不正确'
-          });
-          return;
-        }
-				if (this.password != this.password2) {
-				  uni.showToast({
-				    icon: 'none',
-				    title: '请输入相同密码'
-				  });
-				  return;
+		methods:{
+			close1(){
+				this.password1 = ""
+			},
+			close2(){
+				this.password2 = ""
+			},
+			close3(){
+				this.password3 = ""
+			},
+			display() {
+				this.showPassword = !this.showPassword
+			},
+			
+			save() {
+				if (!this.password1) {
+					uni.showToast({
+						icon: 'none',
+						title: '请输入旧密码'
+					});
+					return;
 				}
-        this.http.ajax({
-        	url: 'user/forget',
-        	method: 'GET',
-        	data: {
-        		mobile: this.phone,
-        		password: this.password,
-        		code: this.code
-        	},
-        	success: function(res) {
-        		wx.showToast({
-        			title: res.message,
-        			icon: 'none'
-        		})
-        		if (res.code == 200) {
-        			setTimeout(() => {
-        				wx.redirectTo({
-        					url: 'login'
-        				}, 1000)
-        			})
-        		}
-        	}
-        });
-      }
-    }
-  }
+				if (!this.password2) {
+					uni.showToast({
+						icon: 'none',
+						title: '请输入新密码'
+					});
+					return;
+				}
+				if (this.password2 != this.password3) {
+					uni.showToast({
+						icon: 'none',
+						title: '两次密码不一致'
+					});
+					return;
+				}
+				let that = this
+				this.http.ajax({
+					url: 'app/resetPassword',
+					method: 'GET',
+					data: {
+						user_id: uni.getStorageSync('userInfo').id,
+						password: this.password1,
+						newpass: this.password2
+					},
+					success: function(res) {
+						if (res.code == 200) {
+							uni.showToast({
+								title: '修改成功！'
+							})
+							uni.removeStorageSync('userInfo')
+							setTimeout(function() {
+								uni.switchTab({
+									url:'../index/index'
+								})
+							}, 1000);
+						} else {
+							uni.showToast({
+								title: res.message,
+								icon: 'none'
+							})
+						}
+					}
+				});
+			},
+		}
+	}
 </script>
 
 <style>
-  .content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .tishi {
-    color: #51565D;
-    font-size: 32rpx;
-    line-height: 50rpx;
-	margin: auto;
-    margin-bottom: 35rpx;
-	margin-top: 69rpx;
-	
-  }
-	.eay1,.eay2,.eay3{
-		position: absolute;
-		top: 5rpx;
-		right: 5rpx;
-	}
-	.eay1 image{
-		width: 66rpx;
-		height: 66rpx;
-		top: 35rpx;
-		margin-right: 30rpx;
-	}
-	.eay2 image{
-		width: 66rpx;
-		height: 66rpx;
-		top: 80rpx;
-		margin-right: 30rpx;
-	}
-	.eay3 image{
-		width: 66rpx;
-		height: 66rpx;
-		top: 120rpx;
-		margin-right: 30rpx;
-	}
-
-.eay2 image{
-		width: 66rpx;
-		height: 66rpx;
-		top: 80rpx;
-		margin-right: 30rpx;
-	}  .list {
-    display: flex;
-    flex-direction: column;
-		padding: 20rpx 35rpx 0;
-  }
-
-  .list-call {
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		align-items: center;
-		height: 76rpx;
+	.itemlist{
 		width: 680rpx;
-		color: #666;
+		margin: auto;
+		padding-top: 25rpx;
+	}
+	.listitem{
+		display: flex;
+		justify-content: space-between;
+		margin-top: 20rpx;
+	}
+	.close,.img{
+		width: 66rpx;
+		height: 66rpx;
+		
+	}
+	.old{
+		width: 610rpx;
+		height: 76rpx;
 		background: #F4F4F4;
 		border-radius: 39rpx;
-		font-size: 26rpx;
-		margin-top: 20rpx;
-		padding: 0 31rpx;
+		padding-left: 30rpx;
 		box-sizing: border-box;
-  }
-
-  .list-call .img {
-    width: 40rpx;
-    height: 40rpx;
-	margin-right: 20rpx;
-  }
-
-  .list-call .sl-input {
-    flex: 1;
-    text-align: left;
-    font-size: 26rpx;
-  }
-
-  .button-login {
-  	width: 680rpx;
-  	height: 76rpx;
-  	background: #1890FF;
-  	border-radius: 39rpx;
-  	/* opacity: 0.4; */
-  	text-align: center;
-  	color: #fff;
-  	line-height: 70rpx;
-  	margin: auto;
-  	margin-top: 32rpx;
-  }
-
-  .yzm {
-    color: #1890FF;
-    font-size: 26rpx;
-    line-height: 64rpx;
-    padding-left: 10rpx;
-    padding-right: 10rpx;
-    width: auto;
-    height: 64rpx;
-    /* border: 1rpx solid #FFA800; */
-    border-radius: 50rpx;
-  }
-  
-  .yzms {
-    color: #1890FF !important;
-    /* border: 1rpx solid #999999; */
-  }
-  .agreement{
-  	  display: flex;
-  	  margin-left: 35rpx;
-  	  color: #666666;
-  	  font-size: 22rpx;
-  	  line-height: 30rpx;
-  	  margin-top: 18rpx;
-  	  box-sizing: border-box;
-  }
+		font-size: 26rpx;
+		outline: none;
+		border: 0;
+	}
+	.password{
+		width: 548rpx;
+		height: 76rpx;
+		background: #F4F4F4;
+		border-radius: 39rpx;
+		padding-left: 30rpx;
+		box-sizing: border-box;
+		font-size: 26rpx;
+		outline: none;
+		border: 0;
+	}
+	.ming{
+		font-size: 22rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #666666;
+		line-height: 30rpx;
+		margin-top: 18rpx;
+	}
+	.modify{
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 72rpx;
+		margin: 0 auto;
+		width: 680rpx;
+		height: 76rpx;
+		background: #1890FF;
+		border-radius: 39rpx;
+		color: #fff;
+		font-size: 28rpx;
+		bottom: 72rpx;
+		text-align: center;
+		line-height: 70rpx;
+	}
 </style>

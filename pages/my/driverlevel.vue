@@ -3,14 +3,13 @@
 		<view class="myhead">
 			<view class="userifom">
 				<view class="headimg">
-					<image  src='../../static/icon/zuanshi.png'></image>
+					<image  :src='avater'></image>
 				</view>
 				<view class="username">
-					<view class="name">我是潍坊大哥</view>
-					<view class="level" style="display: flex;justify-content: center;">黄金
-						<view class="ask">
-							<image src='../../static/icon/zuanshi.png'></image>
-						</view>
+					<view class="name">{{name}}</view>
+					<view class="level">
+					<view>{{djname}}</view>
+					<image :src='djpic' class="ask"></image>
 					</view>
 				</view>
 			</view>
@@ -36,14 +35,15 @@
 		<view class="guidelist" v-for="(item,index) in article" :key="index" @tap="pandaun(index)">
 		<!-- <view class="guidelist" @tap="pandaun(index)"> -->
 		<view class="guideitem">
-			<view>怎么才能赚到钱</view>
+			<view>{{item.title}}</view>
 			<!-- <image :src="ji == index?'../../static/icon/downzd.png':'../../static/icon/rightzd.png'"></image> -->
 			<image :src="ji == index?'../../static/icon/downzd.png':'../../static/icon/rightzd.png'"></image>
 		</view>
 		<view class="box" v-show="ji == index">
-		<view class="guidecot">i我去佛旺季电位器服务器哦服务及偶发价位IQ房产网技巧房价完全范玮琪平均分就去附近欧派就欺负</view>
+		<view class="guidecot" v-html="item.content"></view>
 		</view>
 		</view>
+		<takinfo></takinfo>
 	</view>
 </template>
 
@@ -51,24 +51,38 @@
 	export default{
 		data(){
 			return{
+				avater:uni.getStorageSync('userInfo').avater,
+				name:uni.getStorageSync('userInfo').nickname,
 				decide:false,
 				ji:'',
 				article:[],
 				title: 'progress',
-				pgList: 20,
-				fen1:1200,
-				fen2:6000
+				fen1:uni.getStorageSync('userInfo').integral,
+				fen2:0,
+				pgList: 0,
+				djname:'',
+				djpic:''
 			}
 		},
 		onLoad() {
+		},
+		onShow(){
 			let that = this
-			uni.request({
-				url:'https://trailer.boyaokj.cn/api/commission/notice',
-				method:'POST',
+			this.http.ajax({
+				url: 'app/level',
+				method: 'GET',
+				data: {
+					user_id:uni.getStorageSync('userInfo').id
+				},
 				success(res) {
-					that.article = res.data.data
+					console.log(res)
+					that.fen2 = res.data.user_level.max
+					that.djname = res.data.user_level.name
+					that.djpic = res.data.user_level.image
+					that.article = res.data.level_note
+					that.pgList = Math.round((uni.getStorageSync('userInfo').integral/res.data.user_level.max)*10000)/100
 				}
-			})
+			});
 		},
 		methods:{
 			pandaun(e){
@@ -108,6 +122,7 @@
 		background-size: 100%;
 		height: 355rpx;
 		margin: 20rpx auto;
+		border-radius: 14rpx;
 	}
 	.userifom{
 		display: flex;
@@ -121,13 +136,12 @@
 		color: #FFFFFF;
 		margin-left: 31rpx;
 		margin-top: 50rpx;
-		display: inline-block;
 	}
 	.name{
 		color: #FFFFFF;
 		font-size: 30rpx;
 		font-weight: 600;
-		margin-bottom: 25rpx;
+		margin-bottom: 3rpx;
 		display: flex;
 		align-items: center;
 	}
@@ -149,23 +163,21 @@
 	}
 	.level{
 		font-size: 21rpx;
-		width: 150rpx;
 		height: 40rpx;
 		display: flex;
 		align-items: center;
 		color: #FFFFFF;
 		background: #6765FF;
-		margin-left: 10rpx;
-		border-radius: 16px;
+		border-radius: 16rpx;
+		padding: 2rpx 17rpx 2rpx 17rpx;
+		box-sizing: border-box;
+		justify-content: center;
 	}
 	.ask{
-		display: inline-block;
-	}
-	.ask image{
 		width: 25rpx;
 		height: 25rpx;
 		margin-left: 5rpx;
-		margin-top: 11rpx;
+		margin-top: 0rpx!important;
 	}
 	.guideitem{
 		display: flex;

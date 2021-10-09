@@ -1,10 +1,11 @@
 <template>
 	<view>
-		<view class="tanchuang" style="float: left;">
-				<view class="juli">提示：有新的订单</view>
-				<div class="qd" style="float: left;line-height: 80rpx;">
-					<button class="qiangdan">去抢单(<span>10</span>s)</button>
-				</div>
+		<view class="top">
+			<view class="feld">
+				<image src="../../static/images/backl.png" @click="hui()"></image>
+				<view class="toptitle">联系客户</view>
+				<image></image>
+			</view>
 		</view>
 		<!-- <view class="guidelist" v-for="(item,index) in article" :key="index" @tap="pandaun(index)"> -->
 		<view class="guidelist" @tap="personaldata()">
@@ -31,10 +32,11 @@
 				<image src="../../static/icon/rightzd.png"></image>
 			</view>
 		</view>
-		<view class="guidelist" @tap="pandaun(index)">
+		<view class="guidelist">
 			<view class="guideitem">
 				<view>订单消息提示</view>
-				<switch checked @change="switch1Change"  style="transform: scale(0.7,0.7);"/>
+				<switch checked v-if="show"  style="transform: scale(0.7,0.7); margin-top: 10rpx;" @change="butishi"/>
+				<switch v-else  style="transform: scale(0.7,0.7); margin-top: 10rpx;" @change="butishi"/>
 			</view>
 		</view>
 		<view class="guidelist" @tap="out()">
@@ -43,7 +45,9 @@
 				<view>退出登录</view>
 				<image src="../../static/icon/rightzd.png"></image>
 			</view>
+			<takinfo class="taixi"></takinfo>
 		</view>
+		
 	</view>
 </template>
 <script>
@@ -52,8 +56,12 @@
 			return{
 				decide:false,
 				ji:'',
-				article:[]
+				article:[],
+				show:true
 			}
+		},
+		created() {
+				console.log(this.$store.state.num)
 		},
 		onLoad() {
 			let that = this
@@ -65,7 +73,55 @@
 				}
 			})
 		},
+		onShow(){
+			if(uni.getStorageSync('userInfo').order_notice == 1){
+				this.show = true
+			}else if(uni.getStorageSync('userInfo').order_notice == 0){
+				this.show = false
+			}
+		},
 		methods:{
+			hui(){
+				uni.reLaunch({
+					url:'index'
+				})
+			},
+			butishi(e){
+				let that = this
+				let show = 1
+				if(!e.target.value){
+					show = 0
+				}
+				this.http.ajax({
+					url: 'app/setOrderNotice',
+					method: 'GET',
+					data: {
+						user_id:uni.getStorageSync('userInfo').id,
+						type:show
+					},
+					success(res) {
+						that.http.ajax({
+							url: 'wechat/getUserinfo',
+							method: 'GET',
+							data: {
+								user_id:uni.getStorageSync('userInfo').id
+							},
+							success(res) {
+								uni.setStorageSync('userInfo',res.data)
+								uni.showToast({
+									title:'设置成功',
+									duration:1000
+								})
+								setTimeout(function(){
+									uni.reLaunch({
+										url:'index'
+									})
+								},1000)
+							}
+						});
+					}
+				});
+			},
 			out(){
 				uni.removeStorageSync('userInfo')
 				uni.switchTab({
@@ -93,7 +149,7 @@
 			//修改支付密码
 			updatepaypwd(){
 				uni.navigateTo({
-					url:'./updatepwd'
+					url:'./updatepaypwd'
 				})
 			},
 			//退出
@@ -109,6 +165,33 @@
 
 
 <style>
+	.taixi{
+		margin-top: 130rpx;
+	}
+	.feld image{
+		width: 66rpx;
+		height: 66rpx;
+	}
+	.top{
+		width: 750rpx;
+		height: 130rpx;
+		background-color: #30AEFF;
+		padding-top: 38rpx;
+		box-sizing: border-box;
+	}
+	.feld{
+		height: 88rpx;
+		width: 750rpx;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0 20rpx 0 20rpx;
+		box-sizing: border-box;
+		font-size: 39rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #FFFFFF;
+	}
 	page{
 		background: #F8F8F8;
 	}

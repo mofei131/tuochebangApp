@@ -106,6 +106,41 @@
 			},
 			onLoad(p) {
 				this.orderid = p.id
+				let that = this
+				if(uni.getStorageSync('yanche')){
+					console.log(uni.getStorageSync('yanche'))
+					this.photo1 = uni.getStorageSync('yanche').photo1
+					this.photo2 = uni.getStorageSync('yanche').photo2
+					this.photo3 = uni.getStorageSync('yanche').photo3
+					this.photo4 = uni.getStorageSync('yanche').photo4
+					this.photo5 = uni.getStorageSync('yanche').photo5
+					this.orderid = uni.getStorageSync('yanche').orderid
+				}
+				this.http.ajax({
+					url: 'driverOrder/verifyDetail',
+					method: 'GET',
+					data: {
+						order_id:this.orderid
+					},
+					success: function(res) {
+						console.log(res)
+						if(res.code == 200 && res.data){
+							that.photo1 = res.data.photo1
+							that.photo2 = res.data.photo2
+							that.photo3 = res.data.photo3
+							that.photo4 = res.data.photo4
+							that.photo5 = res.data.photo5
+							that.sign = res.data.sign
+							that.status = res.data.status
+							that.reason = res.data.reason
+						}else if(res.code == -1 && res.data){
+							uni.showToast({
+								title:res.message,
+								icon:'none'
+							})
+						}
+					}
+				});
 			},
 			onShow() {
 				let that = this
@@ -115,37 +150,6 @@
 				if(uni.getStorageSync('zy')){
 					this.zy = uni.getStorageSync('zy')
 				}
-				if(uni.getStorageSync('yanche')){
-					this.photo1 = uni.getStorageSync('yanche').photo1
-					this.photo2 = uni.getStorageSync('yanche').photo2
-					this.photo3 = uni.getStorageSync('yanche').photo3
-					this.photo4 = uni.getStorageSync('yanche').photo4
-					this.photo5 = uni.getStorageSync('yanche').photo5
-				}
-				this.http.ajax({
-					url: 'driverOrder/verifyDetail',
-					method: 'GET',
-					data: {
-						order_id:this.orderid
-					},
-					success: function(res) {
-						if(res.code == 200){
-							that.photo1 = res.data.photo1
-							that.photo2 = res.data.photo2
-							that.photo3 = res.data.photo3
-							that.photo4 = res.data.photo4
-							that.photo5 = res.data.photo5
-							that.sign = res.data.sign
-							that.status = res.data.status
-							that.reason = res.data.reason
-						}else if(res.code == -1){
-							uni.showToast({
-								title:res.message,
-								icon:'none'
-							})
-						}
-					}
-				});
 			},
 			methods: {
 				chooseImage(e) {
@@ -164,64 +168,73 @@
 									sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 									sourceType: ['camera'], //从相册选择、摄像头
 									success: function(res) {
-										if(e == 1){
-											uni.uploadFile({
-												url:'https://trailer.boyaokj.cn/api/file/upload',
-												filePath: res.tempFilePaths[0],
-												name: 'file',
-												success(res) {
-													that.photo1 = JSON.parse(res.data).data.url
-												}
-											})
-										}else if(e == 2){
-											uni.uploadFile({
-												url:'https://trailer.boyaokj.cn/api/file/upload',
-												filePath: res.tempFilePaths[0],
-												name: 'file',
-												success(res) {
-													that.photo2 = JSON.parse(res.data).data.url
-												}
-											})
-										}else if(e == 3){
-											uni.uploadFile({
-												url:'https://trailer.boyaokj.cn/api/file/upload',
-												filePath: res.tempFilePaths[0],
-												name: 'file',
-												success(res) {
-													that.photo3 = JSON.parse(res.data).data.url
-												}
-											})
-										}else if(e == 4){
-											uni.uploadFile({
-												url:'https://trailer.boyaokj.cn/api/file/upload',
-												filePath: res.tempFilePaths[0],
-												name: 'file',
-												success(res) {
-													that.photo4 = JSON.parse(res.data).data.url
-												}
-											})
-										}else if(e == 5){
-											uni.uploadFile({
-												url:'https://trailer.boyaokj.cn/api/file/upload',
-												filePath: res.tempFilePaths[0],
-												name: 'file',
-												success(res) {
-													that.photo5 = JSON.parse(res.data).data.url
-													uni.setStorage({
-														key:'yanche',
-														data:{
-															photo1:that.photo1,
-															photo2:that.photo2,
-															photo3:that.photo3,
-															photo4:that.photo4,
-															photo5:that.photo5,
+										uni.compressImage({
+											src: res.tempFilePaths[0],  
+											quality: 50,  
+											success: res => {
+												console.log("压缩图片")
+												console.log(res.tempFilePath)  
+												if(e == 1){
+													uni.uploadFile({
+														url:'https://trailer.boyaokj.cn/api/file/upload',
+														filePath: res.tempFilePath,
+														name: 'file',
+														success(res) {
+															that.photo1 = JSON.parse(res.data).data.url
+														}
+													})
+												}else if(e == 2){
+													uni.uploadFile({
+														url:'https://trailer.boyaokj.cn/api/file/upload',
+														filePath: res.tempFilePath,
+														name: 'file',
+														success(res) {
+															that.photo2 = JSON.parse(res.data).data.url
+														}
+													})
+												}else if(e == 3){
+													uni.uploadFile({
+														url:'https://trailer.boyaokj.cn/api/file/upload',
+														filePath: res.tempFilePath,
+														name: 'file',
+														success(res) {
+															that.photo3 = JSON.parse(res.data).data.url
+														}
+													})
+												}else if(e == 4){
+													uni.uploadFile({
+														url:'https://trailer.boyaokj.cn/api/file/upload',
+														filePath: res.tempFilePath,
+														name: 'file',
+														success(res) {
+															that.photo4 = JSON.parse(res.data).data.url
+														}
+													})
+												}else if(e == 5){
+													uni.uploadFile({
+														url:'https://trailer.boyaokj.cn/api/file/upload',
+														filePath: res.tempFilePath,
+														name: 'file',
+														success(res) {
+															that.photo5 = JSON.parse(res.data).data.url
+															uni.setStorage({
+																key:'yanche',
+																data:{
+																	photo1:that.photo1,
+																	photo2:that.photo2,
+																	photo3:that.photo3,
+																	photo4:that.photo4,
+																	photo5:that.photo5,
+																	orderid:that.orderid
+																}
+															})
 														}
 													})
 												}
-											})
-										}
-										console.log(res.tempFilePaths[0])
-										that.photo1 = res.tempFilePaths[0]
+											}  
+										})
+										// console.log(res.tempFilePaths[0])
+										// that.photo1 = res.tempFilePaths[0]
 										// if(e == 1){
 										// 	uni.uploadFile({
 										// 		url:'https://trailer.boyaokj.cn/api/file/upload',
@@ -325,6 +338,7 @@
 										icon:'none',
 										duration:1000
 									})
+									uni.removeStorageSync('yanche')
 									setTimeout(function() {
 									uni.reLaunch({
 										url:'index'

@@ -2,7 +2,10 @@
 	<view>
 		<view class="top">
 			<view class="feld">
+				<view class="shu">
 				<image src="../../static/images/xiaoxi.png" @click="tonews"></image>
+				<view class="shunum">{{shunum}}</view>
+				</view>
 				<view class="toptitle">订单</view>
 				<image src="../../static/images/kefu.png" @click="call()"></image>
 			</view>
@@ -35,10 +38,11 @@
 					<view class="jia">￥{{item.money}}</view>
 				</view>
 				</view>
-				<view class="ceng5" v-if="true">
-					<view class="yan" v-if="true" @click="yan(item)">发起验车</view>
-					<view class="bo" v-if="false">验车被驳回</view>
-					<view class="tong" v-if="false">已通过验车</view>
+				<view class="ceng5" v-if="item.status != 4">
+					<view class="yan" v-if="item.verify_status == 0" @click="yan(item)">发起验车</view>
+					<view class="bo" v-if="item.verify_status == -1" @click="yan(item)">验车被驳回</view>
+					<view class="yan" v-if="item.verify_status == 1" @click="yan(item)">验车审核中</view>
+					<view class="tong" v-if="item.verify_status == 2" @click="yan(item)">已通过验车</view>
 					<view class="yan" v-if="true" @click="lianxi(item)">联系客户</view>
 				</view>
 			</view>
@@ -52,14 +56,15 @@
 			return{
 				card:[
 					{title:'全部',show:true},
-					{title:'进心中',show:false},
+					{title:'进行中',show:false},
 					{title:'已完成',show:false},
 				],
 				cell:'1335678520',
 				page:1,
 				limit:10,
 				status:0,
-				orderlist:[]
+				orderlist:[],
+				shunum:0
 			}
 		},
 		onLoad() {
@@ -79,6 +84,16 @@
 				success: function(res) {
 					console.log(res)
 					that.orderlist = res.data
+				}
+			});
+			this.http.ajax({
+				url: 'message/noReadNum',
+				method: 'GET',
+				data: {
+					user_id:uni.getStorageSync('userInfo').id
+				},
+				success(res) {
+					that.shunum = res.data.noread
 				}
 			});
 		},
@@ -173,6 +188,23 @@
 </script>
 
 <style>
+	.shunum{
+		position: absolute;
+		top: 10rpx;
+		right: 0rpx;
+		width: 30rpx;
+		height: 20rpx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background: #FF7878;
+		color: #fff;
+		font-size: 18rpx;
+		border-radius: 30rpx;
+	}
+	.shu{
+		position: relative;
+	}
 	.tong{
 		width: 188rpx;
 		height: 62rpx;

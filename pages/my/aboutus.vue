@@ -4,6 +4,7 @@
 		<!-- <view v-html="content"></view> -->
 		<rich-text  v-html = 'content'></rich-text>
 	</view>
+	<takinfo></takinfo>
 	</view>
 </template>
 
@@ -16,18 +17,24 @@
 		},
 		onLoad() {
 			let that = this
-			uni.request({
-				url:'https://trailer.boyaokj.cn/api/index/setting',
-				method:'GET',
-				data:{
-					key:'fuwu'
+			this.http.ajax({
+				url: 'index/setting',
+				method: 'GET',
+				data: {
+					key:'yinsi'
 				},
 				success(res) {
-					that.content = that.formatRichText(res.data.data.data)
+					that.content = that.formatRichText(res.data.data)
 				}
-			})
+			});
 		},
 		methods:{
+			back(){
+				uni.setStorageSync('yc',1)
+				uni.reLaunch({
+					url:'yanche'
+				})
+			},
 			formatRichText(html) {
 					let newContent = html.replace(/<img[^>]*>/gi, function(match, capture) {
 						match = match.replace(/style="[^"]+"/gi, '').replace(/style='[^']+'/gi, '');
@@ -49,16 +56,31 @@
 </script>
 
 <style>
+	.btn{
+		width: 680rpx;
+		height: 76rpx;
+		background: #40A9FF;
+		border-radius: 39rpx;
+		font-size: 28rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #FFFFFF;
+		margin: 0 auto;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 40rpx;
+	}
 	page{
 		background: #F4F7F7;
 	}
 	.about{
-		width: 640rpx;
+		width: 720rpx;
 		margin: auto;
 		border-radius: 10rpx;
 		background: #fff;
 		padding: 18rpx;
-		user-select: none;
 		height: 100%;
+		box-sizing: border-box;
 	}
 </style>

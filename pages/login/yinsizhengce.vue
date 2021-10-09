@@ -16,18 +16,16 @@
 		},
 		onLoad() {
 			let that = this
-			uni.request({
-				url:'https://trailer.boyaokj.cn/api/index/setting',
-				method:'GET',
-				data:{
-					key:'guanyu'
+			this.http.ajax({
+				url: 'index/setting',
+				method: 'GET',
+				data: {
+					key:'yinsi'
 				},
 				success(res) {
-					// console.log(res.data.data.data)
-					// that.content = res.data.data.data
-					that.content = that.formatRichText(res.data.data.data)
+					that.content = that.formatRichText(res.data.data)
 				}
-			})
+			});
 		},
 		methods:{
 			back(){

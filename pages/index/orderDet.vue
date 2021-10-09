@@ -2,14 +2,12 @@
 	<view>
 		<!-- <view class="map"> -->
 			<map style="width: 100%;display: flex;" :style="{height:(shou?'25vh':'68vh')}" :latitude="latitude" :longitude="longitude" scale="16" show-location="true" :markers="markers" :polyline="polylines">
-				<!-- <cover-view> -->
-							 <cover-image class="war" src="../../static/images/war.png" ></cover-image>
-							 <cover-view class="juli">提示:装车距离距离您150km</cover-view>
-				<!-- </cover-view> -->
+							 <!-- <cover-image class="war" src="../../static/images/war.png" ></cover-image>
+							 <cover-view class="juli">提示:装车距离距离您150km</cover-view> -->
 			</map>
 		<!-- </view> -->
 		 <!-- @touchend="chukai" -->
-		<view class="fidbox" @touchstart="touchStart" @touchend="touchEnd">
+		<view class="fidbox" @touchstart="touchStart" @touchend="touchEnd" :style="shou?'height:1050rpx':'height:410rpx'">
 			<view class="neifidbox">
 				<view class="ceng1">
 					<view class="hui"></view>
@@ -122,6 +120,7 @@
 			</view>
 			</view>
 		</view>
+		<takinfo></takinfo>
 	</view>
 </template>
 <script>

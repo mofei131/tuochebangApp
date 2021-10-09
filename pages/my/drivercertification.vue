@@ -92,8 +92,12 @@
 				<view class="layer8" v-if="status == 2">
 				  <text lines="1" class="word15" @click="updata()">更新司机信息</text>
 				</view>
+				<view class="layer8" v-if="status == 1">
+				  <text lines="1" class="word15">审核中</text>
+				</view>
 	    </view>
 	  </view>
+		<takinfo></takinfo>
 	</view>
 </template>
 
@@ -115,7 +119,7 @@
 				status:0,
 			}
 		},
-		onShow() {
+		onLoad() {
 			let that = this
 			this.http.ajax({
 				url: 'driverAuth/driverInfo',
@@ -137,10 +141,119 @@
 					that.photo5 = res.data.driver_card_homepage
 					that.reason = res.data.reason
 					that.status = res.data.status
- 				}
+				}
 			});
 		},
+		onShow() {
+			
+		},
 		methods:{
+			updata(){
+				if (!this.name) {
+					uni.showToast({
+						title: '请输入您的姓名',
+						icon: 'none',
+					})
+					return
+				}
+				if (!this.phone) {
+					uni.showToast({
+						title: '请输入您的电话',
+						icon: 'none',
+					})
+					return
+				}
+				if (!this.card) {
+					uni.showToast({
+						title: '请输入您的身份证号码',
+						icon: 'none',
+					})
+					return
+				}
+				if (!this.unit && this.dian == 1) {
+					uni.showToast({
+						title: '请输入您的归属公司',
+						icon: 'none',
+					})
+					return
+				}
+				if (!this.photo1 && this.dian == 1) {
+					uni.showToast({
+						title: '请上传公司营业执照',
+						icon: 'none',
+					})
+					return
+				}
+				if (!this.photo2) {
+					uni.showToast({
+						title: '请上传身份证人相面',
+						icon: 'none',
+					})
+					return
+				}
+				if (!this.photo3) {
+					uni.showToast({
+						title: '请上传身份证国徽面',
+						icon: 'none',
+					})
+					return
+				}
+				if (!this.photo4) {
+					uni.showToast({
+						title: '请上传驾驶证照片主页',
+						icon: 'none',
+					})
+					return
+				}
+				if (!this.photo5) {
+					uni.showToast({
+						title: '请上传驾驶证照片副页',
+						icon: 'none',
+					})
+					return
+				}
+				this.http.ajax({
+					url: 'driverAuth/updateDriverInfo',
+					method: 'POST',
+					data: {
+						user_id:uni.getStorageSync('userInfo').id,
+						name:this.name,
+						mobile:this.phone,
+						idcard:this.card,
+						company:this.unit,
+						business_lince:this.photo1,
+						front_id_card:this.photo2,
+						back_id_card:this.photo3,
+						driver_card_homepage:this.photo4,
+						driver_card_frontpage:this.photo5,
+						auth_type:this.dian
+					},
+					success(res) {
+						if(res.code == 200){
+							uni.showToast({
+								title:'提交成功',
+								icon:'none',
+								duration:1000
+							})
+							setTimeout(function() {
+							uni.switchTab({
+								url:'./index'
+							})
+							},1000)
+						}else if(res.code == -1){
+							uni.showToast({
+								title:res.message,
+								icon:'none'
+							})
+						}else{
+							uni.showToast({
+								title:'提交失败',
+								icon:'none'
+							})
+						}
+					}
+				});
+			},
 			dian1(){
 				this.dian = 1
 			},
@@ -154,52 +267,60 @@
 								sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 								sourceType: ['camera','album'], //从相册选择、摄像头
 								success: function(res) {
-									if(e == 1){
-										uni.uploadFile({
-											url:'https://trailer.boyaokj.cn/api/file/upload',
-											filePath: res.tempFilePaths[0],
-											name: 'file',
-											success(res) {
-												that.photo1 = JSON.parse(res.data).data.url
+									uni.compressImage({
+										src: res.tempFilePaths[0],  
+										quality: 50,  
+										success: res => {
+											console.log("压缩图片")
+											console.log(res.tempFilePath)  
+											if(e == 1){
+												uni.uploadFile({
+													url:'https://trailer.boyaokj.cn/api/file/upload',
+													filePath: res.tempFilePath,
+													name: 'file',
+													success(res) {
+														that.photo1 = JSON.parse(res.data).data.url
+													}
+												})
+											}else if(e == 2){
+												uni.uploadFile({
+													url:'https://trailer.boyaokj.cn/api/file/upload',
+													filePath: res.tempFilePath,
+													name: 'file',
+													success(res) {
+														that.photo2 = JSON.parse(res.data).data.url
+													}
+												})
+											}else if(e == 3){
+												uni.uploadFile({
+													url:'https://trailer.boyaokj.cn/api/file/upload',
+													filePath: res.tempFilePath,
+													name: 'file',
+													success(res) {
+														that.photo3 = JSON.parse(res.data).data.url
+													}
+												})
+											}else if(e == 4){
+												uni.uploadFile({
+													url:'https://trailer.boyaokj.cn/api/file/upload',
+													filePath: res.tempFilePath,
+													name: 'file',
+													success(res) {
+														that.photo4 = JSON.parse(res.data).data.url
+													}
+												})
+											}else if(e == 5){
+												uni.uploadFile({
+													url:'https://trailer.boyaokj.cn/api/file/upload',
+													filePath: res.tempFilePath,
+													name: 'file',
+													success(res) {
+														that.photo5 = JSON.parse(res.data).data.url
+													}
+												})
 											}
-										})
-									}else if(e == 2){
-										uni.uploadFile({
-											url:'https://trailer.boyaokj.cn/api/file/upload',
-											filePath: res.tempFilePaths[0],
-											name: 'file',
-											success(res) {
-												that.photo2 = JSON.parse(res.data).data.url
-											}
-										})
-									}else if(e == 3){
-										uni.uploadFile({
-											url:'https://trailer.boyaokj.cn/api/file/upload',
-											filePath: res.tempFilePaths[0],
-											name: 'file',
-											success(res) {
-												that.photo3 = JSON.parse(res.data).data.url
-											}
-										})
-									}else if(e == 4){
-										uni.uploadFile({
-											url:'https://trailer.boyaokj.cn/api/file/upload',
-											filePath: res.tempFilePaths[0],
-											name: 'file',
-											success(res) {
-												that.photo4 = JSON.parse(res.data).data.url
-											}
-										})
-									}else if(e == 5){
-										uni.uploadFile({
-											url:'https://trailer.boyaokj.cn/api/file/upload',
-											filePath: res.tempFilePaths[0],
-											name: 'file',
-											success(res) {
-												that.photo5 = JSON.parse(res.data).data.url
-											}
-										})
-									}
+										}  
+									})
 								},
 							});
 				},

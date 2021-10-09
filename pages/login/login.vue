@@ -51,7 +51,8 @@
 				password: '',
 				dis:false,
 				show:true,
-				btn:false
+				btn:false,
+				scene:''
 			};
 		},
 		methods: {

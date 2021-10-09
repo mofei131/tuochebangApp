@@ -1,16 +1,17 @@
 <template>
 	<view>
-		<view class="item" @click="audio()">
+		<view class="item" @click="audio(item)" v-for="(item,index) in infolist" :key="index">
 			<view class="left">
-				<image class="tbiao" src="../../static/images/dtong.png"></image>
-				<view class="tzi">订单通知</view>
-				<view class="red"></view>
+				<image v-if="item.type == 1" class="tbiao" src="../../static/images/dtong.png"></image>
+				<image v-if="item.type == 2" class="tbiao2" src="../../static/images/xtong.png"></image>
+				<view class="tzi">{{item.title}}</view>
+				<view class="red" v-if="item.is_read == 0"></view>
 			</view>
 			<view class="right">
 				<image src="../../static/images/righticon2.png"></image>
 			</view>
 		</view>
-		<view class="item" @click="audio2()">
+		<!-- <view class="item" @click="audio2()">
 			<view class="left">
 				<image class="tbiao2" src="../../static/images/xtong.png"></image>
 				<view class="tzi">系统通知</view>
@@ -19,7 +20,8 @@
 			<view class="right">
 				<image src="../../static/images/righticon2.png"></image>
 			</view>
-		</view>
+		</view> -->
+		<takinfo></takinfo>
 	</view>
 </template>
 
@@ -27,21 +29,77 @@
 	export default{
 		data(){
 			return{
-				
+				page:1,
+				limit:20,
+				infolist:[]
 			}
 		},
+		onShow() {
+			let that = this
+			this.http.ajax({
+				url:'message/list',
+				method:'GET',
+				data: {
+					user_id:uni.getStorageSync('userInfo').id,
+					page:this.page,
+					limit:this.limit
+				},
+				success(res) {
+					console.log(res)
+					that.infolist = res.data
+				}
+			});
+		},
+		onReachBottom() {
+			this.page += 1
+			this.updata()
+		},
 		methods:{
-			audio(){
-				console.log('打印')
-				const innerAudioContext = uni.createInnerAudioContext();
-				innerAudioContext.src = 'http://hlstore.yimetal.cn/2021/aud1.mp3';
-				innerAudioContext.play();
+			audio(item){
+				let that = this
+				this.http.ajax({
+					url:'message/read',
+					method:'GET',
+					data: {
+						user_id:uni.getStorageSync('userInfo').id,
+						id:item.id
+					},
+					success(res) {
+						if(item.type == 1){
+							uni.switchTab({
+								url:'index'
+							})
+						}else if(item.type == 2){
+							uni.navigateTo({
+								url:'newslist?id='+item.id
+							})
+						}
+					}
+				});
 			},
-			audio2(){
-				console.log('打印2')
-				const innerAudioContext = uni.createInnerAudioContext();
-				innerAudioContext.src = 'http://hlstore.yimetal.cn/2021/aud3.mp3';
-				innerAudioContext.play();
+			updata(){
+				let that = this
+				this.http.ajax({
+					url:'message/list',
+					method:'GET',
+					data: {
+						user_id:uni.getStorageSync('userInfo').id,
+						page:this.page,
+						limit:this.limit
+					},
+					success(res) {
+						if(res.data.length != 0){
+							for(let i in res.data){
+								that.infolist.push(res.data[i])
+							}
+						}else{
+							uni.showToast({
+								title:'没有了',
+								icon:'none'
+							})
+						}
+					}
+				});
 			}
 		}
 	}
@@ -49,13 +107,11 @@
 
 <style>
 	.red{
-		position: absolute;
 		width: 16rpx;
 		height: 16rpx;
 		background: #FF7878;
-		top: 26rpx;
-		left: 189rpx;
 		border-radius: 16rpx;
+		margin: -3rpx 0 0 -5rpx;
 	}
 	.right image{
 		width: 48rpx;

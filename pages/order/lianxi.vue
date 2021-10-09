@@ -50,6 +50,7 @@
 				</view>
 			</view>
 		</view>
+		<takinfo class="taixi"></takinfo>
 	</view>
 </template>
 
@@ -97,6 +98,9 @@
 </script>
 
 <style>
+	.taixi{
+		margin-top: 130rpx;
+	}
 	.fche{
 		font-size: 32rpx;
 		font-family: PingFangSC-Regular, PingFang SC;

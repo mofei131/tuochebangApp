@@ -3,9 +3,16 @@
 		<view class="myhead">
 			<view class="userifom">
 				<view class="headimg">
-					<image  src='../../static/icon/zuanshi.png'></image>
+					<image  :src='avater'></image>
 				</view>
 				<view class="username">
+					<view class="name">{{name}}</view>
+					<view class="level">
+					<view>{{djname}}</view>
+					<image :src='djpic' class="ask"></image>
+					</view>
+				</view>
+				<!-- <view class="username">
 					<view class="name">我是潍坊大哥</view>
 					<view class="level" style="display: flex;justify-content: center;">黄金
 						<view class="ask">
@@ -13,7 +20,7 @@
 						</view>
 					</view>
 					
-				</view>
+				</view> -->
 				
 			</view>
 			<view class="newuser">已邀请用户
@@ -26,35 +33,17 @@
 				</view>
 	 		</view>
 		</view>
-		<view class="billlist">
-			<view class="billitem">
-				<view class="itemleft">
-					<view>张三</view>
-					<view>2020-02-21  13:12:22</view>
-				</view>
-				<view class="itemright">
-					<view>+100</view>
-				</view>
-			</view>
-			<view class="billitem">
-				<view class="itemleft">
-					<view>王五</view>
-					<view>2021-05-09  18:12:19</view>
-				</view>
-				<view class="itemright">
-					<view>+55</view>
-				</view>
-			</view>
-			<view class="billitem">
-				<view class="itemleft">
-					<view>李四</view>
-					<view>2021-08-21  23:32:12</view>
-				</view>
-				<view class="itemright">
-					<view>+63</view>
-				</view>
-			</view>
-		</view>
+		<view>
+		    <view class="item" v-for="(item,index) in boll" :key="index">
+		      <view class="item-info">
+		        <image src="http://hlstore.yimetal.cn/2021/tuochebang/my_touxiang.png" v-if="!item.avater"></image>
+		        <image :src="item.avater" v-else></image>
+		        <text>{{item.nickname}}</text>
+		      </view>
+		      <view class="item-number">{{item.mobile}}</view>
+		    </view>
+				<takinfo></takinfo>
+		  </view>
 	</view>
 </template>
 
@@ -64,7 +53,12 @@
 			return{
 				page:1,
 				limit:6,
-				total:0
+				total:0,
+				boll:[],
+				djname:'',
+				djpic:'',
+				name:uni.getStorageSync('userInfo').nickname,
+				avater:uni.getStorageSync('userInfo').avater,
 			}
 		},
 		onLoad() {
@@ -72,7 +66,19 @@
 		},
 		onShow() {
 			this.getUserInfo();
-			this.distributionList()
+			let that = this
+			this.http.ajax({
+				url: 'app/level',
+				method: 'GET',
+				data: {
+					user_id:uni.getStorageSync('userInfo').id
+				},
+				success(res) {
+					console.log(res)
+					that.djname = res.data.user_level.name
+					that.djpic = res.data.user_level.image
+				}
+			});
 		},
 		methods:{
 			//跳转排行榜
@@ -82,48 +88,88 @@
 				})
 			},
 			getUserInfo(){
+				let that = this
 				uni.request({
-					url:'http://trailer.boyaokj.cn/api/wechat/getUserinfo',
+					url:'http://trailer.boyaokj.cn/api/wechat/myChildren',
 					method:'GET',
 					data:{
+						page:this.page,
+						limit:this.limit,
 						user_id:uni.getStorageSync('userInfo').id
 					},
 					success(res) {
-						console.log(JSON.stringify(res));
-						for(let i in res.data.data){
-							that.boll.push(res.data.data[i])
-						}
+						console.log(res)
+						that.boll = res.data.data.list
+						that.total = res.data.data.count
+						// for(let i in res.data.data.list){
+						// 	that.boll.push(res.data.data.list[i])
+						// }
 					}
 					
 				})
 			},
 			//列表
-			distributionList() {
-				let that = this
-				that.page++
-				uni.request({
-					url:'http://trailer.boyaokj.cn/api/wechat/moneyLog',
-					method:'GET',
-					data:{
-						page:that.page,
-						limit:that.limit,
-						user_id:uni.getStorageSync('userInfo').id,
-						type:2
-					},
-					success(res) {
-						this.total = res.data.data.total
-						console.log(JSON.stringify(res));return;
-						for(let i in res.data.data){
-							that.boll.push(res.data.data[i])
-						}
-					}
-				})
-			}
+			// distributionList() {
+			// 	let that = this
+			// 	that.page++
+			// 	uni.request({
+			// 		url:'http://trailer.boyaokj.cn/api/wechat/moneyLog',
+			// 		method:'GET',
+			// 		data:{
+			// 			page:that.page,
+			// 			limit:that.limit,
+			// 			user_id:uni.getStorageSync('userInfo').id,
+			// 			type:2
+			// 		},
+			// 		success(res) {
+			// 			this.total = res.data.data.total
+			// 			// console.log(JSON.stringify(res));
+			// 			return;
+			// 			for(let i in res.data.data){
+			// 				that.boll.push(res.data.data[i])
+			// 			}
+			// 		}
+			// 	})
+			// }
 		}
 	}
 </script>
 
 <style>
+	.item {
+	  background: #FFFFFF;
+	  border-radius: 14rpx;
+	  margin: 20rpx;
+	  padding: 20rpx;
+	  display: flex;
+	  align-items: center;
+	  justify-content: space-between;
+	}
+	
+	.item-info {
+	  display: flex;
+	  align-items: center;
+	}
+	
+	.item-info image {
+	  width: 60rpx;
+	  height: 60rpx;
+	  margin-right: 37rpx;
+	}
+	
+	.item-info text {
+	  font-size: 28rpx;
+	  font-family: PingFangSC-Medium, PingFang SC;
+	  font-weight: 500;
+	  color: #666666;
+	}
+	
+	.item-number {
+	  font-size: 28rpx;
+	  font-family: PingFangSC-Regular, PingFang SC;
+	  font-weight: 400;
+	  color: #666666;
+	}
 	.phb{
 		position: absolute;
 		top: 0;
@@ -140,28 +186,33 @@
 		background-size: 100%;
 		height: 355rpx;
 		margin: 20rpx auto;
+		border-radius: 14rpx;
 	}
 	.userifom{
 		display: flex;
 		margin-left: 54rpx;
 	}
+	.userifom image{
+		margin-top: 50rpx;
+		display: flex;
+	}
 	.username{
 		color: #FFFFFF;
 		margin-left: 31rpx;
 		margin-top: 50rpx;
-		display: inline-block;
-	}
-	.userifom image{
-		margin-top: 50rpx;
-		display: flex;
 	}
 	.name{
 		color: #FFFFFF;
 		font-size: 30rpx;
 		font-weight: 600;
-		margin-bottom: 25rpx;
+		margin-bottom: 3rpx;
 		display: flex;
 		align-items: center;
+	}
+	.newuser{
+		margin-top: 40rpx;
+		margin-left: 25px;
+		color: #FFFFFF;
 	}
 	.name image{
 		width: 32rpx;
@@ -176,14 +227,21 @@
 	}
 	.level{
 		font-size: 21rpx;
-		width: 150rpx;
 		height: 40rpx;
 		display: flex;
 		align-items: center;
 		color: #FFFFFF;
 		background: #6765FF;
-		margin-left: 10rpx;
-		border-radius: 16px;
+		border-radius: 16rpx;
+		padding: 2rpx 17rpx 2rpx 17rpx;
+		box-sizing: border-box;
+		justify-content: center;
+	}
+	.ask{
+		width: 25rpx;
+		height: 25rpx;
+		margin-left: 5rpx;
+		margin-top: 0rpx!important;
 	}
 	.newuser{
 		margin-top: 40rpx;

@@ -3,14 +3,15 @@
 		<view class="guidelist" v-for="(item,index) in article" :key="index" @tap="pandaun(index)">
 		<!-- <view class="guidelist" @tap="pandaun(index)"> -->
 		<view class="guideitem">
-			<view>怎么才能赚到钱</view>
+			<view>{{item.title}}</view>
 			<!-- <image :src="ji == index?'../../static/icon/downzd.png':'../../static/icon/rightzd.png'"></image> -->
 			<image :src="ji == index?'../../static/icon/downzd.png':'../../static/icon/rightzd.png'"></image>
 		</view>
 		<view class="box" v-show="ji == index">
-		<view class="guidecot">i我去佛旺季电位器服务器哦服务及偶发价位IQ房产网技巧房价完全范玮琪平均分就去附近欧派就欺负</view>
+		<view class="guidecot">{{item.content}}</view>
 		</view>
 		</view>
+		<takinfo></takinfo>
 	</view>
 </template>
 
@@ -26,8 +27,8 @@
 		onLoad() {
 			let that = this
 			uni.request({
-				url:'https://trailer.boyaokj.cn/api/commission/notice',
-				method:'POST',
+				url:'https://trailer.boyaokj.cn/api/index/zhuanqiangonglue',
+				method:'GET',
 				success(res) {
 					that.article = res.data.data
 				}

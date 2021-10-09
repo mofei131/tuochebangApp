@@ -9,7 +9,7 @@
 	      <view class="infomation">
 	        <view class="name">
 	          <text lines="1" decode="true" class="nameword">持卡人：</text>
-			  <input lines="1" class="nameinput" type="number" placeholder="请输入姓名"
+			  <input lines="1" class="nameinput" type="text" v-model="name" placeholder="请输入姓名"
 			  	placeholder-style="color:#C1C2C3;" />
 	        </view>
 	        <view class="xiantiao">
@@ -17,26 +17,43 @@
 	        </view>
 	        <view class="group4">
 	          <text lines="1" class="phone">卡号：</text>
-	          <input lines="1" class="phoneinput" type="number" maxlength="11" placeholder="请输入卡号"
+	          <input lines="1" class="phoneinput" type="number" @input="kasu" maxlength="19" v-model="cardno" placeholder="请输入卡号"
 	          	placeholder-style="color:#C1C2C3;" />
 	        </view>
 	         <view class="xiantiao">
 	          <view class="outer1"></view>
 	        </view>
+					<view v-show="yinhang">
+					<view class="group4">
+					  <text lines="1" class="phone">银行：</text>
+						<view class="phoneinput" v-if="index1 == -1">暂不支持此银行</view>
+							<picker class="phoneinput" v-if="index1 != -1" @change="anjianChange1" :value="index1" :range="array1" range-key="name">
+								<view class="flex-row">
+									<text>{{array1[index1].name}}</text>
+								</view>
+							</picker>
+					</view>
+					 <view class="xiantiao">
+					  <view class="outer1"></view>
+					</view>
+					</view>
 			<view class="group4">
 			  <text lines="1" class="phone">预留电话：</text>
-			  <input lines="1" class="phoneinput" type="number"  maxlength="11" placeholder="请输入卡号"
+			  <input lines="1" class="phoneinput" type="number" v-model="mobile"  maxlength="11" placeholder="请输入预留电话"
 			  	placeholder-style="color:#C1C2C3;"/>
+				<!-- <input class="sl-input" v-model="code" type="number" maxlength="4" placeholder-style="color:#C1C2C3;"
+					placeholder="短信验证码" /> -->
+					<view class="yzm" @tap="getcode">{{yanzhengma}}</view>
 			</view>
-			<button bindtap="getcode" class="main2">
+			<!-- <button bindtap="getcode" class="main2">
 			    <text lines="1" class="info5">获取验证码</text>
-			</button>
+			</button> -->
 			 <view class="xiantiao">
 			  <view class="outer1"></view>
 			</view>
 			<view class="group4">
 			  <text lines="1" class="phone">验证码：</text>
-			  <input lines="1" class="phoneinput" type="number" maxlength="11" placeholder="请输入卡号"
+			  <input lines="1" class="phoneinput" type="number" v-model="code" maxlength="4" placeholder="请输入验证码"
 			  	placeholder-style="color:#C1C2C3;" />
 			</view>
 			 <view class="xiantiao">
@@ -45,18 +62,141 @@
 	      </view>
 	    </view>
 	    <view class="box12">
-	      <view class="layer8">
+	      <view class="layer8" @click="bangd">
 	        <text lines="1" class="word15">确定绑卡</text>
 	      </view>
 	    </view>
 	  </view>
+		<takinfo></takinfo>
 	</view>
 </template>
 
 <script>
+	var js;
+	export default{
+		data(){
+			return{
+				array1:[],
+				index1:0,
+				cardno:'',
+				code:'',
+				second: 0,
+				yinhang:false,
+				name:'',
+				mobile:''
+			}
+		},
+		onShow() {
+			let that = this
+			this.http.ajax({
+				url: 'bank/bankList',
+				method: 'GET',
+				success(res) {
+					that.array1 = JSON.parse(JSON.stringify(res.data))
+				}
+			});
+		},
+		computed: {
+			yanzhengma() {
+				if (this.second == 0) {
+					return '获取验证码';
+				} else {
+					return this.second+'s重新获取';
+				}
+			}
+		},
+		methods:{
+			bangd(){
+				let that = this
+				this.http.ajax({
+					url: 'bank/bind',
+					method: 'POST',
+					data: {
+						mobile: this.mobile,
+						code:this.code,
+						name:this.name,
+						cardNum:this.cardno,
+						bankcode:this.array1[this.index1].code,
+						user_id:uni.getStorageSync('userInfo').id
+					},
+					success(res) {
+						if(res.code == 200){
+							uni.showToast({
+								title: '绑定成功',
+								duration:1000
+							})
+							setTimeout(function() {
+								uni.reLaunch({
+									url:'./bankcardlist'
+								})
+							},1000)
+						}else if(res.code == -1){
+							uni.showToast({
+								title:res.message,
+								icon:'none'
+							})
+						}else{
+							uni.showToast({
+								title:'绑定失败,请联系客服',
+								icon:'none'
+							})
+						}
+					}
+				});
+			},
+			anjianChange1(e) {
+				this.index1 = e.detail.value;
+			},
+			kasu(value){
+				let that = this
+				if(value.detail.value.length == 4){
+					that.index1 = that.array1.findIndex(item => JSON.parse(item.code) === JSON.parse(value.detail.value))
+					console.log(that.index1)
+					that.yinhang = true
+				}else if(value.detail.value.length < 4){
+					that.yinhang = false
+				}
+				// console.log(value.detail.value)
+			},
+			clear() {
+				clearInterval(js)
+				js = null
+				this.second = 0
+			},
+			getcode() {
+				let that = this
+				this.second = 60;
+					js = setInterval(function() {
+						that.second--;
+						if (that.second == 0) {
+							that.clear()
+						}
+					},1000)
+			},
+		}
+	}
 </script>
 
 <style>
+	.sl-input{
+		font-size: 28rpx;
+	}
+	.yzm{
+		width: 178rpx;
+		height: 56rpx;
+		background: #40A9FF;
+		border-radius: 32rpx;
+		font-size: 28rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #FFFFFF;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-left: 150rpx;
+		position: absolute;
+		right: 25rpx;
+	}
 	.page {
 	  position: relative;
 	  width: 750rpx;
@@ -165,7 +305,7 @@
 	  width: 140rpx;
 	  display: block;
 	  overflow-wrap: break-word;
-	  color: rgba(193,194,195,1);
+	  color: rgba(81,86,93,1);
 	  font-size: 28rpx;
 	  font-family: PingFangSC-Regular;
 	  white-space: nowrap;
@@ -191,12 +331,13 @@
 	  flex-direction: column;
 	}
 	.group4 {
-	  width: 338rpx;
+	  width: 720rpx;
 	  height: 40rpx;
 	  margin-top: 32rpx;
 	  flex-direction: row;
 	  display: flex;
-	  justify-content: space-between;
+	  justify-content: start;
+		position: relative;
 	}
 	.phone {
 	  width: 140rpx;
@@ -210,10 +351,10 @@
 	  text-align: left;
 	}
 	.phoneinput {
-	  width: 168rpx;
+	  width: 500rpx;
 	  display: block;
 	  overflow-wrap: break-word;
-	  color: rgba(193,194,195,1);
+	  color: rgba(81,86,93,1);
 	  font-size: 28rpx;
 	  font-family: PingFangSC-Regular;
 	  white-space: nowrap;

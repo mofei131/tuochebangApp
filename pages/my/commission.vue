@@ -4,7 +4,7 @@
 			<view class="userifom">
 				<view class="username">
 					<view class="name">账户收益
-						<view style="font-size: 75rpx;margin-left: 50rpx;">6985</view>
+						<view style="font-size: 75rpx;margin-left: 50rpx;">{{total}}</view>
 						<image src='../../static/icon/points.png'></image>
 					</view>
 					
@@ -15,90 +15,77 @@
 			</view>
 		</view>
 		<view class="billlist">
-			<view class="billitem">
+			<view class="billitem" v-for="(item,index) in bill" :key="index">
 				<view class="itemleft">
-					<view>张三</view>
-					<view>2020-02-21  13:12:22</view>
-					<!-- <view v-else>0000-00-00 00:00:00</view> -->
+					<view>{{item.note}}</view>
+					<view>{{item.create_time}}</view>
 				</view>
 				<view class="itemright">
-					<view>+100</view>
-				</view>
-			</view>
-			<view class="billitem">
-				<view class="itemleft">
-					<view>王五</view>
-					<view>2021-05-09  18:12:19</view>
-					<!-- <view v-else>0000-00-00 00:00:00</view> -->
-				</view>
-				<view class="itemright">
-					<view>+55</view>
-				</view>
-			</view>
-			<view class="billitem">
-				<view class="itemleft">
-					<view>李四</view>
-					<view>2021-08-21  23:32:12</view>
-					<!-- <view v-else>0000-00-00 00:00:00</view> -->
-				</view>
-				<view class="itemright">
-					<view>+63</view>
+					<view>{{item.log}}</view>
 				</view>
 			</view>
 		</view>
+		<takinfo></takinfo>
 	</view>
 </template>
 
 <script>
 	export default{
 		data(){
-			return{
-				bill:[],
-				page:1,
-				limit:10,
-			}
-		},
-		onLoad(p) {
-			this.lei = p.page
-			let that = this
-			uni.request({
-				url:'https://trailer.boyaokj.cn/api/wechat/moneyLog',
-				method:'GET',
-				data:{
-					page:that.page,
-					limit:that.limit,
-					user_id:uni.getStorageSync('userInfo').user_id
-				},
-				success(res) {
-					that.bill = res.data.data
+				return{
+					bill:[],
+					page:1,
+					limit:10,
+					total:0
 				}
-			})
-		},
-		//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
-		onReachBottom() {
-				this.searchChange()
-		},
-		methods:{
-			searchChange() {
-						let that = this
-						that.page++
-						uni.request({
-							url:'https://trailer.boyaokj.cn/api/wechat/moneyLog',
-							method:'GET',
-							data:{
-								page:that.page,
-								limit:that.limit,
-								user_id:uni.getStorageSync('userInfo').id
-							},
-							success(res) {
-								for(let i in res.data.data){
-									that.boll.push(res.data.data[i])
-								}
-							}
-						})
+			},
+			onLoad(p) {
+				this.lei = p.page
+			},
+			onShow() {
+				let that = this
+				uni.request({
+					url:'https://trailer.boyaokj.cn/api/wechat/moneyLog',
+					method:'GET',
+					data:{
+						page:that.page,
+						limit:that.limit,
+						user_id:uni.getStorageSync('userInfo').id,
+						type:2
 					},
+					success(res) {
+						console.log(res)
+						that.bill = res.data.data
+						that.total = res.data.data.total
+					}
+				})
+			},
+			//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
+			onReachBottom() {
+					this.searchChange()
+			},
+			methods:{
+				searchChange() {
+							let that = this
+							that.page++
+							uni.request({
+								url:'https://trailer.boyaokj.cn/api/wechat/moneyLog',
+								method:'GET',
+								data:{
+									page:that.page,
+									limit:that.limit,
+									user_id:uni.getStorageSync('userInfo').user_id,
+									type:2
+								},
+								success(res) {
+									for(let i in res.data.data){
+										that.boll.push(res.data.data[i])
+									}
+								}
+							})
+						},
+			}
 		}
-	}
 </script>
 
 <style>
@@ -147,6 +134,7 @@
 	}
 	.billitem:last-child{
 		border-bottom: 0;
+		display: none;
 	}
 	.itemleft view:nth-child(1){
 		font-size: 26rpx;

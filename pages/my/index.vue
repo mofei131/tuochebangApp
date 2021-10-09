@@ -2,22 +2,25 @@
 	<view>
 	<view class="myhead">
 		<view class="userifom">
-			<view class="headimg">
-				<image  src='../../static/icon/zuanshi.png'></image>
+			<view class="headimg" @click="sethead">
+				<image :src="headimg" v-if="headimg"></image>
+				<image  :src='headpic' v-else></image>	
 			</view>
 			<view class="username">
-				<view class="name">我是潍坊大哥
-					<view class="level" style="display: flex;align-items: center;">白金<view class="ask">
-						<image src='../../static/icon/zuanshi.png'></image>
-					</view></view>
-					
+				<view class="level">
+					<view class="name">{{name}}</view>
+					<view class="ask">
+						<view class="">{{user_level.name}}</view>
+						<image :src='user_level.image'></image>
 				</view>
-				<view class="renzheng" style="font-size: 17rpx;color: #FFFFFF;">已认证</view>
+				</view>
+				<view class="renzheng" v-if="renzheng" style="font-size: 17rpx;color: #FFFFFF;">已认证</view>
+				<view class="renzheng" v-else style="font-size: 17rpx;color: #FFFFFF;">未认证</view>
 			</view>
 		</view>
 		<view class="withdraw">
 			<view class="balance">
-				<view>36.68</view>
+				<view>{{wallet}}</view>
 				<view>余额</view>
 			</view>
 			<view class="darwbtn" @tap="withdrawal()">立即提现</view>
@@ -31,7 +34,7 @@
 		<!-- <view class="tuigaung"> -->
 		<view class="tgtext">我的推广</view>
 		<view class="zixun">
-			<button class="yqbtn" open-type="share">
+			<button class="yqbtn" open-type="share" @tap="erm()">
 				<image src="../../static/icon/yqhy.png" class="zixunitemimage"></image>
 				<view class="zixunitemview" style="margin-top: 22rpx;">邀请好友</view>
 			</button>
@@ -81,13 +84,13 @@
 				<image class="icon" src="../../static/icon/rightzd.png"></image>
 			</view>
 		</view>
-		<view class="functionitem">
+		<view class="functionitem" @click="call">
 			<view class="itemleft">
 				<image src="../../static/icon/myicon5.png"></image>
 				<view>联系客服</view>
 			</view>
 			<view class="itemright">
-				<view class="kefu">400-6666-8888</view>
+				<view class="kefu">{{kefu}}</view>
 				<image class="icon" style="width: 36rpx;height: 36rpx;" src="../../static/icon/rightzd.png"></image>
 			</view>
 		</view>
@@ -106,6 +109,13 @@
 			</view>
 		</view>
 	</view>
+	<view class="jds" @tap="ancl()" v-if="ewm">
+		<view class="baidi">
+		<image :src="ewmimage"></image>
+		<button class="bendi" @tap="saveImgToLocal()">保存到相册</button>
+		</view>
+	</view>
+	<takinfo class="myqiang" v-if="sanz == 1"></takinfo>
 	</view>
 </template>
 <script>
@@ -116,16 +126,187 @@
 		},
 		data() {
 			return {
-				
+				ewm:false,
+				ewmimage:'',
+				name:'',
+				headpic:'http://hlstore.yimetal.cn/2021/tuochebang/my_touxiang.png',
+				headimg:uni.getStorageSync('userInfo').avater,
+				renzheng:'',
+				user_level:'',
+				kefu:'',
+				wallet:0,
+				sanz:uni.getStorageSync('userInfo').order_notice
 			};
 		},
 		onLoad(){
 			
 		},
 		onShow() {
-			
+			this.headimg = uni.getStorageSync('userInfo').avater,
+			this.name = uni.getStorageSync('userInfo').nickname,
+			this.renzheng = uni.getStorageSync('userInfo').driver_verify,
+			console.log(uni.getStorageSync('userInfo'))
+			let that = this
+			this.http.ajax({
+				url: 'wechat/getUserinfo',
+				method: 'GET',
+				data: {
+					user_id:uni.getStorageSync('userInfo').id
+				},
+				success(res) {
+					uni.setStorageSync('userInfo',res.data)
+					that.wallet = res.data.wallet
+				}
+			});
+			if(!uni.getStorageSync('userInfo').nickname){
+				uni.navigateTo({
+					url:'personaldata'
+				})
+				return
+			}
+			this.http.ajax({
+				url: 'wechat/shareCode',
+				method: 'GET',
+				data: {
+					user_id:uni.getStorageSync('userInfo').id
+				},
+				success(res) {
+					that.ewmimage = res.data.url
+				}
+			});
+			this.http.ajax({
+				url: 'app/level',
+				method: 'GET',
+				data: {
+					user_id:uni.getStorageSync('userInfo').id
+				},
+				success(res) {
+					that.user_level = res.data.user_level
+				}
+			});
+			this.http.ajax({
+				url: 'index/setting',
+				method: 'GET',
+				data: {
+					key:'kefu'
+				},
+				success(res) {
+					that.kefu = res.data.data
+				}
+			});
 		},
 		methods: {
+			call(){
+				uni.makePhoneCall({
+					 phoneNumber: this.kefu, 
+				})
+			},
+			sethead(){
+				let that = this
+				uni.chooseImage({
+					count: 1,
+					success: (res) => {
+						const tempFilePaths = res.tempFilePaths;
+						let that = this
+						uni.uploadFile({
+							url: 'https://trailer.boyaokj.cn/api/file/upload', //post请求的地址
+							filePath: tempFilePaths[0],
+							name: 'file',
+							success: (uploadFileRes) => {
+								let obj = JSON.parse(uploadFileRes.data);
+								that.http.ajax({
+									url:'wechat/setUserinfo',
+									method: 'GET',
+									data: {
+										avater:obj.data.url,
+										user_id:uni.getStorageSync('userInfo').id,
+									},
+									success: function(res) {
+										let user = uni.getStorageSync('userInfo')
+										user.avater = obj.data.url
+										uni.setStorageSync('userInfo',user)
+										console.log(obj.data.url)
+										that.headimg = user.avater
+									}
+								})
+							}
+						})
+					},
+				})
+			},
+			erm(){
+				this.ewm = !this.ewm
+			},
+			ancl(){
+				this.ewm = !this.ewm
+			},
+			//微信小程序保存到相册
+			        handleSetting(e){
+								let that = this
+			            if (!e.detail.authSetting['scope.writePhotosAlbum']) {
+			                  that.openSettingBtnHidden = false;
+			            } else {
+			                 that.openSettingBtnHidden = true;
+			            }
+			        },
+			        saveEwm:function(e){
+								let that = this
+			            //获取相册授权
+			               uni.getSetting({
+			                 success(res) {
+			                   if (!res.authSetting['scope.writePhotosAlbum']) {
+			                     uni.authorize({
+			                       scope: 'scope.writePhotosAlbum',
+			                       success() {
+			                         //这里是用户同意授权后的回调
+			                         that.saveImgToLocal();
+			                       },
+			                       fail() {//这里是用户拒绝授权后的回调
+			                           that.openSettingBtnHidden=false
+			                       }
+			                     })
+			                   } else {//用户已经授权过了
+			                     that.saveImgToLocal();
+			                   }
+			                 }
+			               })
+			        },
+			        saveImgToLocal:function(e){
+			            let that = this
+			            uni.showModal({
+										title: '提示',
+										content: '确定保存到相册吗',
+										success: function (res) {
+											if (res.confirm) {
+													uni.downloadFile({
+														url: that.ewmimage,//图片地址
+														success: (res) =>{
+															if (res.statusCode === 200){
+																	uni.saveImageToPhotosAlbum({
+																			filePath: res.tempFilePath,
+																			success: function() {
+																					uni.showToast({
+																							title: "保存成功",
+																							icon: "none"
+																					});
+																			},
+																			fail: function() {
+																					uni.showToast({
+																							title: "保存失败",
+																							icon: "none"
+																					});
+																			}
+																	});
+															} 
+													}
+											}) 
+										} else if (res.cancel) {
+												
+										}
+								}
+						});
+						
+				},
 			//提现
 			withdrawal(){
 				uni.navigateTo({
@@ -188,7 +369,7 @@
 			},
 			//更多设置
 			set(){
-				uni.navigateTo({
+				uni.redirectTo({
 					url:'./set'
 				})
 			}
@@ -198,6 +379,41 @@
 </script>
 
 <style>
+	.myqiang{
+		margin-top: 385rpx;
+	}
+	.bendi{
+		background: #4169E1;
+		color: #fff;
+		border-radius: 0;
+	}
+	.baidi{
+		width: 720rpx;
+		height: 600rpx;
+		padding-top: 50rpx;
+		box-sizing: border-box;
+		margin: auto;
+		background-color: #fff;
+		border-radius: 15rpx;
+		position: relative;
+		margin-top: 50%;
+		z-index: 15;
+	}
+	.jds{
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgb(0,0,0,.5);
+		z-index: 10;
+	}
+	.jds image{
+		width: 500rpx;
+		height: 500rpx;
+		margin: auto;
+		display: block;
+	}
 	page{
 		background: #F8F8F8;
 	}
@@ -343,22 +559,19 @@
 		color: #FFFFFF;
 		font-size: 28rpx;
 		font-weight: 500;
-		margin-top: 15rpx;
+		/* margin-top: 15rpx; */
 		margin-bottom: 5rpx;
 		display: flex;
 		align-items: center;
 	}
 	.level{
 		font-size: 16rpx;
-		width: 65rpx;
 		height: 26rpx;
-		line-height: 26rpx;
 		text-align: center;
-		background: #6765FF;
-		border-radius: 16px;
-		margin-left: 10rpx;
-		display: inline-block;
-		margin-top: 6rpx;
+		display: flex;
+		justify-content: center;
+		/* margin-top: 6rpx; */
+		align-items: center;
 	}
 	.record{
 		float: left;
@@ -368,8 +581,8 @@
 		font-weight: 400;
 		font-size: 19rpx;
 		color: #FFF;
-		background: #6765FF;
 		border-radius: 16rpx;
+		background: #6765FF;
 		text-align: center;
 		padding-top: 2rpx;
 		padding-bottom: 2rpx;
@@ -380,15 +593,23 @@
 	.username{
 		/* width: 180rpx; */
 		margin-left: 31rpx;
+		margin-top: 15rpx;
+		
 	}
 	.ask{
-		display: inline-block;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #fff;
+		padding: 2rpx 9rpx 2rpx 9rpx;
+		background: #6765FF;
+		border-radius: 16rpx;
+		margin-left: 10rpx;
 	}
 	.ask image{
 		width: 25rpx;
 		height: 25rpx;
 		margin-left: 5rpx;
-		margin-top: 11rpx;
 	}
 	.renzheng{
 		width: 80rpx;
@@ -397,7 +618,7 @@
 		line-height: 22rpx;
 		text-align: center;
 		background: #6765FF;
-		border-radius: 16px;
+		border-radius: 16rpx;
 		display: inline-block;
 	}
 	.withdraw{
@@ -531,7 +752,7 @@
 		font-size: 22rpx;
 	}
 	
-	.itemleft,.itemright{
+	.itemleft{
 		display: flex;
 		margin-top: 20rpx;
 	}
@@ -558,21 +779,22 @@
 		font-size: 26rpx;
 		font-family: PingFangSC-Regular, PingFang SC;
 		font-weight: 400;
-		display: flex;
-		align-items: center;
 		color: #949494;
 	}
 	.itemleft image{
 		width: 36rpx;
 		height: 36rpx;
 	}
-	/* .itemright{
+	.itemright{
 		display: flex;
-	} */
+		align-items: center;
+		justify-content: center;
+		margin-top: 10rpx;
+	}
 	.itemright image{
 		width: 11rpx;
 		height: 20rpx;
-		margin-top: 8rpx;
+		/* margin-top: 8rpx; */
 		margin-left: 20rpx;
 	}
 	.functionitem{

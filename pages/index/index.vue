@@ -2,7 +2,10 @@
 	<view>
 		<view class="top">
 			<view class="feld">
+				<view class="shu">
 				<image src="../../static/images/xiaoxi.png" @click="tonews"></image>
+				<view class="shunum">{{shunum}}</view>
+				</view>
 				<view class="toptitle">司机端</view>
 				<image src="../../static/images/shaixuan.png" @click="hsai"></image>
 			</view>
@@ -132,13 +135,13 @@
 					</view>
 					<view class="labellist">
 						<view class="labelitem" v-for="(item,index) in teshu" :key="index" :class="{ clever: cardlist.indexOf(item.id) != -1 }" @tap="select(item.id)">
-							{{item.title}}
+							{{item.name}}
 						</view>
 					</view>
 				</view>
 				<view class="btns">
-					<view class="tbtn">重置</view>
-					<view class="tbtn2">查看</view>
+					<view class="tbtn" @click="chongzhi">重置</view>
+					<view class="tbtn2" @click="screen">查看</view>
 				</view>
 			</view>
 		</view>
@@ -171,11 +174,9 @@
 				area2:'',
 				defaultRegionCode:[],
 				array1:[{
-					record: '三吨板车',id:0
+					record: '三吨斜板车',id:0
 				}, {
-					record: '五吨板车',id:1
-				}, {
-					record: '重型板车',id:2
+					record: '五吨斜板车',id:1
 				}],
 				index1: 0,
 				juli:'',
@@ -193,7 +194,16 @@
 				page:1,
 				limit:10,
 				orderlist:[],
-				dingid:0
+				dingid:0,
+				starttime:'',
+				endtime:'',
+				startprovince:'',
+				startcity:'',
+				startdis:'',
+				endprovince:'',
+				endcity:'',
+				enddis:'',
+				shunum:0
 			}
 		},
 		onLoad() {
@@ -207,7 +217,8 @@
 				});
 		},
 		onShow() {
-			if(!uni.getStorageSync('userInfo')){
+			console.log(uni.getStorageSync('userInfo'))
+			if(!uni.getStorageSync('userInfo') || !uni.getStorageSync('userInfo').id){
 				uni.reLaunch({
 					url:'../login/login'
 				})
@@ -218,7 +229,6 @@
 			        });
 			this.amapPlugin.getRegeo({
 					success: (data) => {
-						console.log(data[0].latitude,data[0].longitude)
 							this.defaultRegionCode = [data[0].regeocodeData.addressComponent.province,data[0].regeocodeData.addressComponent.city,data[0].regeocodeData.addressComponent.district]
 							// this.address = data[0].name;
 							this.lat = data[0].latitude
@@ -234,7 +244,6 @@
 									limit:this.limit
 								},
 								success(res) {
-									console.log(res.data)
 									that.orderlist = res.data
 								}
 							});
@@ -243,8 +252,97 @@
 						console.log(err)
 					}
 			}); 
+			this.http.ajax({
+				url: 'index/getRequirement',
+				method: 'GET',
+				data: {
+				},
+				success(res) {
+					that.teshu = res.data
+				}
+			});
+			this.http.ajax({
+				url: 'message/noReadNum',
+				method: 'GET',
+				data: {
+					user_id:uni.getStorageSync('userInfo').id
+				},
+				success(res) {
+					that.shunum = res.data.noread
+				}
+			});
+		},
+		onPullDownRefresh() {
+				setTimeout(function () {
+						uni.stopPullDownRefresh();
+				}, 1000);
 		},
 		methods: {
+			chongzhi(){
+				this.cardlist = [],
+				this.starttime= '',
+				this.endtime= '',
+				this.startprovince= '',
+				this.startcity= '',
+				this.startdis= '',
+				this.endprovince= '',
+				this.endcity= '',
+				 this.enddis= '',
+				 this.juli= '',
+				 this.min= '',
+				 this.max= '',
+				 this.province= '',
+				 this.province2= '',
+				 this.city= '',
+				 this.city2= '',
+				 this.area= '',
+				 this.area2 = '',
+				this.index1 = 0
+			},
+			screen(){
+				let that = this
+				this.http.ajax({
+					url: 'driverOrder/list',
+					method: 'GET',
+					data: {
+						lng:that.lng,
+						lat:that.lat,
+						page:1,
+						limit:100,
+						requirement_ids:this.cardlist.toString(),
+						starttime:this.starttime,
+						endtime:this.endtime,
+						startprovince:this.startprovince,
+						startcity:this.startcity,
+						startdis:this.startdis,
+						endprovince:this.endprovince,
+						endcity:this.endcity,
+						enddis:this.enddis,
+						trailer_type:this.array1[this.index1].id,
+						licheng:this.juli,
+						pricemin:this.min,
+						pricemax:this.max
+					},
+					success(res) {
+						if(res.code == 200){
+							if(res.data.length != 0){
+								that.orderlist = res.data
+							}else{
+								that.orderlist = []
+							}
+							uni.showToast({
+								title:'筛选成功'
+							})
+							that.shai = !that.shai
+						}else if(res.code == -1){
+							uni.showToast({
+								title:res.message,
+								icon:'none'
+							})
+						}
+					}
+				});
+			},
 			jiequ(){
 				let that = this
 				this.http.ajax({
@@ -321,23 +419,25 @@
 				let that = this
 				this.province = region[0].name
 				this.city = region[1].name
-				// this.code = region[1].code
 				this.area = region[2].name
-					console.log(region)
+				this.startprovince=region[0].code,
+				this.startcity=region[1].code,
+				this.startdis=region[2].code
 			},
 			handleGetRegion2(region){
 				let that = this
 				this.province2 = region[0].name
 				this.city2 = region[1].name
-				// this.code = region[1].code
 				this.area2 = region[2].name
-					console.log(region)
+				this.endprovince=region[0].code,
+				this.endcity=region[1].code,
+				this.enddis=region[2].code
 			},
 			changeDatetimePicker(date){
-				console.log(date)
+				this.starttime = new Date(date.f3).getTime()/1000
 			},
 			changeDatetimePicker2(date){
-				console.log(date)
+				this.endtime = new Date(date.f3).getTime()/1000
 			},
 			todet(id){
 				uni.navigateTo({
@@ -349,6 +449,23 @@
 </script>
 
 <style>
+	.shunum{
+		position: absolute;
+		top: 10rpx;
+		right: 0rpx;
+		width: 30rpx;
+		height: 20rpx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background: #FF7878;
+		color: #fff;
+		font-size: 18rpx;
+		border-radius: 30rpx;
+	}
+	.shu{
+		position: relative;
+	}
 	.labelitem{
 		background: #E9E9E9;
 		border-radius: 50rpx;

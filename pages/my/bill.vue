@@ -1,37 +1,17 @@
 <template>
 	<view>
 		<view class="billlist">
-			<view class="billitem">
+			<view class="billitem" v-for="(item,index) in bill" :key="index">
 				<view class="itemleft">
-					<view>余额提现</view>
-					<view>2020-02-21  13:12:22</view>
-					<!-- <view v-else>0000-00-00 00:00:00</view> -->
+					<view>{{item.note}}</view>
+					<view>{{item.create_time}}</view>
 				</view>
 				<view class="itemright">
-					<view>-100.80</view>
-				</view>
-			</view>
-			<view class="billitem">
-				<view class="itemleft">
-					<view>消费</view>
-					<view>2021-05-09  18:12:19</view>
-					<!-- <view v-else>0000-00-00 00:00:00</view> -->
-				</view>
-				<view class="itemright">
-					<view>-55.60</view>
-				</view>
-			</view>
-			<view class="billitem">
-				<view class="itemleft">
-					<view>余额提现</view>
-					<view>2021-08-21  23:32:12</view>
-					<!-- <view v-else>0000-00-00 00:00:00</view> -->
-				</view>
-				<view class="itemright">
-					<view>-63.39</view>
+					<view>{{item.log}}</view>
 				</view>
 			</view>
 		</view>
+		<takinfo></takinfo>
 	</view>
 </template>
 
@@ -50,16 +30,16 @@
 		onShow() {
 			let that = this
 			uni.request({
-				url:'http://trailer.boyaokj.cn/api/wechat/moneyLog',
+				url:'https://trailer.boyaokj.cn/api/wechat/moneyLog',
 				method:'GET',
 				data:{
 					page:that.page,
 					limit:that.limit,
 					user_id:uni.getStorageSync('userInfo').id,
-					type:1
+					// type:1
 				},
 				success(res) {
-					console.log(JSON.stringify(res))
+					console.log(res.data.data)
 					that.bill = res.data.data
 				}
 			})
@@ -78,7 +58,7 @@
 							data:{
 								page:that.page,
 								limit:that.limit,
-								user_id:uni.getStorageSync('userInfo').user_id
+								user_id:uni.getStorageSync('userInfo').user_id,
 							},
 							success(res) {
 								for(let i in res.data.data){

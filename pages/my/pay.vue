@@ -18,6 +18,7 @@
 				</view>
 		</view>
 		<view class="btn" @click="pay()">立即支付</view>
+		<takinfo></takinfo>
 	</view>
 </template>
 

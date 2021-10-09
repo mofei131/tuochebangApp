@@ -83,13 +83,17 @@
 		{
 			"path": "pages/my/paihangbang",
 			"style": {
-				"navigationBarTitleText": "排行榜"
+				"navigationBarTitleText": "排行榜",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
 			"path": "pages/my/bankcardlist",
 			"style": {
-				"navigationBarTitleText": "银行卡"
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": false
+				}
 			}
 		},
 		{
@@ -125,7 +129,10 @@
 		{
 			"path": "pages/my/set",
 			"style": {
-				"navigationBarTitleText": "设置"
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": false
+				}
 			}
 		},
 		{
@@ -186,7 +193,8 @@
 		},{
 			"path": "pages/index/news",
 			"style": {
-				"navigationBarTitleText": "新消息"
+				"navigationBarTitleText": "新消息",
+				"enablePullDownRefresh": true
 			}
 		},{
 			"path": "pages/order/lianxi",
@@ -200,6 +208,11 @@
 			"path": "pages/my/pay",
 			"style": {
 				"navigationBarTitleText": "押金支付"
+			}
+		},{
+			"path": "pages/index/newslist",
+			"style": {
+				"navigationBarTitleText": "系统消息"
 			}
 		}
 	],

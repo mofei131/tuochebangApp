@@ -82,6 +82,7 @@
 	      </view>
 	    </view>
 	  </view>
+		<takinfo></takinfo>
 	</view>
 </template>
 
@@ -107,7 +108,7 @@
 				reason:''
 			}
 		},
-		onShow() {
+		onLoad() {
 			let that = this
 			this.http.ajax({
 				url: 'index/getTrailerType',
@@ -136,7 +137,96 @@
 				}
 			});
 		},
+		onShow() {
+			
+		},
 		methods:{
+			updata(){
+				if (!this.carcode) {
+					uni.showToast({
+						title: '请输入车牌号',
+						icon: 'none',
+					})
+					return
+				}
+				if (!this.photo6) {
+					uni.showToast({
+						title: '请上传车辆45度角照片',
+						icon: 'none',
+					})
+					return
+				}
+				if (!this.photo7) {
+					uni.showToast({
+						title: '请上传行驶证正页',
+						icon: 'none',
+					})
+					return
+				}
+				if (!this.photo8) {
+					uni.showToast({
+						title: '请上传行驶证副页',
+						icon: 'none',
+					})
+					return
+				}
+				if (!this.photo9) {
+					uni.showToast({
+						title: '请上传商业险照片',
+						icon: 'none',
+					})
+					return
+				}
+				if (!this.photo10) {
+					uni.showToast({
+						title: '请上传货物险照片',
+						icon: 'none',
+					})
+					return
+				}
+				this.http.ajax({
+					url: 'driverAuth/updateCarInfo',
+					method: 'POST',
+					data: {
+						user_id:uni.getStorageSync('userInfo').id,
+						car_type:this.array1[this.index1].id,
+						car_number:this.carcode,
+						car_photo_45:this.photo6,
+						driving_license_front_page:this.photo7,
+						driving_license_second_page:this.photo8,
+						commercial_insurance_photo:this.photo9,
+						cargo_insurance_photo:this.photo10
+					},
+					success(res) {
+						if(res.code == 200){
+							uni.showToast({
+								title:'提交成功',
+								icon:'none',
+								duration:1000
+							})
+							setTimeout(function() {
+							uni.switchTab({
+								url:'./index'
+							})
+							},1000)
+						}else if(res.code == -1){
+							console.log(res)
+							uni.showToast({
+								title:res.message,
+								icon:'none'
+							})
+						}else{
+							console.log(res)
+							uni.showToast({
+								title:'提交失败',
+								icon:'none'
+							})
+						}
+					},fial(res){
+						console.log(res)
+					}
+				});
+			},
 			chooseImage(e) {
 				let that = this
 							uni.chooseImage({
@@ -144,52 +234,60 @@
 								sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 								sourceType: ['camera','album'], //从相册选择、摄像头
 								success: function(res) {
-									if(e == 6){
-										uni.uploadFile({
-											url:'https://trailer.boyaokj.cn/api/file/upload',
-											filePath: res.tempFilePaths[0],
-											name: 'file',
-											success(res) {
-												that.photo6 = JSON.parse(res.data).data.url
+									uni.compressImage({
+										src: res.tempFilePaths[0],  
+										quality: 50,  
+										success: res => {
+											console.log("压缩图片")
+											console.log(res.tempFilePath)  
+											if(e == 6){
+												uni.uploadFile({
+													url:'https://trailer.boyaokj.cn/api/file/upload',
+													filePath: res.tempFilePath,
+													name: 'file',
+													success(res) {
+														that.photo6 = JSON.parse(res.data).data.url
+													}
+												})
+											}else if(e == 7){
+												uni.uploadFile({
+													url:'https://trailer.boyaokj.cn/api/file/upload',
+													filePath: res.tempFilePath,
+													name: 'file',
+													success(res) {
+														that.photo7 = JSON.parse(res.data).data.url
+													}
+												})
+											}else if(e == 8){
+												uni.uploadFile({
+													url:'https://trailer.boyaokj.cn/api/file/upload',
+													filePath: res.tempFilePath,
+													name: 'file',
+													success(res) {
+														that.photo8 = JSON.parse(res.data).data.url
+													}
+												})
+											}else if(e == 9){
+												uni.uploadFile({
+													url:'https://trailer.boyaokj.cn/api/file/upload',
+													filePath: res.tempFilePath,
+													name: 'file',
+													success(res) {
+														that.photo9 = JSON.parse(res.data).data.url
+													}
+												})
+											}else if(e == 10){
+												uni.uploadFile({
+													url:'https://trailer.boyaokj.cn/api/file/upload',
+													filePath: res.tempFilePath,
+													name: 'file',
+													success(res) {
+														that.photo10 = JSON.parse(res.data).data.url
+													}
+												})
 											}
-										})
-									}else if(e == 7){
-										uni.uploadFile({
-											url:'https://trailer.boyaokj.cn/api/file/upload',
-											filePath: res.tempFilePaths[0],
-											name: 'file',
-											success(res) {
-												that.photo7 = JSON.parse(res.data).data.url
-											}
-										})
-									}else if(e == 8){
-										uni.uploadFile({
-											url:'https://trailer.boyaokj.cn/api/file/upload',
-											filePath: res.tempFilePaths[0],
-											name: 'file',
-											success(res) {
-												that.photo8 = JSON.parse(res.data).data.url
-											}
-										})
-									}else if(e == 9){
-										uni.uploadFile({
-											url:'https://trailer.boyaokj.cn/api/file/upload',
-											filePath: res.tempFilePaths[0],
-											name: 'file',
-											success(res) {
-												that.photo9 = JSON.parse(res.data).data.url
-											}
-										})
-									}else if(e == 10){
-										uni.uploadFile({
-											url:'https://trailer.boyaokj.cn/api/file/upload',
-											filePath: res.tempFilePaths[0],
-											name: 'file',
-											success(res) {
-												that.photo10 = JSON.parse(res.data).data.url
-											}               
-										})
-									}
+										}  
+									})
 								},
 							});
 				},
