@@ -1,16 +1,16 @@
 <template>
 	<view>
-		<view class="top">
-			<view class="feld">
+		<view class="top" :style="[{height:CustomBar + 'px'}]" style="position: fixed;top: 0;">
+			<view class="feld" :style="style">
 				<view class="shu">
 				<image src="../../static/images/xiaoxi.png" @click="tonews"></image>
-				<view class="shunum">{{shunum}}</view>
+				<view class="shunum" v-if="shunum > 0">{{shunum}}</view>
 				</view>
 				<view class="toptitle">订单</view>
 				<image src="../../static/images/kefu.png" @click="call()"></image>
 			</view>
 		</view>
-		<view class="card">
+		<view class="card" :style="[{marginTop: (CustomBar + 10) + 'px'}]">
 			<view class="hui" :class="item.show?'liang':''" v-for="(item,index) in card" :key="index" @click="cad(index)">
 				<view>{{item.title}}</view>
 			</view>
@@ -28,12 +28,12 @@
 				</view>
 				<view class="ceng3">
 					<view>装</view>
-					<view>{{item.start_addr}}</view>
+					<view class="addr">{{item.start_addr}}</view>
 				</view>
 				<view class="ceng4">
 					<view class="left">
 						<view>卸</view>
-						<view>{{item.end_addr}}</view>
+						<view class="addr">{{item.end_addr}}</view>
 					</view>
 					<view class="jia">￥{{item.money}}</view>
 				</view>
@@ -64,13 +64,23 @@
 				limit:10,
 				status:0,
 				orderlist:[],
-				shunum:0
+				shunum:0,
+				
+				StatusBar: this.StatusBar,
+				CustomBar: this.CustomBar,
+				Custom: this.Custom,
+				style: ''
 			}
 		},
 		onLoad() {
-			
+			var StatusBar = this.StatusBar;
+			var CustomBar = this.CustomBar;
+			this.style = `height:${CustomBar}px;padding-top:${StatusBar}px;background-color: #30aeff;`;
 		},
 		onShow() {
+			this.card[0].show = true
+			this.card[1].show = false
+			this.card[2].show = false
 			let that = this
 			this.http.ajax({
 				url: 'DriverOrder/myOrder',
@@ -114,9 +124,18 @@
 				})
 			},
 			call(){
-				uni.makePhoneCall({
-					 phoneNumber: this.cell, 
-				})
+				this.http.ajax({
+					url: 'index/setting',
+					method: 'GET',
+					data: {
+						key:'kefu'
+					},
+					success(res) {
+						uni.makePhoneCall({
+							 phoneNumber: res.data.data,
+						})
+					}
+				});
 			},
 			yan(item){
 				uni.navigateTo({
@@ -188,6 +207,13 @@
 </script>
 
 <style>
+	.addr{
+		width: 500rpx;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		word-break: break-all;
+	}
 	.shunum{
 		position: absolute;
 		top: 10rpx;
@@ -270,7 +296,7 @@
 		font-family: PingFangSC-Regular, PingFang SC;
 		font-weight: 400;
 		color: #676767;
-		margin-left: 9rpx;
+		margin-left: 9rpx
 	}
 	.left view:nth-child(1){
 		font-size: 16rpx;
@@ -338,6 +364,7 @@
 		border-radius: 14rpx;
 		margin: auto;
 		margin-top: 20rpx;
+		margin-bottom: 9px;
 	}
 	.fu{
 		font-size: 24rpx;
@@ -366,7 +393,6 @@
 		width: 592rpx;
 		justify-content: space-between;
 		margin: auto;
-		padding-top: 21rpx;
 	}
 	.hui{
 		font-size: 26rpx;
@@ -382,7 +408,7 @@
 		width: 750rpx;
 		height: 130rpx;
 		background-color: #30AEFF;
-		padding-top: 38rpx;
+		/* padding-top: 38rpx; */
 		box-sizing: border-box;
 	}
 	.feld{

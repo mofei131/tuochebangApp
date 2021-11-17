@@ -21,7 +21,7 @@
 				url:'https://trailer.boyaokj.cn/api/index/setting',
 				method:'GET',
 				data:{
-					key:'guanyu'
+					key:'zhuyi'
 				},
 				success(res) {
 					// console.log(res.data.data.data)
@@ -33,9 +33,12 @@
 		methods:{
 			back(){
 				uni.setStorageSync('zy',1)
-				uni.reLaunch({
-					url:'yanche'
-				})
+				// uni.reLaunch({
+				// 	url:'yanche'
+				// })
+				uni.navigateBack({
+				    delta: 1
+				});
 			},
 			formatRichText(html) {
 					let newContent = html.replace(/<img[^>]*>/gi, function(match, capture) {

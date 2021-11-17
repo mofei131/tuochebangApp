@@ -1,12 +1,13 @@
 <template>
 	<view>
-		<view class="top">
-			<view class="feld">
+		<view class="top" :style="[{height:CustomBar + 'px'}]" style="position: fixed;top: 0;">
+			<view class="feld" :style="style">
 				<image src="../../static/images/backl.png" @click="hui"></image>
 				<view class="toptitle">司机端</view>
 				<view @click="jia()">解绑</view>
 			</view>
 		</view>
+		<view  :style="[{marginTop: (CustomBar + 10) + 'px'}]"></view>
 		<view class="billlist">
 			<view class="billitem" v-for="(item,index) in bill" :key="index" :class="[caseClass(index+1)]">
 				<view class="itemleft">
@@ -46,7 +47,12 @@
 				limit:10,
 				xiab:-1,
 				jie:false,
-				dai:false
+				dai:false,
+				
+				StatusBar: this.StatusBar,
+				CustomBar: this.CustomBar,
+				Custom: this.Custom,
+				style: ''
 			}
 		},
 		computed:{
@@ -110,6 +116,10 @@
 			}
 		},
 		onLoad(p) {
+			var StatusBar = this.StatusBar;
+			var CustomBar = this.CustomBar;
+			this.style = `height:${CustomBar}px;padding-top:${StatusBar}px;background-color: #30aeff;`;
+			
 			this.lei = p.page
 		},
 		onShow() {
@@ -324,7 +334,7 @@
 		width: 750rpx;
 		height: 130rpx;
 		background-color: #30AEFF;
-		padding-top: 38rpx;
+		/* padding-top: 38rpx; */
 		box-sizing: border-box;
 	}
 	.feld{

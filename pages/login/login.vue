@@ -18,7 +18,6 @@
 					<view class="eay2" v-if="dis">
 						<image @click="mqing" src="../../static/images/null.png"></image>
 						<image @click="lst" :src="show==true?'../../static/images/eaybi.png':'../../static/images/eaykai.png'" mode=""></image>
-						
 					</view>
 			</view>
 

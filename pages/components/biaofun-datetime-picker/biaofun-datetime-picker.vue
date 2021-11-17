@@ -2,8 +2,10 @@
 	<view class="datatime">
 		<picker mode="multiSelector" :range="range" range-key="text" @change="change" @columnchange="columnchange" :value="value" :disabled="disabled">
 			<view class="content" :class="{ placeholder: !dateStr }">
-				<text>{{ dateStr ? dateStr : placeholder }}</text>
+				<text v-if="timepan">{{ dateStr ? dateStr : placeholder }}</text>
+				<text v-else>请选择开始时间</text>
 			</view>
+			<!-- <view @click="qingchu">1</view> -->
 		</picker>
 	</view>
 </template>
@@ -15,6 +17,7 @@ export default {
 	 * 数据
 	 */
 	props: {
+		 timepan: true,
 		// 是否禁用
 		disabled: {
 			type: Boolean,
@@ -120,10 +123,14 @@ export default {
 	 * 方法
 	 */
 	methods: {
+		qingchu(){
+			this.dateStr = ''
+		},
 		/**
 		 * 确认选择
 		 */
 		change(event) {
+			console.log(event)
 			let year, month, day, hour, minute;
 			if(this.fields == 'year') {
 				year = this.range[0][this.value[0]].number; // 年

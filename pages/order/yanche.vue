@@ -172,6 +172,7 @@
 											src: res.tempFilePaths[0],  
 											quality: 50,  
 											success: res => {
+												uni.showLoading({title: '上传中'});
 												console.log("压缩图片")
 												console.log(res.tempFilePath)  
 												if(e == 1){
@@ -181,6 +182,7 @@
 														name: 'file',
 														success(res) {
 															that.photo1 = JSON.parse(res.data).data.url
+															uni.hideLoading()
 														}
 													})
 												}else if(e == 2){
@@ -190,6 +192,7 @@
 														name: 'file',
 														success(res) {
 															that.photo2 = JSON.parse(res.data).data.url
+															uni.hideLoading()
 														}
 													})
 												}else if(e == 3){
@@ -199,6 +202,7 @@
 														name: 'file',
 														success(res) {
 															that.photo3 = JSON.parse(res.data).data.url
+															uni.hideLoading()
 														}
 													})
 												}else if(e == 4){
@@ -208,6 +212,7 @@
 														name: 'file',
 														success(res) {
 															that.photo4 = JSON.parse(res.data).data.url
+															uni.hideLoading()
 														}
 													})
 												}else if(e == 5){
@@ -217,6 +222,7 @@
 														name: 'file',
 														success(res) {
 															that.photo5 = JSON.parse(res.data).data.url
+															uni.hideLoading()
 															uni.setStorage({
 																key:'yanche',
 																data:{
@@ -359,12 +365,12 @@
 					});
 				},
 				toshuo(){
-					uni.reLaunch({
+					uni.navigateTo({
 						url:'yancheshuoming'
 					}) 
 				},
 				tozhu(){
-					uni.reLaunch({
+					uni.navigateTo({
 						url:'zhuyishixiang'
 					})
 				},

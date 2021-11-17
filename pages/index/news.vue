@@ -35,6 +35,7 @@
 			}
 		},
 		onShow() {
+			this.page = 1
 			let that = this
 			this.http.ajax({
 				url:'message/list',
