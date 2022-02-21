@@ -145,16 +145,17 @@
 				</view>
 			</view>
 		</view>
-		<view class="boximg" v-if="tanshow">
+		<view class="boximg" v-if="tanshow" @click="tanclose()">
 			<view class="neibox2">
-				<swiper class="swiper flex-column mx-start sx-stretch" circular :autoplay="true" interval="3000" duration="500" indicator-dots>
-					<swiper-item class="flex-column mx-start sx-stretch" v-for="(item,index) in tanlist" :key="index">
-						<image class="swiper-item backImgFull" mode="aspectFit" :src="item"></image>
+				<swiper class="swiper flex-column mx-start sx-stretch" circular :autoplay="true" interval="5000" duration="500" indicator-dots indicator-active-color="#30AEFF" indicator-color="#fff">
+					<swiper-item @click.stop="buzhuan()" class="flex-column mx-start sx-stretch" v-for="(item,index) in tanlist" :key="index">
+						<image class="swiper-item backImgFull" :src="item"></image>
 					</swiper-item>
 				</swiper> 
 			</view>
 			<image class="tanclose" src="../../static/images/null.png" mode="aspectFit" @click="tanclose"></image>
 		</view>
+		<takinfo></takinfo>
 	</view>
 </template>
 
@@ -236,15 +237,6 @@ export default {
 				that.array1 = res.data;
 			}
 		});
-		this.http.ajax({
-			url: 'app/popup',
-			method: 'GET',
-			success(res) {
-				console.log('弹窗')
-				console.log(res.data)
-				that.tanlist = res.data
-			}
-		});
 		this.tanshow = true
 	},
 	onShow() {
@@ -255,7 +247,7 @@ export default {
 		}
 		let that = this;
 		this.amapPlugin = new amap.AMapWX({
-			key: 'bd45905078a821a4b50ad67dbc470875'
+			key: 'f9ecff0235b1c6a0415bb2cd7123a86f'
 		});
 		this.amapPlugin.getRegeo({
 			success: data => {
@@ -267,6 +259,7 @@ export default {
 				// this.address = data[0].name;
 				this.lat = data[0].latitude;
 				this.lng = data[0].longitude;
+				console.log(data[0].longitude)
 				let that = this;
 				this.http.ajax({
 					url: 'driverOrder/list',
@@ -278,6 +271,8 @@ export default {
 						limit: this.limit
 					},
 					success(res) {
+						console.log('订单列表')
+						console.log(res)
 						that.orderlist = res.data;
 					}
 				});
@@ -304,13 +299,78 @@ export default {
 				that.shunum = res.data.noread;
 			}
 		});
+		this.http.ajax({
+			url: 'pop/popup',
+			method: 'GET',
+			data:{
+				type:1
+			},
+			success(res) {
+				if(res.data.tanchuang.length == 0){
+					that.tanshow = false
+				}
+				that.tanlist = res.data.tanchuang
+			}
+		});
+	},
+	onReachBottom() {
+		this.page++
+		let that = this;
+		this.http.ajax({
+			url: 'driverOrder/list',
+			method: 'GET',
+			data: {
+				lng: that.lng,
+				lat: that.lat,
+				page: this.page,
+				limit: this.limit,
+			},
+			success(res) {
+				if (res.code == 200) {
+					if (res.data.length != 0) {
+						for(let i in res.data){
+							that.orderlist.push(res.data[i])
+						}
+					}else{
+						// console.log(res)
+						uni.showToast({
+							title: '没有了!',
+							icon: 'none'
+						});
+					}
+				} else if (res.code == -1) {
+					uni.showToast({
+						title: res.message,
+						icon: 'none'
+					});
+				}
+			}
+		});
 	},
 	onPullDownRefresh() {
-		setTimeout(function() {
-			uni.stopPullDownRefresh();
-		}, 1000);
+		this.page = 1
+		let that = this;
+		that.http.ajax({
+			url: 'driverOrder/list',
+			method: 'GET',
+			data: {
+				lng: that.lng,
+				lat: that.lat,
+				page: that.page,
+				limit: that.limit
+			},
+			success(res) {
+				console.log('订单列表')
+				console.log(res)
+				that.orderlist = res.data;
+				uni.stopPullDownRefresh();
+			}
+		});
 	},
 	methods: {
+		buzhuan(){
+			console.log('禁止关闭')
+		},
 		tanclose(){
 			this.tanshow = false
 		},

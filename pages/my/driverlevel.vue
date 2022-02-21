@@ -24,11 +24,17 @@
 				<view class="shuntr">{{ fen1 }}/{{ fen2 }}</view>
 			</view>
 		</view>
+		<view class="guidelist" v-for="(item, index) in jifenlist" @tap="pandaun2(index)">
+			<view class="guideitem">
+				<view>{{ item.name }}</view>
+
+				<image :src="ji2 == index ? '../../static/icon/downzd.png' : '../../static/icon/rightzd.png'"></image>
+			</view>
+			<view class="box" v-show="ji2 == index"><view class="guidecot">{{item.intro}}</view></view>
+		</view>
 		<view class="guidelist" v-for="(item, index) in article" :key="index" @tap="pandaun(index)">
-			<!-- <view class="guidelist" @tap="pandaun(index)"> -->
 			<view class="guideitem">
 				<view>{{ item.title }}</view>
-				<!-- <image :src="ji == index?'../../static/icon/downzd.png':'../../static/icon/rightzd.png'"></image> -->
 				<image :src="ji == index ? '../../static/icon/downzd.png' : '../../static/icon/rightzd.png'"></image>
 			</view>
 			<view class="box" v-show="ji == index"><view class="guidecot" v-html="item.content"></view></view>
@@ -44,14 +50,16 @@ export default {
 			avater: uni.getStorageSync('userInfo').avater,
 			name: uni.getStorageSync('userInfo').nickname,
 			decide: false,
-			ji: '',
+			ji: -1,
+			ji2: '',
 			article: [],
 			title: 'progress',
 			fen1: 0,
 			fen2: 0,
 			pgList: 0,
 			djname: '',
-			djpic: ''
+			djpic: '',
+			jifenlist:[]
 		};
 	},
 	onLoad() {},
@@ -77,11 +85,27 @@ export default {
 				}
 			}
 		});
+		this.http.ajax({
+			url: 'Integral/setList',
+			method: 'GET',
+			// data: {
+			// 	user_id: uni.getStorageSync('userInfo').id
+			// },
+			success(res) {
+				console.log('--->')
+				console.log(res)
+				that.jifenlist = res.data
+			}
+		});
 	},
 	methods: {
 		pandaun(e) {
-			// console.log(e)
 			this.ji = e;
+			this.ji2 = -1
+		},
+		pandaun2(e) {
+			this.ji2 = e;
+			this.ji = -1
 		}
 	}
 };

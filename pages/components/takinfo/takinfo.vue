@@ -22,7 +22,7 @@
 			let that = this
 				console.log('通过')
 			uni.connectSocket({
-			    url: 'ws://8.140.158.108:4348',
+			    url: 'ws://39.107.141.58:4348',
 			});
 			uni.onSocketOpen(function (res) {
 			  console.log('WebSocket连接已打开！');

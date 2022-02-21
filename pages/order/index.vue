@@ -39,10 +39,12 @@
 				</view>
 				</view>
 				<view class="ceng5" v-if="item.status != 4">
-					<view class="yan" v-if="item.verify_status == 0" @click="yan(item)">发起验车</view>
+					<view class="yan" v-if="item.verify_status == 0 && item.car_situation != 3 && item.status == 6" @click="yan(item)">发起验车</view>
 					<view class="bo" v-if="item.verify_status == -1" @click="yan(item)">验车被驳回</view>
 					<view class="yan" v-if="item.verify_status == 1" @click="yan(item)">验车审核中</view>
 					<view class="tong" v-if="item.verify_status == 2" @click="yan(item)">已通过验车</view>
+					<view class="tong" v-if="item.status == 2" @click="ququ(item)">去取车</view>
+					<view class="tong" v-if="item.status == 3" @click="daoda(item)">到达</view>
 					<view class="yan" v-if="true" @click="lianxi(item)">联系客户</view>
 				</view>
 			</view>
@@ -57,6 +59,8 @@
 				card:[
 					{title:'全部',show:true},
 					{title:'进行中',show:false},
+					{title:'取车中',show:false},
+					{title:'已到达',show:false},
 					{title:'已完成',show:false},
 				],
 				cell:'1335678520',
@@ -77,25 +81,21 @@
 			var CustomBar = this.CustomBar;
 			this.style = `height:${CustomBar}px;padding-top:${StatusBar}px;background-color: #30aeff;`;
 		},
+		onPullDownRefresh() {
+			this.page = 1
+			this.chalist()
+			uni.stopPullDownRefresh();
+		},
+		onReachBottom() {
+			this.page++
+			this.chalist()
+		},
 		onShow() {
+			let that = this
 			this.card[0].show = true
 			this.card[1].show = false
 			this.card[2].show = false
-			let that = this
-			this.http.ajax({
-				url: 'DriverOrder/myOrder',
-				method: 'GET',
-				data: {
-					user_id:uni.getStorageSync('userInfo').id,
-					page:this.page,
-					limit:this.limit,
-					status:0
-				},
-				success: function(res) {
-					console.log(res)
-					that.orderlist = res.data
-				}
-			});
+			this.chalist()
 			this.http.ajax({
 				url: 'message/noReadNum',
 				method: 'GET',
@@ -108,6 +108,91 @@
 			});
 		},
 		methods:{
+			daoda(e){
+				let that = this
+				this.http.ajax({
+					url: 'order/alreadyArrive',
+					method: 'GET',
+					data: {
+						id:e.id
+					},
+					success(res) {
+						if(res.code == 200){
+							if(e.car_situation == 3){
+								uni.showToast({
+									title:'请及时托运',
+									icon:'none'
+								})
+							}else{
+								uni.showToast({
+									title:'请验车',
+									icon:'none'
+								})
+							}
+							that.chalist()
+						}else{
+							uni.showToast({
+								title:res.message,
+								icon:'none'
+							})
+						}
+					}
+				});
+			},
+			ququ(e){
+				let that = this
+				this.http.ajax({
+					url: 'order/waitGetcar',
+					method: 'GET',
+					data: {
+						id:e.id
+					},
+					success(res) {
+						if(res.code == 200){
+							uni.showToast({
+								title:'请及时取车',
+								icon:'none'
+							})
+							that.chalist()
+						}else{
+							uni.showToast({
+								title:res.message,
+								icon:'none'
+							})
+						}
+					}
+				});
+			},
+			chalist(){
+				let that = this
+				this.http.ajax({
+					url: 'DriverOrder/myOrder',
+					method: 'GET',
+					data: {
+						user_id:uni.getStorageSync('userInfo').id,
+						page:this.page,
+						limit:this.limit,
+						status:0
+					},
+					success: function(res) {
+						console.log(res)
+						if(that.page == 1){
+							that.orderlist = res.data
+						}else{
+							if(res.data.length != 0){
+								for(let i in res.data){
+									that.orderlist.push(res.data[i])
+								}
+							}else{
+								uni.showToast({
+									title:'没有了',
+									icon:'noen'
+								})
+							}
+						}
+					}
+				});
+			},
 			tonews(){
 				uni.navigateTo({
 					url:'../index/news'
@@ -147,6 +232,8 @@
 					this.card[index].show = true
 					this.card[1].show = false
 					this.card[2].show = false
+					this.card[3].show = false
+					this.card[4].show = false
 					this.status = 0
 					let that = this
 					this.http.ajax({
@@ -166,6 +253,8 @@
 					this.card[1].show = true
 					this.card[0].show = false
 					this.card[2].show = false
+					this.card[3].show = false
+					this.card[4].show = false
 					this.status = 2
 					let that = this
 					this.http.ajax({
@@ -181,10 +270,54 @@
 							that.orderlist = res.data
 						}
 					});
-				}else{
+				}else if(index == 2){
 					this.card[2].show = true
 					this.card[0].show = false
 					this.card[1].show = false
+					this.card[3].show = false
+					this.card[4].show = false
+					this.status = 3
+					let that = this
+					this.http.ajax({
+						url: 'DriverOrder/myOrder',
+						method: 'GET',
+						data: {
+							user_id:uni.getStorageSync('userInfo').id,
+							page:this.page,
+							limit:this.limit,
+							status:3
+						},
+						success: function(res) {
+							that.orderlist = res.data
+						}
+					});
+				}else if(index == 3){
+					this.card[3].show = true
+					this.card[0].show = false
+					this.card[1].show = false
+					this.card[2].show = false
+					this.card[4].show = false
+					this.status = 6
+					let that = this
+					this.http.ajax({
+						url: 'DriverOrder/myOrder',
+						method: 'GET',
+						data: {
+							user_id:uni.getStorageSync('userInfo').id,
+							page:this.page,
+							limit:this.limit,
+							status:6
+						},
+						success: function(res) {
+							that.orderlist = res.data
+						}
+					});
+				}else{
+					this.card[4].show = true
+					this.card[0].show = false
+					this.card[1].show = false
+					this.card[2].show = false
+					this.card[3].show = false
 					this.status = 4
 					let that = this
 					this.http.ajax({

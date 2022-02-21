@@ -60,7 +60,8 @@ export default {
 		return {
 			pay_order_user: '',
 			send_user: '',
-			receive_user: ''
+			receive_user: '',
+			cell:''
 		};
 	},
 	onLoad(p) {
@@ -91,8 +92,17 @@ export default {
 			uni.navigateBack();
 		},
 		call() {
-			uni.makePhoneCall({
-				phoneNumber: this.cell
+			this.http.ajax({
+				url: 'index/setting',
+				method: 'GET',
+				data: {
+					key:'kefu'
+				},
+				success(res) {
+					uni.makePhoneCall({
+						 phoneNumber: res.data.data,
+					})
+				}
 			});
 		}
 	}

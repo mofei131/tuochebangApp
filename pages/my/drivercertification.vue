@@ -7,6 +7,14 @@
 			</view>
 			<view class="info">
 				<view class="infomation">
+					<!-- <view class="name">
+						<text lines="1" decode="true" class="nameword">车辆类型：</text>
+						<picker class="xaunze" @change="anjianChange1" :value="index1" :range="array1" range-key="name">
+							<view class="flex-row">
+								<text>{{ array1[index1].name }}</text>
+							</view>
+						</picker>
+					</view> -->
 					<view class="name">
 						<text lines="1" decode="true" class="nameword">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</text>
 						<input lines="1" class="nameinput" v-model="name" type="text" placeholder="请输入姓名" placeholder-style="color:#C1C2C3;" />
@@ -97,7 +105,18 @@ export default {
 			photo5: '',
 			dian: 1,
 			reason: '',
-			status: 0
+			status: 0,
+			// array1: [
+			// 	{
+			// 		name: '普通司机',
+			// 		id: 0
+			// 	},
+			// 	{
+			// 		name: '加盟司机',
+			// 		id: 1
+			// 	}
+			// ],
+			index1: 0,
 		};
 	},
 	onLoad() {
@@ -127,6 +146,9 @@ export default {
 	},
 	onShow() {},
 	methods: {
+		// anjianChange1(e) {
+		// 	this.index1 = e.detail.value;
+		// },
 		updata() {
 			if (!this.name) {
 				uni.showToast({
@@ -397,6 +419,14 @@ export default {
 </script>
 
 <style>
+	.xaunze {
+		width: 530rpx;
+		margin-left: 40rpx;
+		font-size: 28rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #51565d;
+	}
 .bo {
 	width: 680rpx;
 	height: 200rpx;

@@ -17,6 +17,10 @@
 					<view class="renzheng" v-if="renzheng == 2" style="font-size: 17rpx;color: #FFFFFF;">已认证</view>
 					<view class="renzheng" v-else style="font-size: 17rpx;color: #FFFFFF;">未认证</view>
 				</view>
+				<navigator class="qiandan" url="qiandao" open-type="navigate">
+					<image src="../../static/images/qiandao.png" mode=""></image>
+					<view>去签到</view>
+				</navigator>
 			</view>
 			<view class="withdraw">
 				<view class="balance">
@@ -142,7 +146,8 @@ export default {
 			user_level: '',
 			kefu: '',
 			wallet: 0,
-			sanz: ''
+			sanz: '',
+			yao:true
 		};
 	},
 	onLoad() {},
@@ -201,6 +206,16 @@ export default {
 			},
 			success(res) {
 				that.kefu = res.data.data;
+			}
+		});
+		this.http.ajax({
+			url: 'index/setting',
+			method: 'GET',
+			data: {
+				key: 'open_haibao'
+			},
+			success(res) {
+				that.yao = res.data.data == 1 ? true : false
 			}
 		});
 	},
@@ -265,7 +280,15 @@ export default {
 			});
 		},
 		erm() {
-			this.ewm = !this.ewm;
+			console.log(this.yao)
+			if(this.yao){
+				this.ewm = !this.ewm;
+			}else{
+				uni.showToast({
+					title:'未拥有邀请下级权限！',
+					icon:'none'
+				})
+			}
 		},
 		ancl() {
 			this.ewm = !this.ewm;
@@ -408,6 +431,22 @@ export default {
 </script>
 
 <style>
+	.qiandan{
+		position: absolute;
+		top: 20rpx;
+		right: 60rpx;
+	}
+	.qiandan view{
+		font-size: 24rpx;
+		color: #fff;
+		text-align: center;
+	}
+	.qiandan image{
+		width: 40rpx;
+		height: 40rpx;
+		margin: auto;
+		display: block;
+	}
 .myqiang {
 	margin-top: 385rpx;
 }
@@ -587,6 +626,7 @@ page {
 .userifom {
 	display: flex;
 	margin-left: 54rpx;
+	position: relative;
 }
 .name {
 	color: #ffffff;

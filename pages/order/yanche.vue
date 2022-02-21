@@ -69,9 +69,10 @@
 		<view class="btn" v-if="status == 1">审核中</view>
 		<view class="btn" v-if="status == -1" @click="updata()">被驳回,再次上传</view>
 		<view class="btn" v-if="status == 0" @click="updata()">确认上传</view>
-		<view class="signature" v-show="showCanvas">
-			<canvas class="mycanvas" canvas-id="mycanvas" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend"></canvas>
-			<view class="footer">
+		<view class="signature" v-show="showCanvas" :style="heightNum">
+			<view style="position: absolute;z-index: 0;width: 100%;background-color: #fff;" :style="heightNum"></view>
+			<canvas class="mycanvas" canvas-id="mycanvas" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend" ></canvas>
+			<view class="footer"  style="position: relative;z-index: 9999;">
 				<view class="left" @click="finish">保存</view>
 				<view class="right" @click="clear">清除</view>
 				<view class="close" @click="close">关闭</view>
@@ -101,7 +102,8 @@
 					sign:'',
 					orderid:'',
 					status:0,
-					reason:''
+					reason:'',
+					heightNum:''
 				}
 			},
 			onLoad(p) {
@@ -150,6 +152,11 @@
 				if(uni.getStorageSync('zy')){
 					this.zy = uni.getStorageSync('zy')
 				}
+				uni.getSystemInfo({
+					success: function (res) {
+						that.heightNum = 'height:'+res.windowHeight+'px'
+					}
+				})
 			},
 			methods: {
 				chooseImage(e) {
@@ -491,7 +498,7 @@
 		margin: 0rpx 0 0 20rpx;
 		padding: 26rpx 0 120rpx 0;
 	}
-	.signature {position: fixed;top: 10px;left: 2%;z-index: 999;width:96%;}
+	.signature {position: fixed;top: 0px;left: 0;z-index: 999;width:100%;}
 		.container {
 			padding: 20rpx 0 120rpx 0;
 			box-sizing: border-box;

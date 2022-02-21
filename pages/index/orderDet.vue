@@ -3,7 +3,7 @@
 		<!-- <view class="map"> -->
 		<map
 			style="width: 100%;display: flex;"
-			:style="{ height: shou ? '20vh' : '68vh' }"
+			:style="{ height: shou ? '360rpx' : '1000rpx' }"
 			:latitude="latitude"
 			:longitude="longitude"
 			scale="16"
@@ -77,6 +77,14 @@
 							<view>{{ orderdet.chexing }}</view>
 						</view>
 						<view class="san">
+							<view>托运车况</view>
+							<view>:</view>
+							<view v-if="orderdet.car_situation == 1">新车</view>
+							<view v-if="orderdet.car_situation == 2">二手车</view>
+							<view v-if="orderdet.car_situation == 3">报废车</view>
+							<view v-if="orderdet.car_situation == 4">特殊车辆</view>
+						</view>
+						<view class="san">
 							<view>支付类型</view>
 							<view>:</view>
 							<view v-if="orderdet.pay_type == 1">全款</view>
@@ -139,7 +147,7 @@ export default {
 			shou: true,
 			animationData: {},
 			amapPlugin: null,
-			key: 'bd45905078a821a4b50ad67dbc470875',
+			key: 'f9ecff0235b1c6a0415bb2cd7123a86f',
 			markers: [],
 			poisdatas: [{}, {}, {}],
 			title: 'map',
@@ -178,7 +186,6 @@ export default {
 						id: p.id
 					},
 					success(res) {
-						console.log(res);
 						that.orderdet = res.data;
 						that.tname = res.data.trailer_type.name;
 						that.result = res.data.result;
@@ -226,6 +233,7 @@ export default {
 				// console.log(info)
 			}
 		});
+		console.log(this.orderdet)
 	},
 	// onShow() {
 	// 		// 初始化一个动画
@@ -710,6 +718,7 @@ export default {
 	height: 620rpx;
 	box-sizing: border-box;
 	background-color: #fff;
+	overflow: scroll;
 }
 .btn {
 	width: 550rpx;

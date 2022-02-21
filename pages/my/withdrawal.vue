@@ -27,6 +27,16 @@
 		</view>
 		<view class="inputbox">
 			<view class="input">
+				<view class="entry2" v-if="date == 0"><view>提示：全天候提现,还可提现{{ci}}次</view></view>
+				<view class="entry2" v-if="date == 1"><view>提示：周一可提现,还可提现{{ci}}次</view></view>
+				<view class="entry2" v-if="date == 2"><view>提示：周二可提现,还可提现{{ci}}次</view></view>
+				<view class="entry2" v-if="date == 3"><view>提示：周三可提现,还可提现{{ci}}次</view></view>
+				<view class="entry2" v-if="date == 4"><view>提示：周四可提现,还可提现{{ci}}次</view></view>
+				<view class="entry2" v-if="date == 5"><view>提示：周五可提现,还可提现{{ci}}次</view></view>
+				<view class="entry2" v-if="date == 6"><view>提示：周六可提现,还可提现{{ci}}次</view></view>
+				<view class="entry2" v-if="date == 7"><view>提示：周日可提现,还可提现{{ci}}次</view></view>
+			</view>
+			<view class="input">
 				<view class="entry"><view>提现金额</view></view>
 				<input class="moneyinput" type="digit" v-model="money" placeholder="请输入提现金额" placeholder-style="font-size: 36rpx;color: #999999;" />
 			</view>
@@ -37,9 +47,9 @@
 					<view class="idnum">**** **** **** {{ item.cardno }}</view>
 					<view class="cardw">
 						<image
-							@tap="agreementSuccess(item.id)"
+							@tap="agreementSuccess(item)"
 							class="fix"
-							:src="item.id == cardid ? 'http://hlstore.yimetal.cn/2021/tuochebang/Oval@2x.png' : 'http://hlstore.yimetal.cn/2021/tuochebang/Oval@2x(1).png'"
+							:src="item.id== cardid ? 'http://hlstore.yimetal.cn/2021/tuochebang/Oval@2x.png' : 'http://hlstore.yimetal.cn/2021/tuochebang/Oval@2x(1).png'"
 						></image>
 					</view>
 				</view>
@@ -64,6 +74,7 @@
 					:focus="index == jiao" @input="shu" hold-keyboard="true" confirm-hold="true"/> -->
 					<input class="shumi" password="true" type="number" maxlength="6" @input="paypwd" cursor="0" />
 				</view>
+				<view class="wangl" @click="tomima">修改密码</view>
 				<image src="http://hlstore.yimetal.cn/2021/tuochebang/null.png" class="close" @click="guan"></image>
 			</view>
 		</view>
@@ -82,12 +93,35 @@ export default {
 			cardid: '',
 			money: '',
 			show: false,
-			
-			ktx_money: 0
+			ktx_money: 0,
+			date:'',
+			ci:'',
+			bankcode:'',
+			bankname:'',
+			username:'',
+			cardnos:''
 		};
 	},
 	onLoad() {},
 	onShow() {
+		// if(uni.getStorageSync('userinfo').realname.length != 0){
+		// 	this.username = uni.getStorageSync('userinfo').realname
+		// }else{
+		// 	uni.showModal({
+		// 	    title: '提示',
+		// 	    content: '您为填写真实姓名,无法提现',
+		// 			confirmText:'去填写',
+		// 	    success: function (res) {
+		// 	        if (res.confirm) {
+		// 	            uni.navigateTo({
+		// 	            	url:'./personaldata'
+		// 	            })
+		// 	        } else if (res.cancel) {
+		// 	            console.log('用户点击取消');
+		// 	        }
+		// 	    }
+		// 	});
+		// }
 		let that = this;
 		this.http.ajax({
 			url: 'withDraw/withdrawSet',
@@ -107,11 +141,38 @@ export default {
 				user_id: uni.getStorageSync('userInfo').id
 			},
 			success(res) {
+				console.log('银行卡列表')
+				console.log(res.data)
 				that.banklist = res.data;
+			}
+		});
+		this.http.ajax({
+			url: 'index/setting',
+			method: 'GET',
+			data: {
+				key:'week'
+			},
+			success(res) {
+				that.date = res.data.data
+			}
+		});
+		this.http.ajax({
+			url: 'index/setting',
+			method: 'GET',
+			data: {
+				key:'withdraw_times'
+			},
+			success(res) {
+				that.ci = res.data.data
 			}
 		});
 	},
 	methods: {
+		tomima(){
+			uni.navigateTo({
+				url:'updatepaypwd'
+			})
+		},
 		guan() {
 			this.show = !this.show;
 		},
@@ -126,9 +187,16 @@ export default {
 						money: this.money,
 						type: 2,
 						pay_password: e.target.value,
-						bank_id: this.cardid
+						bank_id:this.cardid,
+						bank_code:this.bankcode,
+						bank_name:this.bankname,
+						username:this.username,
+						cardno:that.cardnos
 					},
 					success(res) {
+						console.log('提现')
+						console.log(that.cardnos)
+						console.log(res)
 						if (res.code == 200) {
 							uni.showToast({
 								title: '提现成功',
@@ -186,7 +254,11 @@ export default {
 			this.isFocus = false;
 		},
 		agreementSuccess(id) {
-			this.cardid = id;
+			this.cardid = id.id;
+			this.bankcode = id.cardno
+			this.bankname = id.bank,
+			this.cardnos = id.cardnos,
+			this.username = id.name
 		},
 		bankcard() {
 			uni.navigateTo({
@@ -197,6 +269,12 @@ export default {
 };
 </script>
 <style>
+	.wangl{
+		font-size: 28rpx;
+		text-align: center;
+		color: #30AEFF;
+		margin-top: 20rpx;
+	}
 .inp {
 	display: flex;
 	align-items: center;
@@ -353,6 +431,11 @@ page {
 	height: 40rpx;
 	float: left;
 	margin-top: 35rpx;
+}
+.entry2 {
+	float: left;
+	margin-left: 40rpx;
+	width: 600rpx;
 }
 .entry {
 	float: left;

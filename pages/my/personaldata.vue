@@ -2,7 +2,7 @@
 	<view>
 		<view class="content">
 			<view class="item">
-				<text>姓名:</text>
+				<text>真实姓名:</text>
 				<input type="text" v-model="name" placeholder="请输入姓名" />
 			</view>
 			<view class="item-border"></view>

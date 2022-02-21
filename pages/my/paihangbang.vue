@@ -3,7 +3,7 @@
 		<view class="topbck">
 			<view class="sanfen">
 				<view class="cepai" v-if="pailist[1]">
-					<image class="cetou" v-if="pailist[1].avater" :src="pailist[1].avater"></image>
+					<image class="cetou" style="left:6rpx" v-if="pailist[1].avater" :src="pailist[1].avater"></image>
 					<image class="cetou" v-else src="http://hlstore.yimetal.cn/2021/tuochebang/my_touxiang.png"></image>
 					<image class="ceimg" src="http://hlstore.yimetal.cn/2021/tuochebang/55f5907f-bff5-4ffd-8042-731e6bd9f5c3.png"></image>
 					<view class="zonname">{{ pailist[1].nickname }}</view>
@@ -17,7 +17,7 @@
 					<view class="zonming">{{ pailist[0].child_num }}</view>
 				</view>
 				<view class="cepai" v-if="pailist[2]">
-					<image class="cetou" style="left:36rpx" v-if="pailist[2].avater" :src="pailist[2].avater"></image>
+					<image class="cetou" style="left:24rpx" v-if="pailist[2].avater" :src="pailist[2].avater"></image>
 					<image class="cetou" v-else src="http://hlstore.yimetal.cn/2021/tuochebang/my_touxiang.png"></image>
 					<image class="ceimg" src="http://hlstore.yimetal.cn/2021/tuochebang/49c3ad62-4a25-4666-9492-0f5b2298651e.png"></image>
 					<view class="zonname">{{ pailist[2].nickname }}</view>
@@ -113,6 +113,10 @@ export default {
 </script>
 
 <style>
+	page{
+		padding-bottom: 60rpx;
+		background-color: #fff;
+	}
 .zifen {
 	font-size: 30rpx;
 	font-family: Helvetica;
@@ -184,7 +188,8 @@ export default {
 	background: #ffffff;
 	border-radius: 6rpx;
 	margin: 16rpx auto;
-	margin-bottom: 90px;
+	margin-bottom: 90rpx;
+	/* padding-bottom: 90rpx; */
 }
 .kaiimg {
 	width: 60rpx;
@@ -198,7 +203,7 @@ export default {
 	position: absolute;
 	top: 42rpx;
 	z-index: 0;
-	left: 28rpx;
+	left: 32rpx;
 }
 page {
 	background: #f7f4f4;
@@ -242,6 +247,7 @@ page {
 	width: 750rpx;
 	height: 430rpx;
 	background: #30aeff;
+	/* padding-bottom: 140rpx; */
 }
 .sanfen {
 	display: flex;

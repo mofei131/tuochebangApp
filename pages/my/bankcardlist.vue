@@ -26,8 +26,8 @@
 		<view class="anbox" v-if="dai">
 			<view class="neibox">
 				<view class="ntitle">提示</view>
-				<view class="ncon1">您去定要解除卡号</view>
-				<view class="ncon2">后四位为{{bill[xiab].cardno}}的招商银行储值卡吗</view>
+				<view class="ncon1">您确定要解除卡号</view>
+				<view class="ncon2">后四位为{{bill[xiab].cardno}}的储值卡吗</view>
 				<view class="nbot">
 					<view @click="zai">取消</view>
 					<view @click="unbindbankcard()">确定</view>
@@ -155,8 +155,8 @@
 				}
 			},
 			hui(){
-				uni.navigateTo({
-					url:'./withdrawal'
+				uni.switchTab({
+					url:'./index'
 				})
 			},
 			searchChange() {

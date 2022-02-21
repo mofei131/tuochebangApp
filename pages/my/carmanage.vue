@@ -72,8 +72,8 @@
 				<view class="layer8">
 					<text lines="1" class="word15" v-if="status == 1 && is_pay == 1" @click="topay2()">审核中</text>
 					<text lines="1" class="word15" v-if="status == -1" @click="topay2()">被驳回,重新提交</text>
-					<text lines="1" class="word15" v-if="status == 0" @click="topay()">支付押金({{ money }})</text>
-					<text lines="1" class="word15" v-if="status == 1 && is_pay == 0" @click="ctopay()">支付押金({{ money }})</text>
+					<text lines="1" class="word15" v-if="status == 0" @click="topay()">提交注册信息</text>
+					<text lines="1" class="word15" v-if="status == 1 && is_pay == 0" @click="ctopay()">交加盟费({{money}})</text>
 					<text lines="1" class="word15" v-if="status == 2" @click="updata()">更新车辆信息</text>
 				</view>
 			</view>
@@ -115,33 +115,7 @@ export default {
 	},
 	onLoad() {
 		let that = this;
-		this.http.ajax({
-			url: 'index/getTrailerType',
-			method: 'GET',
-			success(res) {
-				that.array1 = res.data;
-				that.http.ajax({
-					url: 'driverAuth/carInfo',
-					method: 'GET',
-					data: {
-						user_id: uni.getStorageSync('userInfo').id
-					},
-					success(res) {
-						console.log(res);
-						that.index1 = that.array1.findIndex(item => item.id === JSON.parse(res.data.car_type));
-						that.carcode = res.data.car_number;
-						that.photo6 = res.data.car_photo_45;
-						that.photo7 = res.data.driving_license_front_page;
-						that.photo8 = res.data.driving_license_second_page;
-						that.photo9 = res.data.cargo_insurance_photo;
-						that.photo10 = res.data.commercial_insurance_photo;
-						that.status = res.data.status;
-						that.reason = res.data.reason;
-						that.is_pay = res.data.is_pay;
-					}
-				});
-			}
-		});
+		
 	},
 	onShow() {
 		let that = this;
@@ -155,8 +129,39 @@ export default {
 				that.money = res.data.data;
 			}
 		});
+		this.chakan()
 	},
 	methods: {
+		chakan(){
+			let that = this
+			this.http.ajax({
+				url: 'index/getTrailerType',
+				method: 'GET',
+				success(res) {
+					that.array1 = res.data;
+					that.http.ajax({
+						url: 'driverAuth/carInfo',
+						method: 'GET',
+						data: {
+							user_id: uni.getStorageSync('userInfo').id
+						},
+						success(res) {
+							console.log(res);
+							that.index1 = that.array1.findIndex(item => item.id === JSON.parse(res.data.car_type));
+							that.carcode = res.data.car_number;
+							that.photo6 = res.data.car_photo_45;
+							that.photo7 = res.data.driving_license_front_page;
+							that.photo8 = res.data.driving_license_second_page;
+							that.photo9 = res.data.cargo_insurance_photo;
+							that.photo10 = res.data.commercial_insurance_photo;
+							that.status = res.data.status;
+							that.reason = res.data.reason;
+							that.is_pay = res.data.is_pay;
+						}
+					});
+				}
+			});
+		},
 		updata() {
 			let that = this;
 			if (!this.carcode) {
@@ -412,33 +417,39 @@ export default {
 						sign: res.data.sign // 签名，这里用的 MD5 签名
 					};
 					if (res.code == 200) {
-						uni.requestPayment({
-							provider: 'wxpay',
-							orderInfo: orderInfo,
-							success: function(res) {
-								console.log(res, 1);
-								// uni.removeStorageSync('zancun');
-								// uni.removeStorageSync('zancun2');
-								uni.showToast({
-									title: '提交成功',
-									icon: 'none',
-									duration: 1000
-								});
-								setTimeout(function() {
-									uni.switchTab({
-										url: './index'
-									});
-								}, 1000);
-							},
-							fail: function(res) {
-								// fail
-								console.log(res, 1);
-								wx.showToast({
-									title: res.message,
-									icon: 'none'
-								});
-							}
+						// uni.requestPayment({
+						// 	provider: 'wxpay',
+						// 	orderInfo: orderInfo,
+						// 	success: function(res) {
+						// 		console.log(res, 1);
+						// 		uni.showToast({
+						// 			title: '提交成功',
+						// 			icon: 'none',
+						// 			duration: 1000
+						// 		});
+						// 		setTimeout(function() {
+						// 			uni.switchTab({
+						// 				url: './index'
+						// 			});
+						// 		}, 1000);
+						// 	},
+						// 	fail: function(res) {
+						// 		// fail
+						// 		console.log(res, 1);
+						// 		wx.showToast({
+						// 			title: res.message,
+						// 			icon: 'none'
+						// 		});
+						// 	}
+						// });
+						uni.showToast({
+							title: '提交成功',
+							icon: 'none',
+							duration: 1000
 						});
+						setTimeout(function(){
+							this.chakan()
+						},1000)
 					} else if (res.code == -1) {
 						uni.showToast({
 							title: res.message,
@@ -567,22 +578,6 @@ export default {
 		},
 
 		ctopay() {
-			// uni.share({
-			// 	provider: 'weixin',
-			// 	scene: 'WXSceneSession',
-			// 	type: 0,
-			// 	href: 'http:*******************', //这地址太长了，就省略了
-			// 	title: '你笑起来真好看',
-			// 	summary: '唐艺昕，你有火吗？没有,为何你点燃了我的心？',
-			// 	imageUrl: 'http:*******************',
-			// 	success: function(res) {
-			// 		console.log('success:' + JSON.stringify(res));
-			// 	},
-			// 	fail: function(err) {
-			// 		console.log('fail:' + JSON.stringify(err));
-			// 	}
-			// });
-
 			var that = this;
 			console.log(uni.getStorageSync('userInfo').id, that.money);
 			that.http.ajax({
@@ -757,7 +752,7 @@ export default {
 	flex-direction: column;
 }
 .name {
-	width: 310rpx;
+	width: 610rpx;
 	height: 40rpx;
 	margin-top: 32rpx;
 	flex-direction: row;

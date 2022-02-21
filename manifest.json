@@ -11,8 +11,8 @@
         "nvueStyleCompiler" : "uni-app",
         "compilerVersion" : 3,
         "splashscreen" : {
-            "alwaysShowBeforeRender" : true,
-            "waiting" : true,
+            "alwaysShowBeforeRender" : false,
+            "waiting" : false,
             "autoclose" : true,
             "delay" : 0
         },
@@ -127,6 +127,14 @@
                         "spotlight@2x" : "unpackage/res/icons/80x80.png",
                         "spotlight@3x" : "unpackage/res/icons/120x120.png"
                     }
+                }
+            },
+            "splashscreen" : {
+                "androidStyle" : "common",
+                "android" : {
+                    "hdpi" : "G:/mofei/static/拖车帮/星期二/yepay.png",
+                    "xhdpi" : "G:/mofei/static/拖车帮/星期二/yepay.png",
+                    "xxhdpi" : "G:/mofei/static/拖车帮/星期二/yepay.png"
                 }
             }
         }
