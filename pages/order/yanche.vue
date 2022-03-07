@@ -8,33 +8,51 @@
 			<view class="neizp">
 				<view class="item">
 					<view class="title">
-						请拍摄车辆引擎盖的位置
+						请拍摄车辆左后45度照片
 					</view>
 					<image :src="photo1 == ''?'../../static/images/zhaobj.png':photo1" @click="chooseImage(1)"></image>
 				</view>
 				<view class="item">
 					<view class="title">
-						请拍摄车辆翼子板的位置
+						请拍摄车辆右后45度照片
 					</view>
 					<image :src="photo2 == ''?'../../static/images/zhaobj.png':photo2" @click="chooseImage(2)"></image>
 				</view>
 				<view class="item">
 					<view class="title">
-						请拍摄车辆图片3
+						请拍摄车辆左前45度照片
 					</view>
 					<image :src="photo3 == ''?'../../static/images/zhaobj.png':photo3" @click="chooseImage(3)"></image>
 				</view>
 				<view class="item">
 					<view class="title">
-						请拍摄车辆图片4
+						请拍摄车辆右前45度照片
 					</view>
 					<image :src="photo4 == ''?'../../static/images/zhaobj.png':photo4" @click="chooseImage(4)"></image>
 				</view>
 				<view class="item">
 					<view class="title">
-						请拍摄车辆图片5
+						请拍摄车辆铭牌照片
 					</view>
 					<image :src="photo5 == ''?'../../static/images/zhaobj.png':photo5" @click="chooseImage(5)"></image>
+				</view>
+				<view class="item">
+					<view class="title">
+						请拍摄车辆内饰照片
+					</view>
+					<image :src="photo6 == ''?'../../static/images/zhaobj.png':photo6" @click="chooseImage(6)"></image>
+				</view>
+				<view class="item">
+					<view class="title">
+						请拍摄车辆仪表盘照片
+					</view>
+					<image :src="photo7 == ''?'../../static/images/zhaobj.png':photo7" @click="chooseImage(7)"></image>
+				</view>
+				<view class="item">
+					<view class="title">
+						请拍摄车辆车架号照片
+					</view>
+					<image :src="photo8 == ''?'../../static/images/zhaobj.png':photo8" @click="chooseImage(8)"></image>
 				</view>
 			</view>
 		</view>
@@ -99,6 +117,9 @@
 					photo3:'',
 					photo4:'',
 					photo5:'',
+					photo6:'',
+					photo7:'',
+					photo8:'',
 					sign:'',
 					orderid:'',
 					status:0,
@@ -109,15 +130,18 @@
 			onLoad(p) {
 				this.orderid = p.id
 				let that = this
-				if(uni.getStorageSync('yanche')){
-					console.log(uni.getStorageSync('yanche'))
-					this.photo1 = uni.getStorageSync('yanche').photo1
-					this.photo2 = uni.getStorageSync('yanche').photo2
-					this.photo3 = uni.getStorageSync('yanche').photo3
-					this.photo4 = uni.getStorageSync('yanche').photo4
-					this.photo5 = uni.getStorageSync('yanche').photo5
-					this.orderid = uni.getStorageSync('yanche').orderid
-				}
+				// if(uni.getStorageSync('yanche')){
+				// 	console.log(uni.getStorageSync('yanche'))
+				// 	this.photo1 = uni.getStorageSync('yanche').photo1
+				// 	this.photo2 = uni.getStorageSync('yanche').photo2
+				// 	this.photo3 = uni.getStorageSync('yanche').photo3
+				// 	this.photo4 = uni.getStorageSync('yanche').photo4
+				// 	this.photo5 = uni.getStorageSync('yanche').photo5
+				// 	this.photo6 = uni.getStorageSync('yanche').photo6
+				// 	this.photo7 = uni.getStorageSync('yanche').photo7
+				// 	this.photo8 = uni.getStorageSync('yanche').photo8
+				// 	this.orderid = uni.getStorageSync('yanche').orderid
+				// }
 				this.http.ajax({
 					url: 'driverOrder/verifyDetail',
 					method: 'GET',
@@ -132,6 +156,9 @@
 							that.photo3 = res.data.photo3
 							that.photo4 = res.data.photo4
 							that.photo5 = res.data.photo5
+							that.photo6 = res.data.photo6
+							that.photo7 = res.data.photo7
+							that.photo8 = res.data.photo8
 							that.sign = res.data.sign
 							that.status = res.data.status
 							that.reason = res.data.reason
@@ -230,17 +257,50 @@
 														success(res) {
 															that.photo5 = JSON.parse(res.data).data.url
 															uni.hideLoading()
-															uni.setStorage({
-																key:'yanche',
-																data:{
-																	photo1:that.photo1,
-																	photo2:that.photo2,
-																	photo3:that.photo3,
-																	photo4:that.photo4,
-																	photo5:that.photo5,
-																	orderid:that.orderid
-																}
-															})
+														}
+													})
+												}else if(e == 6){
+													uni.uploadFile({
+														url:'https://trailer.boyaokj.cn/api/file/upload',
+														filePath: res.tempFilePath,
+														name: 'file',
+														success(res) {
+															that.photo6 = JSON.parse(res.data).data.url
+															uni.hideLoading()
+														}
+													})
+												}else if(e == 7){
+													uni.uploadFile({
+														url:'https://trailer.boyaokj.cn/api/file/upload',
+														filePath: res.tempFilePath,
+														name: 'file',
+														success(res) {
+															that.photo7 = JSON.parse(res.data).data.url
+															uni.hideLoading()
+														}
+													})
+												}else if(e == 8){
+													uni.uploadFile({
+														url:'https://trailer.boyaokj.cn/api/file/upload',
+														filePath: res.tempFilePath,
+														name: 'file',
+														success(res) {
+															that.photo8 = JSON.parse(res.data).data.url
+															uni.hideLoading()
+															// uni.setStorage({
+															// 	key:'yanche',
+															// 	data:{
+															// 		photo1:that.photo1,
+															// 		photo2:that.photo2,
+															// 		photo3:that.photo3,
+															// 		photo4:that.photo4,
+															// 		photo5:that.photo5,
+															// 		photo6:that.photo6,
+															// 		photo7:that.photo7,
+															// 		photo8:that.photo8,
+															// 		orderid:that.orderid
+															// 	}
+															// })
 														}
 													})
 												}
@@ -278,6 +338,11 @@
 										// }
 									},
 								});
+								if(that.photo1&&that.photo2&&that.photo3&&that.photo4&&that.photo5&&that.photo6&&that.photo7&&that.photo8){
+									console.log('true')
+								}else{
+									false
+								}
 							},
 				updata(){
 					// if (!this.unit) {
@@ -341,17 +406,20 @@
 							photo3:this.photo3,
 							photo4:this.photo4,
 							photo5:this.photo5,
+							photo6:this.photo6,
+							photo7:this.photo7,
+							photo8:this.photo8,
 							sign:this.sign
 						},
 						success: function(res) {
 							if(res.code == 200){
-								uni.removeStorageSync('yanche')
+								// uni.removeStorageSync('yanche')
 								uni.showToast({
 										title:'上传成功',
 										icon:'none',
 										duration:1000
 									})
-									uni.removeStorageSync('yanche')
+									// uni.removeStorageSync('yanche')
 									setTimeout(function() {
 									uni.reLaunch({
 										url:'index'

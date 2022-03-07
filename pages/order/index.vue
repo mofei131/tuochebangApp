@@ -49,6 +49,7 @@
 				</view>
 			</view>
 		</view>
+		<view class="quanp" v-if="quanp" @click="tologin"></view>
 	</view>
 </template>
 
@@ -73,7 +74,8 @@
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				Custom: this.Custom,
-				style: ''
+				style: '',
+				quanp:false
 			}
 		},
 		onLoad() {
@@ -91,6 +93,12 @@
 			this.chalist()
 		},
 		onShow() {
+			if (!uni.getStorageSync('userInfo') || !uni.getStorageSync('userInfo').id) {
+				// uni.reLaunch({
+				// 	url: '../login/login'
+				// });
+				this.quanp = true
+			}
 			let that = this
 			this.card[0].show = true
 			this.card[1].show = false
@@ -108,6 +116,21 @@
 			});
 		},
 		methods:{
+			tologin(){
+				uni.showModal({
+					title: '提示',
+					content: '请先登录',
+					success: function (res) {
+						if (res.confirm) {
+							uni.reLaunch({
+								url: '../login/login'
+							});
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
+			},
 			daoda(e){
 				let that = this
 				this.http.ajax({
@@ -340,6 +363,14 @@
 </script>
 
 <style>
+	.quanp{
+		position: fixed;
+		z-index: 99;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
 	.addr{
 		width: 500rpx;
 		white-space: nowrap;

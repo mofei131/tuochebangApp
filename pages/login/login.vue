@@ -23,7 +23,8 @@
 
 		</view>
 		<view class="agreement">
-			<text>登录即代表同意</text>
+			<image class="limg" :src="ling?'../../static/images/xding.png':'../../static/images/buzhong.png'" @click="dlng"></image>
+			<text>请同意</text>
 			<navigator url="yonghuxieyi" open-type="navigate">用户协议</navigator>
 			<text>和</text>
 			<navigator url="yinsizhengce" open-type="navigate">隐私政策</navigator>
@@ -51,10 +52,16 @@
 				dis:false,
 				show:true,
 				btn:false,
-				scene:''
+				scene:'',
+				ling:false
 			};
 		},
+		onShow() {
+		},
 		methods: {
+			dlng(){
+				this.ling = !this.ling
+			},
 			lst(){
 				if(this.show){
 					this.show = false
@@ -83,6 +90,13 @@
 				}
 			},
 			bindLogin() {
+				if (!this.ling) {
+					uni.showToast({
+						icon: 'none',
+						title: '请同意用户协议'
+					});
+					return;
+				}
 				if (this.phone.length != 11) {
 					uni.showToast({
 						icon: 'none',
@@ -130,6 +144,10 @@
 </script>
 
 <style>
+	.limg{
+		width: 36rpx;
+		height: 36rpx;
+	}
 	.eay,.eay2{
 		position: absolute;
 		top: 5rpx;

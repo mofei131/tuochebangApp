@@ -228,6 +228,16 @@
 			"style": {
 				"navigationBarTitleText": "签到"
 			}
+		},{
+			"path": "pages/my/yinsi",
+			"style": {
+				"navigationBarTitleText": "隐私协议"
+			}
+		},{
+			"path": "pages/my/yonghu",
+			"style": {
+				"navigationBarTitleText": "用户政策"
+			}
 		}
 	],
 	"globalStyle": {

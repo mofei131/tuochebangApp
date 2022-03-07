@@ -112,6 +112,20 @@
 					<image class="icon" src="../../static/icon/rightzd.png"></image>
 				</view>
 			</view>
+			<view class="functionitem" @tap="toyx(1)">
+				<view class="itemleft">
+					<image src="../../static/icon/myicon6.png"></image>
+					<view>隐私政策</view>
+					<image class="icon" src="../../static/icon/rightzd.png"></image>
+				</view>
+			</view>
+			<view class="functionitem" @tap="toyx(2)">
+				<view class="itemleft">
+					<image src="../../static/icon/myicon6.png"></image>
+					<view>用户协议</view>
+					<image class="icon" src="../../static/icon/rightzd.png"></image>
+				</view>
+			</view>
 			<view class="functionitem" @tap="set()">
 				<view class="itemleft">
 					<image src="../../static/icon/myicon7.png"></image>
@@ -147,7 +161,7 @@ export default {
 			kefu: '',
 			wallet: 0,
 			sanz: '',
-			yao:true
+			yao:true,
 		};
 	},
 	onLoad() {},
@@ -169,6 +183,12 @@ export default {
 				that.wallet = res.data.wallet;
 			}
 		});
+		if (!uni.getStorageSync('userInfo') || !uni.getStorageSync('userInfo').id) {
+			uni.reLaunch({
+				url: '../login/login'
+			});
+			// this.quanp = true
+		}
 		if (!uni.getStorageSync('userInfo').nickname) {
 			uni.navigateTo({
 				url: 'personaldata'
@@ -220,6 +240,18 @@ export default {
 		});
 	},
 	methods: {
+		toyx(e){
+			console.log(e)
+			if(e == 1){
+				uni.navigateTo({
+					url:'./yinsi'
+				})
+			}else if(e == 2){
+				uni.navigateTo({
+					url:'./yonghu'
+				})
+			}
+		},
 		go(){
 			plus.share.getServices(function(res) {
 				var sweixin = null;

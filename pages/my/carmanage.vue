@@ -115,7 +115,7 @@ export default {
 	},
 	onLoad() {
 		let that = this;
-		
+		this.chakan()
 	},
 	onShow() {
 		let that = this;
@@ -129,7 +129,7 @@ export default {
 				that.money = res.data.data;
 			}
 		});
-		this.chakan()
+		
 	},
 	methods: {
 		chakan(){

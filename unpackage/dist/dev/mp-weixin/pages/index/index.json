@@ -1,8 +1,0 @@
-{
-  "navigationStyle": "custom",
-  "usingComponents": {
-    "pick-regions": "/pages/components/pick-regions/pick-regions",
-    "amap": "/common/amap-wx",
-    "shaixuan": "/pages/components/biaofun-datetime-picker/biaofun-datetime-picker"
-  }
-}

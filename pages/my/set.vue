@@ -43,7 +43,7 @@
 		<view class="guidelist" @tap="out()">
 		<!-- <view class="guidelist" @tap="signout(index)"> -->
 			<view class="guideitem">
-				<view>退出登录</view>
+				<view>注销账号</view>
 				<image src="../../static/icon/rightzd.png"></image>
 			</view>
 			<takinfo class="taixi"></takinfo>

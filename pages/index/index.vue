@@ -156,6 +156,7 @@
 			<image class="tanclose" src="../../static/images/null.png" mode="aspectFit" @click="tanclose"></image>
 		</view>
 		<takinfo></takinfo>
+		<!-- <view class="quanp" v-if="quanp" @click="tologin"></view> -->
 	</view>
 </template>
 
@@ -221,7 +222,11 @@ export default {
 			timepan:true,
 			timepan2:true,
 			tanlist:[],
-			tanshow:false
+			tanshow:false,
+			link:'',
+			is_force:'',
+			quanp:false,
+			adcode:''
 		};
 	},
 	onLoad() {
@@ -239,13 +244,37 @@ export default {
 		});
 		this.tanshow = true
 	},
-	onShow() {
-		if (!uni.getStorageSync('userInfo') || !uni.getStorageSync('userInfo').id) {
-			uni.reLaunch({
-				url: '../login/login'
-			});
+	onBackPress(e) {
+		if (e.from == 'backbutton') {
+			return true; //阻止默认返回行为
 		}
-		let that = this;
+	},
+	onShow() {
+		this.page = 1
+		this.http.ajax({
+			url: 'driverOrder/list',
+			method: 'GET',
+			data: {
+				lng: '',
+				lat: '',
+				page: this.page,
+				limit: this.limit
+			},
+			success(res) {
+				console.log('订单列表1')
+				console.log(res)
+				that.orderlist = res.data;
+			}
+		});
+		// this.jiazai()
+		let that = this
+		if (!uni.getStorageSync('userInfo') || !uni.getStorageSync('userInfo').id) {
+			// uni.reLaunch({
+			// 	url: '../login/login'
+			// });
+			this.quanp = true
+		}
+		// let that = this;
 		this.amapPlugin = new amap.AMapWX({
 			key: 'f9ecff0235b1c6a0415bb2cd7123a86f'
 		});
@@ -274,6 +303,19 @@ export default {
 						console.log('订单列表')
 						console.log(res)
 						that.orderlist = res.data;
+					}
+				});
+				that.http.ajax({
+					url: 'index/refreshLocation',
+					method: 'GET',
+					data: {
+						user_id:uni.getStorageSync('userInfo').id,
+						lat:data[0].latitude,
+						lon:data[0].longitude
+					},
+					success(res) {
+						console.log('上传结果')
+						console.log(res)
 					}
 				});
 			},
@@ -368,6 +410,81 @@ export default {
 		});
 	},
 	methods: {
+		// tologin(){
+			
+		// },
+		jiazai(){
+			let that = this;
+			that.http.ajax({
+				url: 'index/version',
+				method: 'GET',
+				data:{},
+				success(res) {
+					console.log('更新')
+					console.log(res)
+					that.adcode = res.data.VERSION
+					that.link = res.data.update_link
+					that.is_force = res.data.IS_FORCE
+					uni.getSystemInfo({
+						success(res) {
+							console.log('机型')
+							console.log(res)
+							if(res.platform == "android"){
+					if(plus.runtime.version != that.adcode){
+						uni.showModal({
+							title: "发现新版本",
+							content: "确认下载更新",
+							success: (res) => {
+								if (res.confirm) { //当用户确定更新，执行更新
+									uni.showLoading({
+										title: '更新中……'
+									})
+									console.log(that.link)
+									uni.downloadFile({ //执行下载
+										url: that.link, //下载地址
+										success: downloadResult => { //下载成功
+											uni.hideLoading();
+											if (downloadResult.statusCode == 200) {
+												uni.showModal({
+													title: '',
+													content: '更新成功，确定现在重启吗？',
+													confirmText: '重启',
+													confirmColor: '#EE8F57',
+													success: function(res) {
+														if (res.confirm) {
+															plus.runtime.install( //安装
+																downloadResult
+																.tempFilePath, {
+																	force: true
+																},
+																function(res) {
+																	utils.showToast(
+																		'更新成功，重启中');
+																	plus.runtime
+																		.restart();
+																}
+															);
+														}
+													}
+												});
+											}
+										}
+									});
+								}else if (res.cancel) {
+									if(that.is_force ==1 ){
+										that.jiazai()
+									}
+								}
+							}
+						})
+					}
+					}
+						}
+					})
+				}
+			});
+			
+		},
 		buzhuan(){
 			console.log('禁止关闭')
 		},
@@ -500,8 +617,24 @@ export default {
 			this.jie = false;
 		},
 		lie(id) {
-			this.jie = true;
-			this.dingid = id;
+			if(this.quanp){
+				uni.showModal({
+					title: '提示',
+					content: '请先登录',
+					success: function (res) {
+						if (res.confirm) {
+							uni.reLaunch({
+								url: '../login/login'
+							});
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
+			}else{
+				this.jie = true;
+				this.dingid = id;
+			}
 		},
 		hsai() {
 			if (this.shai) {
@@ -545,6 +678,14 @@ export default {
 </script>
 
 <style scoped>
+	.quanp{
+		position: fixed;
+		z-index: 99;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
 	.tanclose{
 		width: 120rpx;
 		height: 120rpx;

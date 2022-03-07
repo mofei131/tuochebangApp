@@ -34,7 +34,7 @@
 						</view>
 					</view>
 					<view class="dizhi">
-						<view class="zhxi">
+						<view class="zhxi"> 
 							<view style="background: #EB4A32;">终</view>
 							<view>{{ orderdet.end_name }}</view>
 						</view>
@@ -114,7 +114,7 @@
 					</view>
 					<view class="tixing">
 						<view>特别提醒:</view>
-						<view>拖车邦仅为信息居间服务平台，实际运输过程中的相关风险由发货方与承运方自行评估与承担，出发前请务必确认。</view>
+						<view>拖运小咖仅为信息居间服务平台，实际运输过程中的相关风险由发货方与承运方自行评估与承担，出发前请务必确认。</view>
 					</view>
 				</view>
 				<view class="ceng4">
@@ -162,7 +162,7 @@ export default {
 			orderdet: [],
 			tname: '',
 			tanbox: false,
-			
+			upDataMsg:'',
 			id: ''
 		};
 	},
@@ -235,16 +235,42 @@ export default {
 		});
 		console.log(this.orderdet)
 	},
-	// onShow() {
-	// 		// 初始化一个动画
-	// 		var animation = uni.createAnimation({
-	// 				transformOrigin: "50% 0 50%",
-	// 				duration: 1000,  //动画持续1秒
-	// 				timingFunction: 'linear',  //linear 全程匀速运动
-	// 				// delay:200  //延迟两秒执行动画
-	// 		})
-	// 		this.animation = animation
-	// },
+	onShow() {
+		// let that = this
+		// let amapFile2 = require('../../common/amap-wx.js');
+		// let amapPlugin2 = new amapFile2.AMapWX({
+		// 	key: this.key
+		// });
+		// that.upDataMsg = setInterval(function(){
+		// 		amapPlugin2.getRegeo({
+		// 			success: function(data) {
+		// 				that.latitude = data[0].latitude;
+		// 				that.longitude = data[0].longitude;
+		// 				that.http.ajax({
+		// 					url: 'index/refreshLocation',
+		// 					method: 'GET',
+		// 					data: {
+		// 						user_id:uni.getStorageSync('userInfo').id,
+		// 						lat:that.latitude,
+		// 						lon:that.longitude
+		// 					},
+		// 					success(res) {
+		// 						console.log('上传结果')
+		// 						console.log(res)
+		// 					}
+		// 				});
+		// 			},
+		// 			fail: function(info) {
+		// 			}
+		// 		});
+		// 	},10000)
+	},
+	onHide() {
+		clearInterval(this.upDataMsg)
+	},
+	onUnload() {
+		clearInterval(this.upDataMsg)
+	},
 	methods: {
 		tiaobox() {
 			this.tanbox = true;
