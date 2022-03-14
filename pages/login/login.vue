@@ -24,7 +24,7 @@
 		</view>
 		<view class="agreement">
 			<image class="limg" :src="ling?'../../static/images/xding.png':'../../static/images/buzhong.png'" @click="dlng"></image>
-			<text>请同意</text>
+			<text>同意</text>
 			<navigator url="yonghuxieyi" open-type="navigate">用户协议</navigator>
 			<text>和</text>
 			<navigator url="yinsizhengce" open-type="navigate">隐私政策</navigator>

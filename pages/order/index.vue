@@ -61,7 +61,7 @@
 					{title:'全部',show:true},
 					{title:'进行中',show:false},
 					{title:'取车中',show:false},
-					{title:'已到达',show:false},
+					{title:'已到达取车点',show:false},
 					{title:'已完成',show:false},
 				],
 				cell:'1335678520',

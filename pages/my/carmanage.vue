@@ -448,7 +448,7 @@ export default {
 							duration: 1000
 						});
 						setTimeout(function(){
-							this.chakan()
+							that.chakan()
 						},1000)
 					} else if (res.code == -1) {
 						uni.showToast({

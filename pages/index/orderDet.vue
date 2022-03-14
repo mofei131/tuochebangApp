@@ -65,6 +65,11 @@
 						<view>:</view>
 						<view>{{ orderdet.zc_start_time }} ~ {{ orderdet.zc_end_time }}</view>
 					</view>
+					<view class="zhuangc">
+						<view>最迟装车时间</view>
+						<view>:</view>
+						<view>{{ orderdet.zc_late_time }}</view>
+					</view>
 					<view class="leifu">
 						<view class="san">
 							<view>板车类型</view>
@@ -167,8 +172,11 @@ export default {
 		};
 	},
 	onLoad(p) {
-		this.id = p
 		let that = this;
+		this.id = p.id
+	},
+	onShow() {
+		let that = this
 		let amapFile = require('../../common/amap-wx.js');
 		let amapPlugin = new amapFile.AMapWX({
 			key: this.key
@@ -183,9 +191,10 @@ export default {
 					url: 'driverOrder/detail',
 					method: 'GET',
 					data: {
-						id: p.id
+						id: that.id
 					},
 					success(res) {
+						console.log(res)
 						that.orderdet = res.data;
 						that.tname = res.data.trailer_type.name;
 						that.result = res.data.result;
@@ -233,37 +242,6 @@ export default {
 				// console.log(info)
 			}
 		});
-		console.log(this.orderdet)
-	},
-	onShow() {
-		// let that = this
-		// let amapFile2 = require('../../common/amap-wx.js');
-		// let amapPlugin2 = new amapFile2.AMapWX({
-		// 	key: this.key
-		// });
-		// that.upDataMsg = setInterval(function(){
-		// 		amapPlugin2.getRegeo({
-		// 			success: function(data) {
-		// 				that.latitude = data[0].latitude;
-		// 				that.longitude = data[0].longitude;
-		// 				that.http.ajax({
-		// 					url: 'index/refreshLocation',
-		// 					method: 'GET',
-		// 					data: {
-		// 						user_id:uni.getStorageSync('userInfo').id,
-		// 						lat:that.latitude,
-		// 						lon:that.longitude
-		// 					},
-		// 					success(res) {
-		// 						console.log('上传结果')
-		// 						console.log(res)
-		// 					}
-		// 				});
-		// 			},
-		// 			fail: function(info) {
-		// 			}
-		// 		});
-		// 	},10000)
 	},
 	onHide() {
 		clearInterval(this.upDataMsg)

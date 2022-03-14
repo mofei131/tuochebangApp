@@ -214,7 +214,6 @@ export default {
 			endcity: '',
 			enddis: '',
 			shunum: 0,
-			
 			StatusBar: this.StatusBar,
 			CustomBar: this.CustomBar,
 			Custom: this.Custom,
@@ -226,15 +225,18 @@ export default {
 			link:'',
 			is_force:'',
 			quanp:false,
-			adcode:''
+			adcode:'',
+			shou:1,
 		};
 	},
 	onLoad() {
+		let that = this;
+		if(uni.getStorageSync('shou')){
+			this.shou = uni.getStorageSync('shou')
+		}
 		var StatusBar = this.StatusBar;
 		var CustomBar = this.CustomBar;
 		this.style = `height:${CustomBar}px;padding-top:${StatusBar}px;background-color: #30aeff;`;
-		
-		let that = this;
 		this.http.ajax({
 			url: 'index/getTrailerType',
 			method: 'GET',
@@ -243,6 +245,59 @@ export default {
 			}
 		});
 		this.tanshow = true
+		if(that.shou == 1){
+			uni.showModal({
+				title: '提示',
+				content: '请授权您的位置信息，获取附近订单',
+				confirmText:'授权并继续',
+				cancelText:'退出应用',
+				success: function (res) {
+					if (res.confirm) {
+						this.amapPlugin = new amap.AMapWX({
+							key: 'f9ecff0235b1c6a0415bb2cd7123a86f'
+						});
+						this.amapPlugin.getRegeo({
+							success: data => {
+								uni.setStorageSync('shou',2)
+								this.defaultRegionCode = [
+									data[0].regeocodeData.addressComponent.province,
+									data[0].regeocodeData.addressComponent.city,
+									data[0].regeocodeData.addressComponent.district
+								];
+								// this.address = data[0].name;
+								uni.setStorageSync('lat',data[0].latitude)
+								uni.setStorageSync('lng',data[0].longitude)
+								that.lat = data[0].latitude;
+								that.lng = data[0].longitude;
+								console.log(data[0].longitude)
+								that.http.ajax({
+									url: 'driverOrder/list',
+									method: 'GET',
+									data: {
+										lng: data[0].longitude,
+										lat: data[0].latitude,
+										page: that.page,
+										limit: that.limit
+									},
+									success(res) {
+										console.log('订单列表')
+										console.log(res)
+										that.orderlist = res.data;
+									}
+								});
+							},
+							fail: err => {
+								uni.setStorageSync('shou',2)
+								console.log(err);
+							}
+						});
+					} else if (res.cancel) {
+						plus.runtime.quit();
+					}
+				}
+			});
+		}
+		
 	},
 	onBackPress(e) {
 		if (e.from == 'backbutton') {
@@ -250,13 +305,18 @@ export default {
 		}
 	},
 	onShow() {
+		let that = this
+		if(uni.getStorageSync('lat') || uni.getStorageSync('lng')){
+			this.lat = uni.getStorageSync('lat')
+			this.lng = uni.getStorageSync('lng')
+		}
 		this.page = 1
 		this.http.ajax({
 			url: 'driverOrder/list',
 			method: 'GET',
 			data: {
-				lng: '',
-				lat: '',
+				lng:this.lng,
+				lat:this.lat,
 				page: this.page,
 				limit: this.limit
 			},
@@ -266,8 +326,7 @@ export default {
 				that.orderlist = res.data;
 			}
 		});
-		// this.jiazai()
-		let that = this
+		this.jiazai()
 		if (!uni.getStorageSync('userInfo') || !uni.getStorageSync('userInfo').id) {
 			// uni.reLaunch({
 			// 	url: '../login/login'
@@ -275,52 +334,19 @@ export default {
 			this.quanp = true
 		}
 		// let that = this;
-		this.amapPlugin = new amap.AMapWX({
-			key: 'f9ecff0235b1c6a0415bb2cd7123a86f'
-		});
-		this.amapPlugin.getRegeo({
-			success: data => {
-				this.defaultRegionCode = [
-					data[0].regeocodeData.addressComponent.province,
-					data[0].regeocodeData.addressComponent.city,
-					data[0].regeocodeData.addressComponent.district
-				];
-				// this.address = data[0].name;
-				this.lat = data[0].latitude;
-				this.lng = data[0].longitude;
-				console.log(data[0].longitude)
-				let that = this;
-				this.http.ajax({
-					url: 'driverOrder/list',
-					method: 'GET',
-					data: {
-						lng: data[0].longitude,
-						lat: data[0].latitude,
-						page: this.page,
-						limit: this.limit
-					},
-					success(res) {
-						console.log('订单列表')
-						console.log(res)
-						that.orderlist = res.data;
-					}
-				});
-				that.http.ajax({
-					url: 'index/refreshLocation',
-					method: 'GET',
-					data: {
-						user_id:uni.getStorageSync('userInfo').id,
-						lat:data[0].latitude,
-						lon:data[0].longitude
-					},
-					success(res) {
-						console.log('上传结果')
-						console.log(res)
-					}
-				});
+		console.log(this.lat)
+		console.log(this.lng)
+		that.http.ajax({
+			url: 'index/refreshLocation',
+			method: 'GET',
+			data: {
+				user_id:uni.getStorageSync('userInfo').id,
+				lat:that.lat,
+				lon:that.lng
 			},
-			fail: err => {
-				console.log(err);
+			success(res) {
+				console.log('上传结果')
+				console.log(res)
 			}
 		});
 		this.http.ajax({

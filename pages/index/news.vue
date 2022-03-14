@@ -51,6 +51,11 @@
 				}
 			});
 		},
+		onPullDownRefresh() {
+			this.page = 1
+			this.updata()
+			uni.stopPullDownRefresh();
+		},
 		onReachBottom() {
 			this.page += 1
 			this.updata()
@@ -66,9 +71,9 @@
 						id:item.id
 					},
 					success(res) {
-						if(item.type == 1){
-							uni.switchTab({
-								url:'index'
+						if(item.type == 1 && item.order_id.length != 0){
+							uni.navigateTo({
+								url:'../index/orderDet?id='+item.order_id
 							})
 						}else if(item.type == 2){
 							uni.navigateTo({

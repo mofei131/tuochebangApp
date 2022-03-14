@@ -79,6 +79,11 @@ export default {
 			}
 		});
 	},
+	onPullDownRefresh() {
+		this.page = 1
+		this.paihang();
+		uni.stopPullDownRefresh();
+	},
 	onReachBottom() {
 		this.page += 1;
 		this.paihang();

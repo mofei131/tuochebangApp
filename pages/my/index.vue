@@ -245,6 +245,7 @@ export default {
 			if(e == 1){
 				uni.navigateTo({
 					url:'./yinsi'
+					// url:'../login/yinsi'
 				})
 			}else if(e == 2){
 				uni.navigateTo({
