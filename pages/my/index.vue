@@ -179,6 +179,7 @@ export default {
 				user_id: uni.getStorageSync('userInfo').id
 			},
 			success(res) {
+				console.log(res)
 				uni.setStorageSync('userInfo', res.data);
 				that.wallet = res.data.wallet;
 			}

@@ -48,6 +48,14 @@
 			</view>
 			<takinfo class="taixi"></takinfo>
 		</view>
+		<view class="guidelist" @tap="toclos()">
+		<!-- <view class="guidelist" @tap="signout(index)"> -->
+			<view class="guideitem">
+				<view>退出应用</view>
+				<image src="../../static/icon/rightzd.png"></image>
+			</view>
+			<takinfo class="taixi"></takinfo>
+		</view>
 		
 	</view>
 </template>
@@ -131,6 +139,17 @@
 						});
 					}
 				});
+			},
+			toclos(){
+				uni.getSystemInfo({
+					success(res) {
+						if(res.platform == "android"){
+							plus.runtime.quit(); 
+						}else{
+							plus.ios.import("UIApplication").sharedApplication().performSelector("exit")
+						}
+					}
+				})
 			},
 			out(){
 				uni.removeStorageSync('userInfo')

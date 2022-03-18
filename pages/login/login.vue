@@ -35,6 +35,9 @@
 		<view class="button-login2"  ref="login"  v-else>
 			<text>确认登录</text>
 		</view>
+		<view class="button-login2" style="opacity: 1;"   ref="login" @click="ret()">
+			<text>退出应用</text>
+		</view>
 
 		<view class="agreenment">
 			<navigator url="register" open-type="navigate">注册账户</navigator>
@@ -59,6 +62,17 @@
 		onShow() {
 		},
 		methods: {
+			ret(){
+				uni.getSystemInfo({
+					success(res) {
+						if(res.platform == "android"){
+							plus.runtime.quit(); 
+						}else{
+							plus.ios.import("UIApplication").sharedApplication().performSelector("exit")
+						}
+					}
+				})
+			},
 			dlng(){
 				this.ling = !this.ling
 			},

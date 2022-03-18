@@ -2902,15 +2902,45 @@ var render = function() {
                                   }
                                 }
                               },
-                              [_vm._v("到达")]
+                              [_vm._v("到达取车点")]
+                            )
+                          : _vm._e(),
+                        _vm._$g("35-" + $31, "i")
+                          ? _c(
+                              "v-uni-view",
+                              {
+                                staticClass: _vm._$g("35-" + $31, "sc"),
+                                attrs: { _i: "35-" + $31 },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.$handleViewEvent($event)
+                                  }
+                                }
+                              },
+                              [_vm._v("拖运中")]
+                            )
+                          : _vm._e(),
+                        _vm._$g("36-" + $31, "i")
+                          ? _c(
+                              "v-uni-view",
+                              {
+                                staticClass: _vm._$g("36-" + $31, "sc"),
+                                attrs: { _i: "36-" + $31 },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.$handleViewEvent($event)
+                                  }
+                                }
+                              },
+                              [_vm._v("到达目的地")]
                             )
                           : _vm._e(),
                         true
                           ? _c(
                               "v-uni-view",
                               {
-                                staticClass: _vm._$g("35-" + $31, "sc"),
-                                attrs: { _i: "35-" + $31 },
+                                staticClass: _vm._$g("37-" + $31, "sc"),
+                                attrs: { _i: "37-" + $31 },
                                 on: {
                                   click: function($event) {
                                     return _vm.$handleViewEvent($event)
@@ -2931,10 +2961,10 @@ var render = function() {
           1
         )
       }),
-      _vm._$g(36, "i")
+      _vm._$g(38, "i")
         ? _c("v-uni-view", {
-            staticClass: _vm._$g(36, "sc"),
-            attrs: { _i: 36 },
+            staticClass: _vm._$g(38, "sc"),
+            attrs: { _i: 38 },
             on: {
               click: function($event) {
                 return _vm.$handleViewEvent($event)
@@ -3034,7 +3064,7 @@ if(false) {}
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ./node_modules/css-loader/dist/runtime/api.js */ 10);
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "\n.quanp{\n\tposition: fixed;\n\tz-index: 99;\n\ttop: 0;\n\tleft: 0;\n\twidth: 100%;\n\theight: 100%;\n}\n.addr{\n\twidth: 500rpx;\n\twhite-space: nowrap;\n\ttext-overflow: ellipsis;\n\toverflow: hidden;\n\tword-break: break-all;\n}\n.shunum{\n\tposition: absolute;\n\ttop: 10rpx;\n\tright: 0rpx;\n\twidth: 30rpx;\n\theight: 20rpx;\n\tdisplay: flex;\n\tjustify-content: center;\n\talign-items: center;\n\tbackground: #FF7878;\n\tcolor: #fff;\n\tfont-size: 18rpx;\n\tborder-radius: 30rpx;\n}\n.shu{\n\tposition: relative;\n}\n.tong{\n\twidth: 188rpx;\n\theight: 62rpx;\n\tbackground: #52C41A;\n\tborder-radius: 35rpx;\n\tfont-size: 24rpx;\n\tfont-family: PingFangSC-Medium, PingFang SC;\n\tfont-weight: 500;\n\tcolor: #FFFFFF;\n\tdisplay: flex;\n\tjustify-content: center;\n\talign-items: center;\n\tmargin-left: 16rpx;\n}\n.bo{\n\twidth: 188rpx;\n\theight: 62rpx;\n\tbackground: #EB4A32;\n\tborder-radius: 35rpx;\n\tfont-size: 24rpx;\n\tfont-family: PingFangSC-Medium, PingFang SC;\n\tfont-weight: 500;\n\tcolor: #FFFFFF;\n\tdisplay: flex;\n\tjustify-content: center;\n\talign-items: center;\n\tmargin-left: 16rpx;\n}\n.yan{\n\twidth: 188rpx;\n\theight: 62rpx;\n\tbackground: #30AEFF;\n\tborder-radius: 35rpx;\n\tfont-size: 24rpx;\n\tfont-family: PingFangSC-Medium, PingFang SC;\n\tfont-weight: 500;\n\tcolor: #FFFFFF;\n\tdisplay: flex;\n\tjustify-content: center;\n\talign-items: center;\n\tmargin-left: 16rpx;\n}\n.ceng5{\n\tdisplay: flex;\n\tjustify-content: flex-end;\n\tpadding-top: 11rpx;\n\tborder-top: 1px solid #DBDBDB;\n\tmargin-top: 15rpx;\n}\n.jia{\n\tfont-size: 32rpx;\n\tfont-family: PingFangSC-Medium, PingFang SC;\n\tfont-weight: 500;\n\tcolor: #30AEFF;\n}\n.ceng4{\n\tdisplay: flex;\n\tjustify-content: space-between;\n\talign-items: center;\n}\n.left uni-view:nth-child(2){\n\tfont-size: 24rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #676767;\n\tmargin-left: 9rpx\n}\n.left uni-view:nth-child(1){\n\tfont-size: 16rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #FFFFFF;\n\twidth: 24rpx;\n\theight: 24rpx;\n\tbackground: #30AEFF;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n\tborder-radius: 24rpx;\n}\n.left{\n\tdisplay: flex;\n\tjustify-content: start;\n\tmargin-top: 8rpx;\n\talign-items: center;\n}\n.ceng3 uni-view:nth-child(2){\n\tfont-size: 24rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #676767;\n\tmargin-left: 9rpx;\n}\n.ceng3 uni-view:nth-child(1){\n\tfont-size: 16rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #FFFFFF;\n\twidth: 24rpx;\n\theight: 24rpx;\n\tbackground: #6B6B6B;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n\tborder-radius: 24rpx;\n}\n.ceng3{\n\tdisplay: flex;\n\tjustify-content: start;\n\tmargin-top: 8rpx;\n\talign-items: center;\n}\n.ceng2 uni-view{\n\tfont-size: 26rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #333333;\n\tmargin-top: 20rpx;\n}\n.neibox{\n\twidth: 644rpx;\n\tmargin: auto;\n\tpadding: 20rpx 0 15rpx 0;\n\tbox-sizing: border-box;\n}\n.listbox{\n\twidth: 710rpx;\n\t/* height: 291rpx; */\n\tbackground: #FFFFFF;\n\tbox-shadow: 0px 0px 19rpx 0px rgba(0, 0, 0, 0.11);\n\tborder-radius: 14rpx;\n\tmargin: auto;\n\tmargin-top: 20rpx;\n\tmargin-bottom: 9px;\n}\n.fu{\n\tfont-size: 24rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #30AEFF;\n}\n.code{\n\tfont-size: 24rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #6B6B6B;\n}\n.ceng1{\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: space-between;\n}\n.liang uni-view{\n\tpadding-bottom: 5rpx;\n\tborder-bottom: 4rpx solid #30AEFF;\n\tcolor: #30AEFF;\n}\n.card{\n\tdisplay: flex;\n\twidth: 592rpx;\n\tjustify-content: space-between;\n\tmargin: auto;\n}\n.hui{\n\tfont-size: 26rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #8A8A8A;\n}\n.feld uni-image{\n\twidth: 66rpx;\n\theight: 66rpx;\n}\n.top{\n\twidth: 750rpx;\n\theight: 130rpx;\n\tbackground-color: #30AEFF;\n\t/* padding-top: 38rpx; */\n\tbox-sizing: border-box;\n}\n.feld{\n\theight: 88rpx;\n\twidth: 750rpx;\n\tdisplay: flex;\n\tjustify-content: space-between;\n\talign-items: center;\n\tpadding: 0 20rpx 0 20rpx;\n\tbox-sizing: border-box;\n\tfont-size: 39rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #FFFFFF;\n}\n", ""]);
+exports.push([module.i, "\n.quanp{\n\tposition: fixed;\n\tz-index: 99;\n\ttop: 0;\n\tleft: 0;\n\twidth: 100%;\n\theight: 100%;\n}\n.addr{\n\twidth: 500rpx;\n\twhite-space: nowrap;\n\ttext-overflow: ellipsis;\n\toverflow: hidden;\n\tword-break: break-all;\n}\n.shunum{\n\tposition: absolute;\n\ttop: 10rpx;\n\tright: 0rpx;\n\twidth: 30rpx;\n\theight: 20rpx;\n\tdisplay: flex;\n\tjustify-content: center;\n\talign-items: center;\n\tbackground: #FF7878;\n\tcolor: #fff;\n\tfont-size: 18rpx;\n\tborder-radius: 30rpx;\n}\n.shu{\n\tposition: relative;\n}\n.tong{\n\twidth: 188rpx;\n\theight: 62rpx;\n\tbackground: #52C41A;\n\tborder-radius: 35rpx;\n\tfont-size: 24rpx;\n\tfont-family: PingFangSC-Medium, PingFang SC;\n\tfont-weight: 500;\n\tcolor: #FFFFFF;\n\tdisplay: flex;\n\tjustify-content: center;\n\talign-items: center;\n\tmargin-left: 16rpx;\n}\n.bo{\n\twidth: 188rpx;\n\theight: 62rpx;\n\tbackground: #EB4A32;\n\tborder-radius: 35rpx;\n\tfont-size: 24rpx;\n\tfont-family: PingFangSC-Medium, PingFang SC;\n\tfont-weight: 500;\n\tcolor: #FFFFFF;\n\tdisplay: flex;\n\tjustify-content: center;\n\talign-items: center;\n\tmargin-left: 16rpx;\n}\n.yan{\n\twidth: 188rpx;\n\theight: 62rpx;\n\tbackground: #30AEFF;\n\tborder-radius: 35rpx;\n\tfont-size: 24rpx;\n\tfont-family: PingFangSC-Medium, PingFang SC;\n\tfont-weight: 500;\n\tcolor: #FFFFFF;\n\tdisplay: flex;\n\tjustify-content: center;\n\talign-items: center;\n\tmargin-left: 16rpx;\n}\n.ceng5{\n\tdisplay: flex;\n\tjustify-content: flex-end;\n\tpadding-top: 11rpx;\n\tborder-top: 1px solid #DBDBDB;\n\tmargin-top: 15rpx;\n}\n.jia{\n\tfont-size: 32rpx;\n\tfont-family: PingFangSC-Medium, PingFang SC;\n\tfont-weight: 500;\n\tcolor: #30AEFF;\n}\n.ceng4{\n\tdisplay: flex;\n\tjustify-content: space-between;\n\talign-items: center;\n}\n.left uni-view:nth-child(2){\n\tfont-size: 24rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #676767;\n\tmargin-left: 9rpx\n}\n.left uni-view:nth-child(1){\n\tfont-size: 16rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #FFFFFF;\n\twidth: 24rpx;\n\theight: 24rpx;\n\tbackground: #30AEFF;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n\tborder-radius: 24rpx;\n}\n.left{\n\tdisplay: flex;\n\tjustify-content: start;\n\tmargin-top: 8rpx;\n\talign-items: center;\n}\n.ceng3 uni-view:nth-child(2){\n\tfont-size: 24rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #676767;\n\tmargin-left: 9rpx;\n}\n.ceng3 uni-view:nth-child(1){\n\tfont-size: 16rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #FFFFFF;\n\twidth: 24rpx;\n\theight: 24rpx;\n\tbackground: #6B6B6B;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n\tborder-radius: 24rpx;\n}\n.ceng3{\n\tdisplay: flex;\n\tjustify-content: start;\n\tmargin-top: 8rpx;\n\talign-items: center;\n}\n.ceng2 uni-view{\n\tfont-size: 26rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #333333;\n\tmargin-top: 20rpx;\n}\n.neibox{\n\twidth: 644rpx;\n\tmargin: auto;\n\tpadding: 20rpx 0 15rpx 0;\n\tbox-sizing: border-box;\n}\n.listbox{\n\twidth: 710rpx;\n\t/* height: 291rpx; */\n\tbackground: #FFFFFF;\n\tbox-shadow: 0px 0px 19rpx 0px rgba(0, 0, 0, 0.11);\n\tborder-radius: 14rpx;\n\tmargin: auto;\n\tmargin-top: 20rpx;\n\tmargin-bottom: 9px;\n}\n.fu{\n\tfont-size: 24rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #30AEFF;\n}\n.code{\n\tfont-size: 24rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #6B6B6B;\n}\n.ceng1{\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: space-between;\n}\n.liang uni-view{\n\tpadding-bottom: 5rpx;\n\tborder-bottom: 4rpx solid #30AEFF;\n\tcolor: #30AEFF;\n}\n.card{\n\tdisplay: flex;\n\twidth: 720rpx;\n\tjustify-content: space-between;\n\tmargin: auto;\n}\n.hui{\n\tfont-size: 26rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #8A8A8A;\n}\n.feld uni-image{\n\twidth: 66rpx;\n\theight: 66rpx;\n}\n.top{\n\twidth: 750rpx;\n\theight: 130rpx;\n\tbackground-color: #30AEFF;\n\t/* padding-top: 38rpx; */\n\tbox-sizing: border-box;\n}\n.feld{\n\theight: 88rpx;\n\twidth: 750rpx;\n\tdisplay: flex;\n\tjustify-content: space-between;\n\talign-items: center;\n\tpadding: 0 20rpx 0 20rpx;\n\tbox-sizing: border-box;\n\tfont-size: 39rpx;\n\tfont-family: PingFangSC-Regular, PingFang SC;\n\tfont-weight: 400;\n\tcolor: #FFFFFF;\n}\n", ""]);
 // Exports
 module.exports = exports;
 
@@ -10603,6 +10633,33 @@ var render = function() {
           _c("takinfo", { staticClass: _vm._$g(32, "sc"), attrs: { _i: 32 } })
         ],
         1
+      ),
+      _c(
+        "v-uni-view",
+        {
+          staticClass: _vm._$g(33, "sc"),
+          attrs: { _i: 33 },
+          on: {
+            click: function($event) {
+              return _vm.$handleViewEvent($event)
+            }
+          }
+        },
+        [
+          _c(
+            "v-uni-view",
+            { staticClass: _vm._$g(34, "sc"), attrs: { _i: 34 } },
+            [
+              _c("v-uni-view", { attrs: { _i: 35 } }, [_vm._v("退出应用")]),
+              _c("v-uni-image", {
+                attrs: { src: _vm._$g(36, "a-src"), _i: 36 }
+              })
+            ],
+            1
+          ),
+          _c("takinfo", { staticClass: _vm._$g(37, "sc"), attrs: { _i: 37 } })
+        ],
+        1
       )
     ],
     1
@@ -10947,16 +11004,32 @@ var render = function() {
           ),
       _c(
         "v-uni-view",
-        { staticClass: _vm._$g(23, "sc"), attrs: { _i: 23 } },
+        {
+          ref: "login",
+          staticClass: _vm._$g(23, "sc"),
+          staticStyle: { opacity: "1" },
+          attrs: { _i: 23 },
+          on: {
+            click: function($event) {
+              return _vm.$handleViewEvent($event)
+            }
+          }
+        },
+        [_c("v-uni-text", { attrs: { _i: 24 } }, [_vm._v("退出应用")])],
+        1
+      ),
+      _c(
+        "v-uni-view",
+        { staticClass: _vm._$g(25, "sc"), attrs: { _i: 25 } },
         [
           _c(
             "v-uni-navigator",
-            { attrs: { url: "register", "open-type": "navigate", _i: 24 } },
+            { attrs: { url: "register", "open-type": "navigate", _i: 26 } },
             [_vm._v("注册账户")]
           ),
           _c(
             "v-uni-navigator",
-            { attrs: { url: "forget", "open-type": "navigate", _i: 25 } },
+            { attrs: { url: "forget", "open-type": "navigate", _i: 27 } },
             [_vm._v("忘记密码?")]
           )
         ],
@@ -11339,11 +11412,27 @@ var render = function() {
           ),
       _c(
         "v-uni-view",
-        { staticClass: _vm._$g(22, "sc"), attrs: { _i: 22 } },
+        {
+          ref: "login",
+          staticClass: _vm._$g(22, "sc"),
+          staticStyle: { opacity: "1" },
+          attrs: { _i: 22 },
+          on: {
+            click: function($event) {
+              return _vm.$handleViewEvent($event)
+            }
+          }
+        },
+        [_c("v-uni-text", { attrs: { _i: 23 } }, [_vm._v("退出应用")])],
+        1
+      ),
+      _c(
+        "v-uni-view",
+        { staticClass: _vm._$g(24, "sc"), attrs: { _i: 24 } },
         [
           _c(
             "v-uni-navigator",
-            { attrs: { url: "login", "open-type": "navigate", _i: 23 } },
+            { attrs: { url: "login", "open-type": "navigate", _i: 25 } },
             [_vm._v("已有账号使用密码登录")]
           )
         ],

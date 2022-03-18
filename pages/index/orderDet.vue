@@ -124,7 +124,9 @@
 				</view>
 				<view class="ceng4">
 					<view class="btn" v-if="orderdet.status == 1" @click="tiaobox()">接取订单</view>
-					<view class="btn" v-if="orderdet.status == 2" @click="lianxi(orderdet.id)">联系客户</view>
+					<view class="btn" v-if="orderdet.status != 1 && orderdet.status != 3" @click="lianxi(orderdet.id)">联系客户</view>
+					<!-- <view class="btn" v-if="orderdet.status == 6" @click="tuoyunzhong(orderdet)">拖运中</view>
+					<view class="btn" v-if="orderdet.status == 7" @click="mudidi(orderdet)">到达目的地</view> -->
 					<view class="btn" v-if="orderdet.status == 3">订单完成</view>
 				</view>
 			</view>
@@ -250,6 +252,60 @@ export default {
 		clearInterval(this.upDataMsg)
 	},
 	methods: {
+		tuoyunzhong(e){
+			this.http.ajax({
+				url: 'order/tuoyunzhong',
+				method: 'GET',
+				data: {
+					id:e.id
+				},
+				success(res) {
+					if(res.code == 200){
+						uni.showToast({
+							title:'请及时托运',
+							icon:'none'
+						})
+						that.chalist()
+					}else{
+						uni.showToast({
+							title:res.message,
+							icon:'none'
+						})
+					}
+				}
+			});
+		},
+		daoda(e){
+			let that = this
+			this.http.ajax({
+				url: 'order/alreadyArrive',
+				method: 'GET',
+				data: {
+					id:e.id
+				},
+				success(res) {
+					if(res.code == 200){
+						if(e.car_situation == 3){
+							uni.showToast({
+								title:'请及时托运',
+								icon:'none'
+							})
+						}else{
+							uni.showToast({
+								title:'请验车',
+								icon:'none'
+							})
+						}
+						that.chalist()
+					}else{
+						uni.showToast({
+							title:res.message,
+							icon:'none'
+						})
+					}
+				}
+			});
+		},
 		tiaobox() {
 			this.tanbox = true;
 		},

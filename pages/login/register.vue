@@ -34,6 +34,9 @@
 		<view class="button-login2" hover-class="button-hover" v-else>
 			<text>立即注册</text>
 		</view>
+		<view class="button-login2" style="opacity: 1;"  ref="login" @click="ret()">
+			<text>退出应用</text>
+		</view>
 		<view class="agreenment">
 			<navigator url="login" open-type="navigate">已有账号使用密码登录</navigator>
 		</view>
@@ -82,6 +85,17 @@
 			this.clear()
 		},
 		methods: {
+			ret(){
+				uni.getSystemInfo({
+					success(res) {
+						if(res.platform == "android"){
+							plus.runtime.quit(); 
+						}else{
+							plus.ios.import("UIApplication").sharedApplication().performSelector("exit")
+						}
+					}
+				})
+			},
 			dlng(){
 				this.ling = !this.ling
 			},
