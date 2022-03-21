@@ -1,6 +1,14 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path": "pages/index/kaiping",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},{
 			"path": "pages/index/index",
 			"style": {
 				"navigationStyle": "custom",
@@ -13,6 +21,7 @@
 			"path": "pages/order/index",
 			"style": {
 				"navigationStyle": "custom",
+				"enablePullDownRefresh": true,
 				"app-plus": {
 					"titleNView": false
 				}
@@ -213,6 +222,21 @@
 			"path": "pages/index/newslist",
 			"style": {
 				"navigationBarTitleText": "系统消息"
+			}
+		},{
+			"path": "pages/my/qiandao",
+			"style": {
+				"navigationBarTitleText": "签到"
+			}
+		},{
+			"path": "pages/my/yinsi",
+			"style": {
+				"navigationBarTitleText": "隐私协议"
+			}
+		},{
+			"path": "pages/my/yonghu",
+			"style": {
+				"navigationBarTitleText": "用户政策"
 			}
 		}
 	],

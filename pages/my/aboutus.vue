@@ -21,7 +21,7 @@
 				url: 'index/setting',
 				method: 'GET',
 				data: {
-					key:'yinsi'
+					key:'aboutUs'
 				},
 				success(res) {
 					that.content = that.formatRichText(res.data.data)

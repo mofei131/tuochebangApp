@@ -42,35 +42,6 @@ const ajax = function(opt) {
 			opt.complete(res);
 		},
 	})
-	// var xmlHttp = null;
-	// if (XMLHttpRequest) {
-	// 	xmlHttp = new XMLHttpRequest();
-	// } else {
-	// 	xmlHttp = new ActiveXObject('Microsoft.XMLHTTP');
-	// }
-	// var params = [];
-	// if (opt.data && !opt.data.i) {
-	// 	opt.url = opt.url + '&' + 'i=2'
-	// }
-
-	// for (var key in opt.data) {
-	// 	opt.url = opt.url + '&' + key + '=' + opt.data[key]
-	// 	// params.push(key + '=' + opt.data[key]);
-	// }
-	// var postData = params.join('&');
-	// if (opt.method.toUpperCase() === 'POST') {
-	// 	xmlHttp.open(opt.method, opt.url, opt.async);
-	// 	xmlHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
-	// 	xmlHttp.send(postData);
-	// } else if (opt.method.toUpperCase() === 'GET') {
-	// 	xmlHttp.open(opt.method, opt.url + '?' + postData, opt.async);
-	// 	xmlHttp.send(null);
-	// }
-	// xmlHttp.onreadystatechange = function() {
-	// 	if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-	// 		opt.success(xmlHttp.responseText);
-	// 	}
-	// };
 }
 
 const checkLogin = function() {

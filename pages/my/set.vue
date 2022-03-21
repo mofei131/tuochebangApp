@@ -1,12 +1,13 @@
 <template>
 	<view>
-		<view class="top">
-			<view class="feld">
+		<view class="top" :style="[{height:CustomBar + 'px'}]" style="position: fixed;top: 0;">
+			<view class="feld" :style="style">
 				<image src="../../static/images/backl.png" @click="hui()"></image>
 				<view class="toptitle">联系客户</view>
 				<image></image>
 			</view>
 		</view>
+		<view  :style="[{marginTop: (CustomBar + 10) + 'px'}]"></view>
 		<!-- <view class="guidelist" v-for="(item,index) in article" :key="index" @tap="pandaun(index)"> -->
 		<view class="guidelist" @tap="personaldata()">
 			<view class="guideitem">
@@ -42,7 +43,15 @@
 		<view class="guidelist" @tap="out()">
 		<!-- <view class="guidelist" @tap="signout(index)"> -->
 			<view class="guideitem">
-				<view>退出登录</view>
+				<view>注销账号</view>
+				<image src="../../static/icon/rightzd.png"></image>
+			</view>
+			<takinfo class="taixi"></takinfo>
+		</view>
+		<view class="guidelist" @tap="toclos()">
+		<!-- <view class="guidelist" @tap="signout(index)"> -->
+			<view class="guideitem">
+				<view>退出应用</view>
 				<image src="../../static/icon/rightzd.png"></image>
 			</view>
 			<takinfo class="taixi"></takinfo>
@@ -57,13 +66,22 @@
 				decide:false,
 				ji:'',
 				article:[],
-				show:true
+				show:true,
+				
+				StatusBar: this.StatusBar,
+				CustomBar: this.CustomBar,
+				Custom: this.Custom,
+				style: ''
 			}
 		},
 		created() {
 				console.log(this.$store.state.num)
 		},
 		onLoad() {
+			var StatusBar = this.StatusBar;
+			var CustomBar = this.CustomBar;
+			this.style = `height:${CustomBar}px;padding-top:${StatusBar}px;background-color: #30aeff;`;
+			
 			let that = this
 			uni.request({
 				url:'https://trailer.boyaokj.cn/api/commission/notice',
@@ -112,15 +130,26 @@
 									title:'设置成功',
 									duration:1000
 								})
-								setTimeout(function(){
-									uni.reLaunch({
-										url:'index'
-									})
-								},1000)
+								// setTimeout(function(){
+								// 	uni.reLaunch({
+								// 		url:'index'
+								// 	})
+								// },1000)
 							}
 						});
 					}
 				});
+			},
+			toclos(){
+				uni.getSystemInfo({
+					success(res) {
+						if(res.platform == "android"){
+							plus.runtime.quit(); 
+						}else{
+							plus.ios.import("UIApplication").sharedApplication().performSelector("exit")
+						}
+					}
+				})
 			},
 			out(){
 				uni.removeStorageSync('userInfo')
@@ -176,7 +205,7 @@
 		width: 750rpx;
 		height: 130rpx;
 		background-color: #30AEFF;
-		padding-top: 38rpx;
+		/* padding-top: 38rpx; */
 		box-sizing: border-box;
 	}
 	.feld{

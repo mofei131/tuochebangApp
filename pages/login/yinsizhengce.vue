@@ -31,7 +31,7 @@
 			back(){
 				uni.setStorageSync('yc',1)
 				uni.reLaunch({
-					url:'yanche'
+					url:'yinsi'
 				})
 			},
 			formatRichText(html) {

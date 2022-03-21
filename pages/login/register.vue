@@ -24,7 +24,8 @@
 		</view>
 		<view class="agreement">
 			<text v-if="password == ''">密码为6-20位，可由数字、字母、符号组成。</text>
-			<text v-if="password != ''">登录即代表同意<navigator url="yonghuxieyi" open-type="navigate" class="xiahuaxian">用户协议</navigator>及<navigator
+			<image v-if="password != ''" class="limg" :src="ling?'../../static/images/xding.png':'../../static/images/buzhong.png'" @click="dlng"></image>
+			<text v-if="password != ''">同意<navigator url="yonghuxieyi" open-type="navigate" class="xiahuaxian">用户协议</navigator>及<navigator
 					class="xiahuaxian" url="yinsizhengce" open-type="navigate">隐私政策</navigator></text>
 		</view>
 		<view class="button-login" hover-class="button-hover" @tap="bindLogin" v-if="dis">
@@ -32,6 +33,9 @@
 		</view>
 		<view class="button-login2" hover-class="button-hover" v-else>
 			<text>立即注册</text>
+		</view>
+		<view class="button-login2" style="opacity: 1;"  ref="login" @click="ret()">
+			<text>退出应用</text>
 		</view>
 		<view class="agreenment">
 			<navigator url="login" open-type="navigate">已有账号使用密码登录</navigator>
@@ -59,7 +63,8 @@
 				agreement: true,
 				showPassword: false,
 				second: 0,
-				dis:false
+				dis:false,
+				ling:false
 			};
 		},
 		computed: {
@@ -80,6 +85,20 @@
 			this.clear()
 		},
 		methods: {
+			ret(){
+				uni.getSystemInfo({
+					success(res) {
+						if(res.platform == "android"){
+							plus.runtime.quit(); 
+						}else{
+							plus.ios.import("UIApplication").sharedApplication().performSelector("exit")
+						}
+					}
+				})
+			},
+			dlng(){
+				this.ling = !this.ling
+			},
 			int(){
 				if(this.password.length != 0){
 					this.dis = true
@@ -117,6 +136,7 @@
 						mobile: this.phone,
 					},
 					success(res) {
+						console.log(res)
 						if(res.code == 200){
 							console.log(res)
 							console.log("倒计时")
@@ -138,6 +158,13 @@
 				//   });
 				//   return;
 				// }
+				if (!this.ling) {
+					uni.showToast({
+						icon: 'none',
+						title: '请同意用户协议'
+					});
+					return;
+				}
 				if (this.phone.length != 11) {
 					uni.showToast({
 						icon: 'none',
