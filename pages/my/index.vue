@@ -154,17 +154,14 @@
 			<button class="code2-baocun" @tap.stop="saveImgToLocal2()">保存二维码</button>
 			<view class="code2-tishi">*被邀请人扫描二维码，自动绑定邀请人。</view>
 		</view>
-
 		<takinfo class="myqiang" v-if="sanz == 1"></takinfo>
 	</view>
 </template>
 <script>
 	import iconlist from '../components/iconlist/iconlist.vue';
-	// import ayQrcode from "../components/ay-qrcode/ay-qrcode.vue"
 	export default {
 		components: {
 			iconlist
-			// ayQrcode
 		},
 		data() {
 			return {
@@ -1090,17 +1087,17 @@
 
 	.qrcode {
 		position: fixed;
+		background-color: #fff;
 		top: 0;
 		left: 0;
 		right: 0;
 		bottom: 0;
-		background: #ffff;
 		width: 100%;
 		height: 100%;
 		display: flex;
+		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		flex-direction: column;
 	}
 
 	.qrcode image {
@@ -1122,7 +1119,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin-bottom: 55rpx;
+		margin-bottom: 73rpx;
 	}
 
 	.code2-tishi {
