@@ -326,7 +326,7 @@ export default {
 				that.orderlist = res.data;
 			}
 		});
-		// this.jiazai()
+		this.jiazai()
 		if (!uni.getStorageSync('userInfo') || !uni.getStorageSync('userInfo').id) {
 			// uni.reLaunch({
 			// 	url: '../login/login'

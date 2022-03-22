@@ -207,7 +207,7 @@ export default {
 								dottedLine: true,
 								arrowIconPath: '../../static/images/close.png',
 								width: 10,
-								color: 'FEAA34'
+								color: '0091ff'
 							}
 						];
 						that.markers = [
@@ -343,7 +343,7 @@ export default {
 										dottedLine: true,
 										arrowIconPath: '../../static/images/close.png',
 										width: 10,
-										color: 'FEAA34'
+										color: '0091ff'
 									}
 								];
 							}
